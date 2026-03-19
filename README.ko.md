@@ -15,7 +15,7 @@
 
 <br>
 
-[**예제**](#-예제) · [**시작하기**](#-시작하기) · [**기능**](#-기능) · [**테마**](#-테마-시스템) · [**아키텍처**](#️-아키텍처) · [**English**](README.md)
+[**시작하기**](#-시작하기) · [**기능**](#-기능) · [**테마**](#-테마-시스템) · [**아키텍처**](#️-아키텍처) · [**English**](README.md)
 
 <br>
 
@@ -45,18 +45,18 @@
 
 ### 💡 입력
 ```
-목적지: 도쿄, 일본
-일정: 2026년 4월 5일 ~ 4월 10일
-인원: 성인 2명
-숙소: 파크하얏트 도쿄 (5박)
-항공: KE713 ICN→NRT 09:30-11:45
-예산: 350만원
+목적지: 스위스
+일정: 2026. 8. 15. ~ 8. 20.
+인원: 3명 (60대 부모님 동반)
+숙소: 샬레 3박 + Hotel Des Balances 1박
+항공: 스위스 항공 LX163, LX162
+예산: 1200만원
 ```
 
 </td>
 <td width="50%" valign="top">
 
-### ✨ 출력
+### ✨ 출력 &nbsp; <a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz"><img src="https://img.shields.io/badge/▶_라이브_데모-CodePen-000?style=flat-square&logo=codepen&logoColor=white" height="20"></a>
 완성된 `.html` 파일에 포함되는 요소:
 - 🗺️ Leaflet 인터랙티브 지도
 - 📊 예산 도넛 차트
@@ -65,83 +65,21 @@
 - 🌙 다크/라이트 모드 토글
 - 📱 완전한 반응형 디자인
 
-</td>
-</tr>
-</table>
-
-<br>
-
----
-
-<br>
-
-## 📂 예제
-
-### 🔗 라이브 데모
-
-<table>
-<tr>
-<th align="center" colspan="2">🇰🇷 한국어</th>
-<th align="center" colspan="2">🇺🇸 English</th>
-</tr>
-<tr>
-<td align="center">
 <a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz">
-<img src="https://img.shields.io/badge/▶_데모_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+<img src="https://img.shields.io/badge/▶_한국어_데모_1-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
+</a> <a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
+<img src="https://img.shields.io/badge/▶_한국어_데모_2-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
 </a>
-</td>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
-<img src="https://img.shields.io/badge/▶_데모_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR">
-<img src="https://img.shields.io/badge/▶_Demo_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
-<img src="https://img.shields.io/badge/▶_Demo_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-</tr>
-</table>
-
 <br>
+<a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR">
+<img src="https://img.shields.io/badge/▶_English_Demo_1-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
+</a> <a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
+<img src="https://img.shields.io/badge/▶_English_Demo_2-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
+</a>
 
-### 📁 레퍼런스 파일
-
-<table>
-<tr>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Tokyo%20Tower.png" width="48">
-<br><b>도쿄 솔로</b>
-<br><sub><code>tokyo-2026.html</code></sub>
-<br><sub>도시 여행 · Urban Slate</sub>
-</td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Family.png" width="48">
-<br><b>도쿄 가족</b>
-<br><sub><code>3-family-toyko2026.html</code></sub>
-<br><sub>가족 여행 · Urban Slate</sub>
-</td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smileys/Heart%20Eyes.png" width="48">
-<br><b>이탈리아 허니문</b>
-<br><sub><code>italy-honeymoon-2026.html</code></sub>
-<br><sub>허니문 · Elegant Noir</sub>
-</td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Snow-Capped%20Mountain.png" width="48">
-<br><b>스위스 가족</b>
-<br><sub><code>parents_swiss2026.html</code></sub>
-<br><sub>자연 여행 · Forest Green</sub>
 </td>
 </tr>
 </table>
-
-> 아무 `.html` 파일이나 브라우저에서 바로 열 수 있습니다 — 서버가 필요하지 않습니다.
 
 <br>
 

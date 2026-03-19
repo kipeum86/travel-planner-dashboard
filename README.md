@@ -15,7 +15,7 @@
 
 <br>
 
-[**Examples**](#-examples) · [**Getting Started**](#-getting-started) · [**Features**](#-features) · [**Themes**](#-theme-system) · [**Architecture**](#-architecture) · [**한국어**](README.ko.md)
+[**Getting Started**](#-getting-started) · [**Features**](#-features) · [**Themes**](#-theme-system) · [**Architecture**](#-architecture) · [**한국어**](README.ko.md)
 
 <br>
 
@@ -45,18 +45,18 @@ Paste your flight confirmations, hotel reservations, and daily plans — get bac
 
 ### 💡 Input
 ```
-Destination: Tokyo, Japan
-Dates: Apr 5 – Apr 10, 2026
-Travelers: 2 adults
-Hotel: Park Hyatt Tokyo (5 nights)
-Flight: KE713 ICN→NRT 09:30-11:45
-Budget: $3,500
+Destination: Switzerland
+Dates: Aug 15 – Aug 20, 2026
+Travelers: 3 (with parents in their 60s)
+Hotel: Chalet 3 nights + Hotel Des Balances 1 night
+Flight: SWISS LX163, LX162
+Budget: ₩12,000,000
 ```
 
 </td>
 <td width="50%" valign="top">
 
-### ✨ Output
+### ✨ Output &nbsp; <a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR"><img src="https://img.shields.io/badge/▶_Live_Demo-CodePen-000?style=flat-square&logo=codepen&logoColor=white" height="20"></a>
 A complete `.html` file featuring:
 - 🗺️ Interactive Leaflet map
 - 📊 Budget doughnut chart
@@ -65,83 +65,21 @@ A complete `.html` file featuring:
 - 🌙 Dark/Light mode toggle
 - 📱 Fully responsive design
 
-</td>
-</tr>
-</table>
-
-<br>
-
----
-
-<br>
-
-## 📂 Examples
-
-### 🔗 Live Demos
-
-<table>
-<tr>
-<th align="center" colspan="2">🇺🇸 English</th>
-<th align="center" colspan="2">🇰🇷 한국어</th>
-</tr>
-<tr>
-<td align="center">
 <a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR">
-<img src="https://img.shields.io/badge/▶_Demo_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+<img src="https://img.shields.io/badge/▶_English_Demo_1-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
+</a> <a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
+<img src="https://img.shields.io/badge/▶_English_Demo_2-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
 </a>
-</td>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
-<img src="https://img.shields.io/badge/▶_Demo_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz">
-<img src="https://img.shields.io/badge/▶_데모_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
-<img src="https://img.shields.io/badge/▶_데모_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-</tr>
-</table>
-
 <br>
+<a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz">
+<img src="https://img.shields.io/badge/▶_한국어_데모_1-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
+</a> <a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
+<img src="https://img.shields.io/badge/▶_한국어_데모_2-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
+</a>
 
-### 📁 Reference Files
-
-<table>
-<tr>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Tokyo%20Tower.png" width="48">
-<br><b>Tokyo Solo</b>
-<br><sub><code>tokyo-2026.html</code></sub>
-<br><sub>City break · Urban Slate</sub>
-</td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Family.png" width="48">
-<br><b>Tokyo Family</b>
-<br><sub><code>3-family-toyko2026.html</code></sub>
-<br><sub>Family trip · Urban Slate</sub>
-</td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smileys/Heart%20Eyes.png" width="48">
-<br><b>Italy Honeymoon</b>
-<br><sub><code>italy-honeymoon-2026.html</code></sub>
-<br><sub>Honeymoon · Elegant Noir</sub>
-</td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Snow-Capped%20Mountain.png" width="48">
-<br><b>Swiss Family</b>
-<br><sub><code>parents_swiss2026.html</code></sub>
-<br><sub>Nature trip · Forest Green</sub>
 </td>
 </tr>
 </table>
-
-> Open any `.html` file directly in your browser — no server required.
 
 <br>
 
