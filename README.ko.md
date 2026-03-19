@@ -101,9 +101,9 @@
 >     └── references/
 > ```
 >
-> **2.** [claude.ai](https://claude.ai) → **Customize** (좌측 하단) → **Skills** 로 이동합니다
+> **2.** [claude.ai](https://claude.ai) → **Settings** (좌측 하단) → **Capabilities** → 최하단 **Skills** 섹션 → **"Go to Customize"** 클릭
 >
-> **3.** **"+"** 버튼 → **"Upload a skill"** → ZIP 파일을 선택합니다
+> **3.** 상단의 **"+"** 버튼 → **"Upload a skill"** → ZIP 파일을 선택합니다
 
 ✅ 완료! 모든 대화에서 스킬을 사용할 수 있습니다.
 

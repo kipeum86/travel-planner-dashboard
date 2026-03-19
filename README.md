@@ -101,9 +101,9 @@ Upload the skill to Claude.ai in 3 steps:
 >     └── references/
 > ```
 >
-> **2.** Go to [claude.ai](https://claude.ai) → **Customize** (bottom-left) → **Skills**
+> **2.** Go to [claude.ai](https://claude.ai) → **Settings** (bottom-left) → **Capabilities** → scroll to **Skills** section → click **"Go to Customize"**
 >
-> **3.** Click the **"+"** button → **"Upload a skill"** → select your ZIP file
+> **3.** Click the **"+"** button (top) → **"Upload a skill"** → select your ZIP file
 
 ✅ Done! The skill is now available across all your conversations.
 
