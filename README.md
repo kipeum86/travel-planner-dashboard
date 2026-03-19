@@ -81,23 +81,43 @@ A complete `.html` file featuring:
 
 | Requirement | Details |
 |:---|:---|
-| **Claude AI** | Access to Claude with skill support |
+| **Claude.ai** | Claude Pro / Team / Enterprise plan |
 | **Browser** | Any modern browser with ES6 support |
 | **Build tools** | ❌ None required |
 
 ### Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/your-username/travel-planner-dashboard.git
+Upload the skill to Claude.ai in 3 steps:
 
-# That's it! No dependencies to install.
-# This is a Claude AI skill — no build process needed.
-```
+> **1.** Compress the `travel-plan/` folder into a ZIP file
+>
+> ⚠️ **Important:** The folder itself must be at the root of the ZIP — do NOT zip only the folder's contents.
+>
+> ```
+> travel-plan.zip
+> └── travel-plan/
+>     ├── SKILL.md
+>     ├── examples/
+>     └── references/
+> ```
+>
+> **2.** Go to [claude.ai](https://claude.ai) → **Customize** (bottom-left) → **Skills**
+>
+> **3.** Click the **"+"** button → **"Upload a skill"** → select your ZIP file
+
+✅ Done! The skill is now available across all your conversations.
+
+<details>
+<summary><b>📥 Pre-packaged ZIP available</b></summary>
+<br>
+
+A ready-to-upload `travel-plan.zip` is included in this repository. Download and upload it directly — no compression needed.
+
+</details>
 
 ### Usage
 
-Simply provide your travel details to Claude using any of these trigger phrases:
+Start a conversation in your project and provide travel details using any of these trigger phrases:
 
 <table>
 <tr>

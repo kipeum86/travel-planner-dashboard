@@ -81,23 +81,43 @@
 
 | 항목 | 세부 사항 |
 |:---|:---|
-| **Claude AI** | 스킬을 지원하는 Claude 접근 권한 |
+| **Claude.ai** | Claude Pro / Team / Enterprise 플랜 |
 | **브라우저** | ES6를 지원하는 모든 최신 브라우저 |
 | **빌드 도구** | ❌ 필요 없음 |
 
 ### 설치
 
-```bash
-# 저장소 클론
-git clone https://github.com/your-username/travel-planner-dashboard.git
+3단계로 Claude.ai에 스킬을 업로드하세요:
 
-# 끝! 설치할 의존성이 없습니다.
-# Claude AI 스킬이므로 빌드 과정이 필요하지 않습니다.
-```
+> **1.** `travel-plan/` 폴더를 ZIP 파일로 압축합니다
+>
+> ⚠️ **중요:** ZIP 파일의 루트에 폴더 자체가 위치해야 합니다. 폴더 내용물만 들어 있으면 안 됩니다.
+>
+> ```
+> travel-plan.zip
+> └── travel-plan/
+>     ├── SKILL.md
+>     ├── examples/
+>     └── references/
+> ```
+>
+> **2.** [claude.ai](https://claude.ai) → **Customize** (좌측 하단) → **Skills** 로 이동합니다
+>
+> **3.** **"+"** 버튼 → **"Upload a skill"** → ZIP 파일을 선택합니다
+
+✅ 완료! 모든 대화에서 스킬을 사용할 수 있습니다.
+
+<details>
+<summary><b>📥 미리 패키징된 ZIP 제공</b></summary>
+<br>
+
+이 저장소에 바로 업로드 가능한 `travel-plan.zip`이 포함되어 있습니다. 다운로드 후 바로 업로드하세요 — 별도의 압축이 필요 없습니다.
+
+</details>
 
 ### 사용법
 
-Claude에게 다음과 같은 트리거 문구로 여행 정보를 전달하세요:
+프로젝트 내에서 대화를 시작하고 다음 트리거 문구로 여행 정보를 전달하세요:
 
 <table>
 <tr>
