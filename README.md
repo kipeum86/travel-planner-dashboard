@@ -15,7 +15,7 @@
 
 <br>
 
-[**Getting Started**](#-getting-started) · [**Features**](#-features) · [**Themes**](#-theme-system) · [**Examples**](#-examples) · [**Architecture**](#-architecture) · [**한국어**](README.ko.md)
+[**Examples**](#-examples) · [**Getting Started**](#-getting-started) · [**Features**](#-features) · [**Themes**](#-theme-system) · [**Architecture**](#-architecture) · [**한국어**](README.ko.md)
 
 <br>
 
@@ -68,6 +68,80 @@ A complete `.html` file featuring:
 </td>
 </tr>
 </table>
+
+<br>
+
+---
+
+<br>
+
+## 📂 Examples
+
+### 🔗 Live Demos
+
+<table>
+<tr>
+<th align="center" colspan="2">🇺🇸 English</th>
+<th align="center" colspan="2">🇰🇷 한국어</th>
+</tr>
+<tr>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR">
+<img src="https://img.shields.io/badge/▶_Demo_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
+<img src="https://img.shields.io/badge/▶_Demo_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz">
+<img src="https://img.shields.io/badge/▶_데모_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
+<img src="https://img.shields.io/badge/▶_데모_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+</tr>
+</table>
+
+<br>
+
+### 📁 Reference Files
+
+<table>
+<tr>
+<td align="center">
+<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Tokyo%20Tower.png" width="48">
+<br><b>Tokyo Solo</b>
+<br><sub><code>tokyo-2026.html</code></sub>
+<br><sub>City break · Urban Slate</sub>
+</td>
+<td align="center">
+<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Family.png" width="48">
+<br><b>Tokyo Family</b>
+<br><sub><code>3-family-toyko2026.html</code></sub>
+<br><sub>Family trip · Urban Slate</sub>
+</td>
+<td align="center">
+<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smileys/Heart%20Eyes.png" width="48">
+<br><b>Italy Honeymoon</b>
+<br><sub><code>italy-honeymoon-2026.html</code></sub>
+<br><sub>Honeymoon · Elegant Noir</sub>
+</td>
+<td align="center">
+<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Snow-Capped%20Mountain.png" width="48">
+<br><b>Swiss Family</b>
+<br><sub><code>parents_swiss2026.html</code></sub>
+<br><sub>Nature trip · Forest Green</sub>
+</td>
+</tr>
+</table>
+
+> Open any `.html` file directly in your browser — no server required.
 
 <br>
 
@@ -279,80 +353,6 @@ Six carefully crafted themes — each with **dark and light mode** variants and 
 </table>
 
 > Themes are automatically selected based on your destination and trip type. Override by specifying your preference.
-
-<br>
-
----
-
-<br>
-
-## 📂 Examples
-
-### 🔗 Live Demos
-
-<table>
-<tr>
-<th align="center" colspan="2">🇺🇸 English</th>
-<th align="center" colspan="2">🇰🇷 한국어</th>
-</tr>
-<tr>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR">
-<img src="https://img.shields.io/badge/▶_Demo_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
-<img src="https://img.shields.io/badge/▶_Demo_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz">
-<img src="https://img.shields.io/badge/▶_데모_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-<td align="center">
-<a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
-<img src="https://img.shields.io/badge/▶_데모_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
-</a>
-</td>
-</tr>
-</table>
-
-<br>
-
-### 📁 Reference Files
-
-<table>
-<tr>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Tokyo%20Tower.png" width="48">
-<br><b>Tokyo Solo</b>
-<br><sub><code>tokyo-2026.html</code></sub>
-<br><sub>City break · Urban Slate</sub>
-</td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Family.png" width="48">
-<br><b>Tokyo Family</b>
-<br><sub><code>3-family-toyko2026.html</code></sub>
-<br><sub>Family trip · Urban Slate</sub>
-</td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smileys/Heart%20Eyes.png" width="48">
-<br><b>Italy Honeymoon</b>
-<br><sub><code>italy-honeymoon-2026.html</code></sub>
-<br><sub>Honeymoon · Elegant Noir</sub>
-</td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Snow-Capped%20Mountain.png" width="48">
-<br><b>Swiss Family</b>
-<br><sub><code>parents_swiss2026.html</code></sub>
-<br><sub>Nature trip · Forest Green</sub>
-</td>
-</tr>
-</table>
-
-> Open any `.html` file directly in your browser — no server required.
 
 <br>
 
