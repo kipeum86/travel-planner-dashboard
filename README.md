@@ -288,7 +288,40 @@ Six carefully crafted themes — each with **dark and light mode** variants and 
 
 ## 📂 Examples
 
-The repository includes four reference dashboards showcasing different trip types:
+### 🔗 Live Demos
+
+<table>
+<tr>
+<th align="center" colspan="2">🇺🇸 English</th>
+<th align="center" colspan="2">🇰🇷 한국어</th>
+</tr>
+<tr>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR">
+<img src="https://img.shields.io/badge/▶_Demo_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
+<img src="https://img.shields.io/badge/▶_Demo_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz">
+<img src="https://img.shields.io/badge/▶_데모_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
+<img src="https://img.shields.io/badge/▶_데모_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+</tr>
+</table>
+
+<br>
+
+### 📁 Reference Files
 
 <table>
 <tr>

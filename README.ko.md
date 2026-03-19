@@ -289,7 +289,40 @@
 
 ## 📂 예제
 
-다양한 여행 유형을 보여주는 4개의 레퍼런스 대시보드가 포함되어 있습니다:
+### 🔗 라이브 데모
+
+<table>
+<tr>
+<th align="center" colspan="2">🇰🇷 한국어</th>
+<th align="center" colspan="2">🇺🇸 English</th>
+</tr>
+<tr>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz">
+<img src="https://img.shields.io/badge/▶_데모_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
+<img src="https://img.shields.io/badge/▶_데모_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR">
+<img src="https://img.shields.io/badge/▶_Demo_1-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+<td align="center">
+<a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
+<img src="https://img.shields.io/badge/▶_Demo_2-CodePen-000?style=for-the-badge&logo=codepen&logoColor=white" height="28">
+</a>
+</td>
+</tr>
+</table>
+
+<br>
+
+### 📁 레퍼런스 파일
 
 <table>
 <tr>
