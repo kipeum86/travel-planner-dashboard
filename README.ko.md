@@ -93,31 +93,13 @@
 
 3단계로 Claude.ai에 스킬을 업로드하세요:
 
-> **1.** `travel-plan/` 폴더를 ZIP 파일로 압축합니다
->
-> ⚠️ **중요:** ZIP 파일의 루트에 폴더 자체가 위치해야 합니다. 폴더 내용물만 들어 있으면 안 됩니다.
->
-> ```
-> travel-plan.zip
-> └── travel-plan/
->     ├── SKILL.md
->     ├── examples/
->     └── references/
-> ```
+> **1.** 이 저장소에서 `travel-plan-github.zip` 파일을 다운로드합니다
 >
 > **2.** [claude.ai](https://claude.ai) → **Settings** (좌측 하단) → **Capabilities** → 최하단 **Skills** 섹션 → **"Go to Customize"** 클릭
 >
-> **3.** 상단의 **"+"** 버튼 → **"Upload a skill"** → ZIP 파일을 선택합니다
+> **3.** 상단의 **"+"** 버튼 → **"Upload a skill"** → 다운로드한 ZIP 파일을 선택합니다
 
 ✅ 완료! 모든 대화에서 스킬을 사용할 수 있습니다.
-
-<details>
-<summary><b>📥 미리 패키징된 ZIP 제공</b></summary>
-<br>
-
-이 저장소에 바로 업로드 가능한 `travel-plan.zip`이 포함되어 있습니다. 다운로드 후 바로 업로드하세요 — 별도의 압축이 필요 없습니다.
-
-</details>
 
 ### 사용법
 
@@ -300,16 +282,11 @@ travel-planner-dashboard/
 ├── 📄 README.ko.md                       ← 현재 문서
 ├── 📜 LICENSE                            ← Apache 2.0
 │
-└── 📁 travel-plan/
-    ├── 📄 SKILL.md                       ← 스킬 정의 & 워크플로우
-    ├── 📁 examples/                      ← 레퍼런스 HTML 출력물
-    │   ├── tokyo-2026.html
-    │   ├── 3-family-toyko2026.html
-    │   ├── italy-honeymoon-2026.html
-    │   └── parents_swiss2026.html
-    └── 📁 references/                    ← 디자인 시스템 문서
-        ├── html-architecture.md          ← 페이지 구조 & 컴포넌트
-        └── design-system.md              ← 테마 & CSS 변수
+└── 📦 travel-plan-github.zip             ← 바로 업로드 가능한 스킬 패키지
+    └── travel-plan/
+        ├── SKILL.md                      ← 스킬 정의 & 워크플로우
+        ├── examples/                     ← 레퍼런스 HTML 출력물
+        └── references/                   ← 디자인 시스템 문서
 ```
 
 ### 기술 스택
@@ -426,9 +403,9 @@ graph LR
 
 기여를 환영합니다! 다음과 같은 방법으로 참여할 수 있습니다:
 
-- **새 테마 추가** — `references/design-system.md`에 새로운 컬러 팔레트 확장
+- **새 테마 추가** — 디자인 시스템에 새로운 컬러 팔레트 확장
 - **예제 여행 추가** — 새로운 목적지의 `.html` 출력물 제출
-- **컴포넌트 개선** — `references/html-architecture.md`의 섹션 향상
+- **컴포넌트 개선** — 페이지 구조 & 섹션 디자인 향상
 - **버그 리포트** — 생성된 HTML을 첨부하여 이슈 열기
 
 <br>

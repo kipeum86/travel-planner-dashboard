@@ -93,31 +93,13 @@ A complete `.html` file featuring:
 
 Upload the skill to Claude.ai in 3 steps:
 
-> **1.** Compress the `travel-plan/` folder into a ZIP file
->
-> ⚠️ **Important:** The folder itself must be at the root of the ZIP — do NOT zip only the folder's contents.
->
-> ```
-> travel-plan.zip
-> └── travel-plan/
->     ├── SKILL.md
->     ├── examples/
->     └── references/
-> ```
+> **1.** Download `travel-plan-github.zip` from this repository
 >
 > **2.** Go to [claude.ai](https://claude.ai) → **Settings** (bottom-left) → **Capabilities** → scroll to **Skills** section → click **"Go to Customize"**
 >
-> **3.** Click the **"+"** button (top) → **"Upload a skill"** → select your ZIP file
+> **3.** Click the **"+"** button (top) → **"Upload a skill"** → select the downloaded ZIP file
 
 ✅ Done! The skill is now available across all your conversations.
-
-<details>
-<summary><b>📥 Pre-packaged ZIP available</b></summary>
-<br>
-
-A ready-to-upload `travel-plan.zip` is included in this repository. Download and upload it directly — no compression needed.
-
-</details>
 
 ### Usage
 
@@ -299,16 +281,11 @@ travel-planner-dashboard/
 ├── 📄 README.ko.md                       ← 한국어 문서
 ├── 📜 LICENSE                            ← Apache 2.0
 │
-└── 📁 travel-plan/
-    ├── 📄 SKILL.md                       ← Skill definition & workflow
-    ├── 📁 examples/                      ← Reference HTML outputs
-    │   ├── tokyo-2026.html
-    │   ├── 3-family-toyko2026.html
-    │   ├── italy-honeymoon-2026.html
-    │   └── parents_swiss2026.html
-    └── 📁 references/                    ← Design system docs
-        ├── html-architecture.md          ← Page structure & components
-        └── design-system.md              ← Themes & CSS variables
+└── 📦 travel-plan-github.zip             ← Ready-to-upload skill package
+    └── travel-plan/
+        ├── SKILL.md                      ← Skill definition & workflow
+        ├── examples/                     ← Reference HTML outputs
+        └── references/                   ← Design system docs
 ```
 
 ### Tech Stack
@@ -425,9 +402,9 @@ graph LR
 
 Contributions are welcome! Here's how you can help:
 
-- **Add new themes** — Extend `references/design-system.md` with new color palettes
+- **Add new themes** — Extend the design system with new color palettes
 - **Add example trips** — Submit `.html` outputs for new destinations
-- **Improve components** — Enhance sections in `references/html-architecture.md`
+- **Improve components** — Enhance page structure & section designs
 - **Report bugs** — Open an issue with the generated HTML attached
 
 <br>
