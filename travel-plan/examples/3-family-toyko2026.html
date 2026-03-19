@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도쿄 가족여행 2026 · 지우네 첫 해외여행</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        /* * [NEW THEME] Tokyo Family Trip - Playful, Clean, Muji/Kawaii Vibe
+         */
+        :root {
+            /* LIGHT MODE (Default) - Warm & Playful */
+            color-scheme: light;
+            --color-primary: #FF9F1C;       /* Playful Orange */
+            --color-primary-rgb: 255, 159, 28;
+            --color-accent: #FF4081;        /* Candy Pink */
+            --color-accent-rgb: 255, 64, 129;
+            --color-success: #8CB369;       /* Matcha Green */
+            --color-success-rgb: 140, 179, 105;
+            --color-blue: #3A86FF;          /* Sky Blue */
+            --color-blue-rgb: 58, 134, 255;
+
+            --bg: #FDFBF7;                  /* Warm Off-White */
+            --bg-secondary: #F4F1EA;
+            --surface: #FFFFFF;
+            --surface-strong: #FFFFFF;
+            
+            --text-strong: #2D3748;
+            --text-body: #4A5568;
+            --text-muted: #A0AEC0;
+            --text-inverse: #FFFFFF;
+
+            --border: rgba(0, 0, 0, 0.06);
+            --border-strong: rgba(0, 0, 0, 0.12);
+
+            --hero-start: #FFD166;          /* Warm Yellow */
+            --hero-end: #FF9F1C;            /* Orange */
+            
+            --sidebar-start: #FFFFFF;
+            --sidebar-end: #FDFBF7;
+
+            --shadow-sm: 0 4px 12px rgba(255, 159, 28, 0.08);
+            --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.05);
+            --tooltip-bg: rgba(255, 255, 255, 0.95);
+            --radius-card: 1.5rem;
+        }
+
+        html[data-theme="dark"] {
+            /* DARK MODE - Tokyo Night Neon Vibe */
+            color-scheme: dark;
+            --color-primary: #FFCA3A;       /* Neon Yellow */
+            --color-primary-rgb: 255, 202, 58;
+            --color-accent: #F15BB5;        /* Neon Pink */
+            --color-accent-rgb: 241, 91, 181;
+            --color-success: #00F5D4;       /* Neon Cyan */
+            --color-success-rgb: 0, 245, 212;
+            --color-blue: #00BBF9;          /* Neon Blue */
+            --color-blue-rgb: 0, 187, 249;
+
+            --bg: #0F172A;                  /* Deep Night Navy */
+            --bg-secondary: #1E293B;
+            --surface: #1E293B;
+            --surface-strong: #334155;
+            
+            --text-strong: #F8FAFC;
+            --text-body: #CBD5E1;
+            --text-muted: #64748B;
+            --text-inverse: #0F172A;
+
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.15);
+
+            --hero-start: #1E293B;          /* Dark Slate */
+            --hero-end: #0F172A;            /* Deep Navy */
+            
+            --sidebar-start: #0F172A;
+            --sidebar-end: #1E293B;
+
+            --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 12px 35px rgba(0, 0, 0, 0.6);
+            --tooltip-bg: rgba(30, 41, 59, 0.95);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-body);
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Playful Polka Dot Pattern */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: radial-gradient(var(--text-muted) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.15;
+        }
+
+        main, aside, .mobile-topbar { position: relative; z-index: 1; }
+        a, button { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Navigation & Topbar */
+        .mobile-topbar {
+            background: rgba(var(--bg-rgb), 0.85);
+            background-color: var(--surface);
+            border-bottom: 2px dashed var(--border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .sidebar-shell {
+            background: linear-gradient(180deg, var(--sidebar-start) 0%, var(--sidebar-end) 100%);
+            border-right: 2px dashed var(--border);
+        }
+
+        .sidebar-overline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.5rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 9999px;
+            border: 2px solid rgba(var(--color-primary-rgb), 0.4);
+            background: rgba(var(--color-primary-rgb), 0.15);
+            color: var(--color-primary);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle, .menu-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 1rem;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            color: var(--text-strong);
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.05);
+        }
+        .desktop-theme-toggle { display: none; }
+        .theme-toggle:hover, .menu-button:hover {
+            border-color: var(--color-primary);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px rgba(var(--color-primary-rgb), 0.2);
+        }
+
+        /* Nav Links */
+        .nav-link { color: var(--text-muted); border-radius: 1rem; font-weight: 600; margin-bottom: 0.25rem;}
+        .nav-link:hover {
+            color: var(--color-primary);
+            background: rgba(var(--color-primary-rgb), 0.1);
+            transform: translateX(6px);
+        }
+        .nav-link.active {
+            color: var(--text-inverse);
+            background: var(--color-primary);
+            box-shadow: 0 4px 10px rgba(var(--color-primary-rgb), 0.3);
+        }
+        #main-nav .section-number {
+            width: 1.8rem; height: 1.8rem;
+            margin-right: 0.6rem;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            color: var(--text-strong);
+            font-size: 0.8rem; font-weight: 900;
+            background: var(--bg-secondary);
+        }
+        .nav-link.active .section-number {
+            background: rgba(255,255,255,0.3);
+            color: var(--text-inverse);
+        }
+
+        /* Hero Section */
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--hero-start) 0%, var(--hero-end) 100%);
+            border-bottom: 2px dashed var(--border);
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 0 3rem 3rem;
+            margin-bottom: 2rem;
+            color: var(--text-strong);
+        }
+        html[data-theme="dark"] .hero-gradient { color: #ffffff; }
+        .hero-layout {
+            position: relative; z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .hero-pill {
+            border: 2px solid rgba(var(--color-primary-rgb), 0.3);
+            background: var(--surface);
+            color: var(--text-strong);
+            font-weight: 800;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.05);
+        }
+
+        .hero-stat {
+            min-width: 100px;
+            padding: 1.25rem 1rem;
+            border-radius: 1.25rem;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.05);
+            color: var(--text-strong);
+        }
+        .hero-stat-label { color: var(--text-muted); }
+
+        .hero-panel {
+            padding: 1.75rem;
+            border-radius: var(--radius-card);
+            background: var(--surface);
+            border: 2px solid var(--border);
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.05);
+            color: var(--text-strong);
+        }
+        .hero-panel-eyebrow {
+            font-size: 0.8rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(var(--color-accent-rgb), 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+        }
+        .hero-panel-row {
+            display: grid; grid-template-columns: 80px minmax(0,1fr); gap: 1rem;
+            padding: 1rem 0;
+            border-top: 2px dashed var(--border);
+        }
+        .hero-panel-row:first-of-type { border-top: none; padding-top: 0; }
+        .hero-panel-label {
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .hero-panel-value { font-size: 1rem; font-weight: 800; }
+        .hero-panel-copy { margin-top: 0.3rem; font-size: 0.85rem; color: var(--text-body); line-height: 1.5; }
+
+        /* Typography & Headings */
+        .section-kicker {
+            display: inline-flex; align-items: center;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            background: rgba(var(--color-blue-rgb), 0.1);
+            color: var(--color-blue);
+            font-size: 0.8rem; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .section-heading {
+            color: var(--text-strong);
+            font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+            font-weight: 900; letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 4px; left: 0; width: 100%; height: 12px;
+            background: rgba(var(--color-primary-rgb), 0.3);
+            z-index: -1;
+            border-radius: 6px;
+        }
+        .content-section { scroll-margin-top: 110px; }
+
+        /* Cards */
+        .kpi-card, .day-card, .hotel-card, .flight-card {
+            border-radius: var(--radius-card);
+            border: 2px solid var(--border);
+            background: var(--surface);
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .kpi-card { padding: 1.5rem; text-align: center; }
+        .kpi-card:hover, .day-card:hover, .hotel-card:hover, .flight-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 10px 10px 0px rgba(var(--color-primary-rgb), 0.15);
+            border-color: var(--color-primary);
+        }
+
+        /* Timeline & Day Cards */
+        .day-card { overflow: hidden; }
+        .day-header {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 2px dashed var(--border);
+            color: var(--text-strong);
+            position: relative;
+        }
+
+        .timeline-container { position: relative; padding-left: 2.5rem; }
+        .timeline-container::before {
+            content: ""; position: absolute;
+            left: 0.85rem; top: 0; bottom: 0; width: 4px;
+            background: var(--bg-secondary);
+            border-radius: 2px;
+        }
+        .timeline-item { position: relative; margin-bottom: 2rem; }
+        .timeline-dot {
+            position: absolute; left: -2.15rem; top: 0.5rem;
+            width: 1.2rem; height: 1.2rem;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 3px solid var(--color-primary);
+            box-shadow: 0 0 0 4px var(--surface);
+            z-index: 2;
+        }
+        .timeline-dot.accent { border-color: var(--color-accent); background: var(--color-accent); }
+
+        /* Badges & Tags */
+        .info-badge {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.8rem; border-radius: 9999px;
+            font-size: 0.8rem; font-weight: 800;
+        }
+        .activity-tag {
+            display: inline-flex; align-items: center; gap: 0.25rem;
+            padding: 0.35rem 0.7rem; border-radius: 0.75rem;
+            font-size: 0.75rem; font-weight: 700;
+            border: 2px solid transparent;
+        }
+
+        /* Forms & Interactive */
+        .checklist-item {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.75rem 0; border-bottom: 2px dashed var(--border);
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .checklist-item:last-child { border-bottom: none; }
+        .checklist-cb { 
+            width: 1.5rem; height: 1.5rem; 
+            accent-color: var(--color-primary); 
+            cursor: pointer; flex-shrink: 0; 
+            border-radius: 0.4rem;
+        }
+        .checklist-item.checked .checklist-label { text-decoration: line-through; color: var(--text-muted); opacity: 0.5; }
+
+        /* Map */
+        .map-container { border-radius: var(--radius-card); overflow: hidden; border: 2px solid var(--border); box-shadow: 6px 6px 0px rgba(0,0,0,0.03); }
+        #leaflet-map { height: 400px; width: 100%; z-index: 0; }
+        html[data-theme="dark"] .leaflet-layer { filter: brightness(0.8) contrast(1.1) saturate(0.8); }
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: var(--surface-strong); color: var(--text-body); box-shadow: var(--shadow-md); border-radius: 1rem;
+        }
+        .leaflet-popup-content h4 { font-weight: 900; color: var(--text-strong); }
+
+        .place-card-link { cursor: pointer; transition: all 0.2s ease; }
+        .place-card-link:hover { border-color: var(--color-blue) !important; transform: translateY(-3px); box-shadow: 6px 6px 0px rgba(var(--color-blue-rgb), 0.15); }
+
+        .dday-badge {
+            background: var(--color-accent) !important;
+            color: #ffffff !important;
+            border: none !important;
+        }
+
+        /* Utilities */
+        .bg-white { background: var(--surface) !important; }
+        .bg-white\/80 { background: rgba(var(--surface-rgb, 255,255,255), 0.8) !important; }
+        .bg-gray-50 { background: var(--bg-secondary) !important; }
+        .bg-gray-100 { background: var(--surface-strong) !important; }
+        .text-gray-900, .text-gray-800 { color: var(--text-strong) !important; }
+        .text-gray-700, .text-gray-600 { color: var(--text-body) !important; }
+        .text-gray-500, .text-gray-400 { color: var(--text-muted) !important; }
+        .border-gray-200 { border-color: var(--border) !important; }
+        .shadow-sm { box-shadow: 4px 4px 0px rgba(0,0,0,0.03) !important; }
+
+        .bg-amber-50, .bg-yellow-50 { background: rgba(var(--color-primary-rgb), 0.1) !important; }
+        .bg-amber-100, .bg-yellow-100 { background: rgba(var(--color-primary-rgb), 0.2) !important; }
+        .text-amber-700, .text-yellow-700 { color: var(--color-primary) !important; }
+        .border-amber-100, .border-amber-200, .border-yellow-100 { border-color: rgba(var(--color-primary-rgb), 0.3) !important; }
+
+        .bg-red-50, .bg-orange-50, .bg-pink-50 { background: rgba(var(--color-accent-rgb), 0.1) !important; }
+        .bg-red-100, .bg-orange-100, .bg-pink-100 { background: rgba(var(--color-accent-rgb), 0.2) !important; }
+        .text-red-500, .text-red-600, .text-red-700, .text-orange-700, .text-pink-700 { color: var(--color-accent) !important; }
+        .border-red-100, .border-red-200, .border-orange-100, .border-pink-100 { border-color: rgba(var(--color-accent-rgb), 0.3) !important; }
+
+        .bg-emerald-50, .bg-green-50 { background: rgba(var(--color-success-rgb), 0.1) !important; }
+        .bg-emerald-100, .bg-green-100 { background: rgba(var(--color-success-rgb), 0.2) !important; }
+        .text-emerald-700, .text-green-800 { color: var(--color-success) !important; }
+        .border-emerald-100, .border-green-100 { border-color: rgba(var(--color-success-rgb), 0.3) !important; }
+
+        .bg-blue-50, .bg-cyan-50, .bg-purple-50 { background: rgba(var(--color-blue-rgb), 0.1) !important; }
+        .bg-blue-100, .bg-cyan-100, .bg-purple-100 { background: rgba(var(--color-blue-rgb), 0.2) !important; }
+        .text-blue-600, .text-blue-700, .text-cyan-700, .text-purple-700 { color: var(--color-blue) !important; }
+        .border-blue-100, .border-blue-200, .border-cyan-100, .border-purple-100 { border-color: rgba(var(--color-blue-rgb), 0.3) !important; }
+
+        @media (max-width: 1024px) { .hero-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 767px) {
+            .hero-gradient { border-radius: 0 0 2rem 2rem; }
+            .hero-gradient h2 { font-size: 2.25rem !important; }
+            .hero-panel { padding: 1.25rem; }
+            .hero-panel-row { grid-template-columns: 1fr; gap: 0.25rem; }
+            .theme-toggle .theme-label { display: none; }
+            #leaflet-map { height: 320px; }
+        }
+        @media (min-width: 768px) { .desktop-theme-toggle { display: inline-flex; } }
+    </style>
+</head>
+<body class="antialiased">
+<div class="relative min-h-screen flex">
+
+    <!-- 모바일 상단 바 -->
+    <div class="mobile-topbar md:hidden fixed top-0 left-0 right-0 flex justify-between items-center p-4 z-50">
+        <div>
+            <div class="text-[10px] tracking-widest uppercase text-gray-500 font-bold mb-1">Tokyo Family Trip</div>
+            <h1 class="text-lg font-black text-gray-900">도쿄 가족여행</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <button type="button" data-theme-toggle class="theme-toggle" aria-label="다크 모드로 전환">
+                <span class="theme-icon" data-theme-icon>☾</span>
+                <span class="theme-label" data-theme-label>다크</span>
+            </button>
+            <button id="mobile-menu-button" class="menu-button" aria-label="메뉴 열기">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- 사이드바 -->
+    <aside id="sidebar" class="sidebar-shell w-64 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40 overflow-y-auto pt-24 md:pt-0 pb-8 flex flex-col h-screen">
+        <div class="p-6 pb-2">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <div class="sidebar-overline">👨‍👩‍👦 지우네 여행</div>
+                    <h2 class="text-2xl font-black text-gray-900 leading-tight mt-2">도쿄 4박 5일</h2>
+                    <p class="text-xs font-bold mt-2 text-gray-500 bg-gray-50 inline-block px-2 py-1 rounded-md">26.09.12 — 09.16</p>
+                </div>
+                <button type="button" data-theme-toggle class="theme-toggle desktop-theme-toggle" aria-label="다크 모드로 전환">
+                    <span class="theme-icon" data-theme-icon>☾</span>
+                </button>
+            </div>
+        </div>
+        <nav id="main-nav" class="flex flex-col space-y-1 px-4 mt-6">
+            <a href="#overview" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">🎒</span>여행 개요</a>
+            <a href="#flights" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">✈️</span>항공편 정보</a>
+            <a href="#hotels" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">🏠</span>숙소 정보</a>
+            <a href="#map" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">🗺</span>주요 스팟</a>
+            <div class="my-3 border-t-2 dashed border-gray-200 mx-2"></div>
+            <a href="#day1" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">1</span>DAY 1 · 우에노 도착</a>
+            <a href="#day2" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">2</span>DAY 2 · 디즈니랜드</a>
+            <a href="#day3" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">3</span>DAY 3 · 오다이바</a>
+            <a href="#day4" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">4</span>DAY 4 · 스카이트리</a>
+            <a href="#day5" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">5</span>DAY 5 · 귀국</a>
+            <div class="my-3 border-t-2 dashed border-gray-200 mx-2"></div>
+            <a href="#budget" class="nav-link px-3 py-3 font-medium text-sm flex items-center"><span class="section-number">📝</span>예산 · 준비물</a>
+        </nav>
+        <div class="mt-auto pt-6 px-6 text-xs text-gray-400 font-medium text-center">
+            <p>Tokyo Family Trip 🇯🇵</p>
+        </div>
+    </aside>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 hidden md:hidden"></div>
+
+    <!-- 메인 -->
+    <main class="flex-1 min-w-0 md:ml-64 pt-16 md:pt-0 pb-24">
+
+        <!-- HERO -->
+        <div class="hero-gradient px-6 sm:px-10 lg:px-14 py-12 md:py-16">
+            <div class="max-w-6xl mx-auto hero-layout">
+                <div class="max-w-3xl">
+                    <div class="flex flex-wrap gap-2 mb-6 text-sm">
+                        <span class="info-badge hero-pill">🇯🇵 일본 도쿄</span>
+                        <span class="info-badge hero-pill">👨‍👩‍👦 3인 가족 (4살 아이)</span>
+                        <span class="info-badge hero-pill">📅 4박 5일</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-black mb-4 tracking-tight leading-tight" style="text-shadow: 2px 2px 0px rgba(0,0,0,0.1)">
+                        우리 가족 첫<br>도쿄 나들이 🎈
+                    </h2>
+                    <p class="text-base md:text-lg max-w-2xl font-medium opacity-90 mb-8">
+                        2026년 9월 12일(토) — 9월 16일(수)<br>
+                        디즈니랜드, 수족관, 그리고 맛있는 간식! 아이와 함께하는 여유로운 4박 5일 도쿄 여행.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div id="dday-box" class="dday-badge hero-stat text-center">
+                            <div id="dday-count" class="text-2xl font-black">D-?</div>
+                            <div class="hero-stat-label text-xs font-bold uppercase mt-1 text-white opacity-90">출발까지</div>
+                        </div>
+                        <div class="hero-stat text-center">
+                            <div class="text-2xl font-black">4박 5일</div>
+                            <div class="hero-stat-label text-xs font-bold uppercase mt-1">여행 기간</div>
+                        </div>
+                        <div class="hero-stat text-center">
+                            <div class="text-2xl font-black">우에노</div>
+                            <div class="hero-stat-label text-xs font-bold uppercase mt-1">숙소 위치</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-panel">
+                    <div class="hero-panel-eyebrow">Trip Summary</div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Route</div>
+                        <div>
+                            <div class="hero-panel-value">김포 ↔ 하네다 왕복</div>
+                            <p class="hero-panel-copy">아이 컨디션을 위해 비행시간이 짧고 도심 접근성이 좋은 김포-하네다 노선 이용.</p>
+                        </div>
+                    </div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Stay</div>
+                        <div>
+                            <div class="hero-panel-value">아파트먼트 호텔</div>
+                            <p class="hero-panel-copy">MIMARU Tokyo Ueno East. 주방이 있고 넓어 가족 여행객에게 최적.</p>
+                        </div>
+                    </div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Focus</div>
+                        <div>
+                            <div class="hero-panel-value">아이 친화적 코스</div>
+                            <p class="hero-panel-copy">도쿄 디즈니랜드, 스미다 수족관, 팀랩 플래내츠 등 시각적으로 즐거운 명소 위주.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-4 sm:px-8 lg:px-12 max-w-5xl mx-auto">
+
+            <!-- OVERVIEW -->
+            <section id="overview" class="content-section mb-16">
+                <div class="section-kicker">Overview</div>
+                <h3 class="section-heading">여행 개요</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                    <div class="kpi-card">
+                        <div class="text-4xl mb-3">✈️</div>
+                        <div class="text-xs font-black text-blue-500 uppercase tracking-widest mb-1">항공편</div>
+                        <div class="text-lg font-black text-gray-900">대한항공 왕복</div>
+                        <div class="text-sm font-medium text-gray-500 mt-1">김포(GMP) ↔ 하네다(HND)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="text-4xl mb-3">🏠</div>
+                        <div class="text-xs font-black text-amber-500 uppercase tracking-widest mb-1">숙소</div>
+                        <div class="text-lg font-black text-gray-900">MIMARU 우에노</div>
+                        <div class="text-sm font-medium text-gray-500 mt-1">패밀리 아파트먼트 4박</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="text-4xl mb-3">🏰</div>
+                        <div class="text-xs font-black text-pink-500 uppercase tracking-widest mb-1">핵심 액티비티</div>
+                        <div class="text-lg font-black text-gray-900">도쿄 디즈니랜드</div>
+                        <div class="text-sm font-medium text-gray-500 mt-1">DAY 2 풀데이 일정</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="text-4xl mb-3">💴</div>
+                        <div class="text-xs font-black text-emerald-500 uppercase tracking-widest mb-1">예상 경비</div>
+                        <div class="text-lg font-black text-gray-900">약 350만원</div>
+                        <div class="text-sm font-medium text-gray-500 mt-1">3인 가족 전체 기준</div>
+                    </div>
+                </div>
+
+                <!-- 일정 요약 -->
+                <div class="bg-white rounded-3xl p-6 md:p-8 border-2 border-gray-200 shadow-sm">
+                    <h4 class="font-black text-xl mb-6 flex items-center gap-2 text-gray-900">📅 일정 한눈에 보기</h4>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-amber-50 rounded-xl py-2 border-2 border-amber-100">
+                                <div class="text-xs font-black text-amber-600">DAY 1</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">12</div>
+                            </div>
+                            <div class="flex-1 pb-1 border-b-2 dashed border-gray-100">
+                                <div class="font-black text-base text-gray-900">도착 및 우에노 파크 산책 🐼</div>
+                                <div class="text-gray-500 font-medium mt-1">오전 비행기 도착 → 모노레일 이동 → 호텔 체크인 → 우에노 동물원</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-pink-50 rounded-xl py-2 border-2 border-pink-100">
+                                <div class="text-xs font-black text-pink-600">DAY 2</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">13</div>
+                            </div>
+                            <div class="flex-1 pb-1 border-b-2 dashed border-gray-100">
+                                <div class="font-black text-base text-gray-900">도쿄 디즈니랜드 🏰</div>
+                                <div class="text-gray-500 font-medium mt-1">아이 맞춤형 어트랙션 위주 탑승 → 퍼레이드 관람 → 불꽃놀이</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-blue-50 rounded-xl py-2 border-2 border-blue-100">
+                                <div class="text-xs font-black text-blue-600">DAY 3</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">14</div>
+                            </div>
+                            <div class="flex-1 pb-1 border-b-2 dashed border-gray-100">
+                                <div class="font-black text-base text-gray-900">오다이바 & 팀랩 플래내츠 ✨</div>
+                                <div class="text-gray-500 font-medium mt-1">팀랩 몰입형 전시 체험 → 실물 건담 관람 → 오다이바 해변공원</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-emerald-50 rounded-xl py-2 border-2 border-emerald-100">
+                                <div class="text-xs font-black text-emerald-600">DAY 4</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">15</div>
+                            </div>
+                            <div class="flex-1 pb-1 border-b-2 dashed border-gray-100">
+                                <div class="font-black text-base text-gray-900">아사쿠사 & 스미다 수족관 🐧</div>
+                                <div class="text-gray-500 font-medium mt-1">센소지 주변 구경 → 스카이트리 방문 → 펭귄이 있는 스미다 수족관</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-gray-100 rounded-xl py-2 border-2 border-gray-200">
+                                <div class="text-xs font-black text-gray-600">DAY 5</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">16</div>
+                            </div>
+                            <div class="flex-1 pb-1">
+                                <div class="font-bold text-base text-gray-900">도쿄역 & 귀국 ✈️</div>
+                                <div class="text-gray-500 font-medium mt-1">도쿄역 캐릭터 스트리트 쇼핑 → 하네다 공항 이동 → 김포 도착</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FLIGHTS -->
+            <section id="flights" class="content-section mb-16">
+                <div class="section-kicker">Flights</div>
+                <h3 class="section-heading">항공편 정보</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="flight-card p-6 md:p-8 border-t-4 border-t-blue-500">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="info-badge bg-blue-50 text-blue-700 border-2 border-blue-100">🛫 가는편</span>
+                            <span class="font-bold text-gray-700">대한항공 KE2101</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">09:00</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">김포 GMP</div>
+                            </div>
+                            <div class="flex-1 px-4 relative">
+                                <div class="border-t-2 dashed border-gray-300 w-full absolute top-1/2 left-0 transform -translate-y-1/2"></div>
+                                <div class="text-center relative z-10"><span class="bg-surface px-2 text-xl">✈️</span></div>
+                                <div class="text-xs font-bold text-center text-gray-400 mt-2">2H 10M</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">11:10</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">하네다 HND</div>
+                            </div>
+                        </div>
+                        <div class="text-sm font-bold text-gray-600 bg-gray-50 rounded-xl p-3 border-2 border-gray-100 text-center">
+                            9월 12일 (토) · 직항 · 이코노미
+                        </div>
+                    </div>
+                    <div class="flight-card p-6 md:p-8 border-t-4 border-t-orange-500">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="info-badge bg-orange-50 text-orange-700 border-2 border-orange-100">🛬 오는편</span>
+                            <span class="font-bold text-gray-700">대한항공 KE2104</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">19:45</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">하네다 HND</div>
+                            </div>
+                            <div class="flex-1 px-4 relative">
+                                <div class="border-t-2 dashed border-gray-300 w-full absolute top-1/2 left-0 transform -translate-y-1/2"></div>
+                                <div class="text-center relative z-10"><span class="bg-surface px-2 text-xl" style="transform: scaleX(-1); display:inline-block;">✈️</span></div>
+                                <div class="text-xs font-bold text-center text-gray-400 mt-2">2H 25M</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">22:10</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">김포 GMP</div>
+                            </div>
+                        </div>
+                        <div class="text-sm font-bold text-gray-600 bg-gray-50 rounded-xl p-3 border-2 border-gray-100 text-center">
+                            9월 16일 (수) · 직항 · 이코노미
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-3xl p-6 md:p-8 border-2 border-amber-100 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-[-20px] right-[-20px] text-8xl opacity-10">👶</div>
+                    <h4 class="font-black text-lg text-gray-900 mb-4">💡 아이 동반 항공 이용 팁</h4>
+                    <ul class="space-y-3 text-sm font-medium text-gray-700">
+                        <li class="flex items-start gap-2"><span class="text-amber-500">✔</span> 베시넷(아기바구니)은 작아서 불가, **유아용 기내식(키즈밀)** 사전 신청 필수! (출발 24시간 전까지)</li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500">✔</span> 유모차는 탑승구(게이트)까지 사용 후 수하물로 부칠 수 있음 (도어투도어 서비스).</li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500">✔</span> 이착륙 시 귀 아픔 방지를 위해 아이가 마실 물, 주스나 사탕 준비.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- HOTELS -->
+            <section id="hotels" class="content-section mb-16">
+                <div class="section-kicker">Hotels</div>
+                <h3 class="section-heading">숙소 정보</h3>
+                
+                <div class="hotel-card relative overflow-hidden p-6 md:p-8" style="border-width: 2px; border-color: var(--color-primary);">
+                    <div class="absolute top-0 right-0 text-white text-xs font-black px-4 py-2 rounded-bl-2xl uppercase tracking-widest" style="background: var(--color-primary);">Family Pick</div>
+                    <div class="flex flex-wrap items-center gap-2 mb-4">
+                        <span class="info-badge bg-amber-50 text-amber-700 border-2 border-amber-100">9/12 ~ 9/16</span>
+                        <span class="info-badge bg-gray-100 text-gray-700 border-2 border-gray-200">4박 연속 숙박</span>
+                    </div>
+                    <h4 class="text-2xl md:text-3xl font-black text-gray-900 mb-2">🏠 MIMARU Tokyo Ueno East</h4>
+                    <p class="text-base font-medium text-gray-600 mb-5">Family Apartment (40㎡) · 우에노역 도보 5분 · 주방 및 식탁 완비</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gray-50 rounded-2xl p-4 text-center border-2 border-gray-100">
+                            <div class="text-3xl mb-2">🍳</div>
+                            <div class="text-sm font-bold text-gray-800">간단한 주방</div>
+                            <div class="text-xs text-gray-500 mt-1">전자레인지, 식기 완비<br>아이 밥 먹이기 좋음</div>
+                        </div>
+                        <div class="bg-gray-50 rounded-2xl p-4 text-center border-2 border-gray-100">
+                            <div class="text-3xl mb-2">🛏️</div>
+                            <div class="text-sm font-bold text-gray-800">넓은 객실</div>
+                            <div class="text-xs text-gray-500 mt-1">일반 비즈니스 호텔 대비<br>2배 이상 넓은 공간</div>
+                        </div>
+                        <div class="bg-gray-50 rounded-2xl p-4 text-center border-2 border-gray-100">
+                            <div class="text-3xl mb-2">🚆</div>
+                            <div class="text-sm font-bold text-gray-800">교통의 요지</div>
+                            <div class="text-xs text-gray-500 mt-1">스카이라이너 직통<br>어디든 이동 편리</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-100 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+                        <div><span class="font-bold text-gray-600 mr-2">요금:</span><strong class="text-gray-900 text-lg">약 1,180,000원</strong> (4박 총액)</div>
+                        <div><span class="font-bold text-gray-600 mr-2">특이사항:</span><strong class="text-gray-900">매일 청소는 없으나 수건 교체 가능</strong></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MAP -->
+            <section id="map" class="content-section mb-16">
+                <div class="section-kicker">Map</div>
+                <h3 class="section-heading">도쿄 주요 스팟</h3>
+                <div class="map-container mb-6">
+                    <div id="leaflet-map"></div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div class="place-card-link bg-white rounded-2xl p-4 border-2 border-gray-100 shadow-sm text-center" data-place="haneda">
+                        <div class="text-2xl mb-1">✈️</div>
+                        <h5 class="font-black text-sm text-gray-900">하네다 공항</h5>
+                    </div>
+                    <div class="place-card-link bg-white rounded-2xl p-4 border-2 border-gray-100 shadow-sm text-center" data-place="mimaru">
+                        <div class="text-2xl mb-1">🏠</div>
+                        <h5 class="font-black text-sm text-gray-900">우에노 숙소</h5>
+                    </div>
+                    <div class="place-card-link bg-white rounded-2xl p-4 border-2 border-gray-100 shadow-sm text-center" data-place="disney">
+                        <div class="text-2xl mb-1">🏰</div>
+                        <h5 class="font-black text-sm text-gray-900">디즈니랜드</h5>
+                    </div>
+                    <div class="place-card-link bg-white rounded-2xl p-4 border-2 border-gray-100 shadow-sm text-center" data-place="teamlab">
+                        <div class="text-2xl mb-1">✨</div>
+                        <h5 class="font-black text-sm text-gray-900">팀랩 플래내츠</h5>
+                    </div>
+                    <div class="place-card-link bg-white rounded-2xl p-4 border-2 border-gray-100 shadow-sm text-center" data-place="skytree">
+                        <div class="text-2xl mb-1">🗼</div>
+                        <h5 class="font-bold text-sm text-gray-900">스카이트리</h5>
+                    </div>
+                    <div class="place-card-link bg-white rounded-2xl p-4 border-2 border-gray-100 shadow-sm text-center" data-place="tokyostation">
+                        <div class="text-2xl mb-1">🚂</div>
+                        <h5 class="font-bold text-sm text-gray-900">도쿄역 캐릭터스트리트</h5>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 1 -->
+            <section id="day1" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-2xl px-4 py-2 text-center border-2 border-gray-200">
+                            <div class="text-sm font-black text-gray-500">DAY 1</div>
+                            <div class="text-2xl font-black text-gray-900">9/12</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">도쿄 입성 & 우에노 파크 🐼</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">비행기 타고 슝슝! 동네 적응하기</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-blue-50 rounded-2xl p-5 border-2 border-blue-100">
+                                    <div class="text-xs font-black text-blue-600 mb-2 uppercase tracking-wide">09:00 — 김포 출발</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">대한항공 탑승 (약 2시간)</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">미리 신청한 키즈밀 수령! 창가 자리에서 구름 구경하며 하네다 공항으로 이동.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border-2 border-gray-100">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">12:30 — 하네다 공항 → 우에노</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">도쿄 모노레일 & 야마노테선</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">공항에서 모노레일을 타고 하마마츠초역 환승, 우에노역 도착. (유모차 이동 시 엘리베이터 위치 확인 필수)</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-100">
+                                    <div class="text-xs font-black text-amber-600 mb-2 uppercase tracking-wide">14:00 — MIMARU 우에노</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">호텔 체크인 & 짐 풀기</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">얼리 체크인 가능 여부 확인 후, 불가능하면 짐만 맡기고 주변 식당에서 점심 (우동이나 돈카츠).</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-emerald-50 rounded-2xl p-5 border-2 border-emerald-100">
+                                    <div class="text-xs font-black text-emerald-600 mb-2 uppercase tracking-wide">16:00 — 우에노 공원</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">우에노 동물원 구경 🐘</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">판다와 코끼리, 기린 등 아이가 좋아하는 동물들 구경. 공원 내 넓은 산책로에서 마음껏 뛰어놀기.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-emerald-100 text-emerald-700">🐼 우에노 동물원 (입장료 저렴)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 2 -->
+            <section id="day2" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-2xl px-4 py-2 text-center border-2 border-gray-200">
+                            <div class="text-sm font-black text-gray-500">DAY 2</div>
+                            <div class="text-2xl font-black text-gray-900">9/13</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">꿈과 환상의 나라 🏰</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">도쿄 디즈니랜드 풀타임 즐기기</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-4 border-2 border-gray-100">
+                                    <div class="text-xs font-black text-gray-500 mb-1 tracking-wide">07:30</div>
+                                    <h4 class="font-black text-gray-900">🍳 든든한 아침 & 편의점 간식 털기</h4>
+                                    <p class="text-sm font-medium text-gray-600 mt-1">디즈니랜드 가기 전 체력 보충! 아이 간식(주먹밥 등) 챙기기.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-pink-50 rounded-2xl p-5 border-2 border-pink-200">
+                                    <div class="text-xs font-black text-pink-600 mb-2 uppercase tracking-wide">09:00 — 디즈니랜드 입장</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">🏰 디즈니랜드 탐험 시작!</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">입장하자마자 앱으로 '디즈니 프리미어 액세스(DPA)' 또는 스탠바이 패스 확인.<br>아이가 타기 좋은 <b>'푸의 허니헌트'</b>, <b>'잇츠 어 스몰 월드'</b> 위주로 공략!</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-pink-100 text-pink-700 font-bold">🍯 푸의 허니헌트</span>
+                                        <span class="activity-tag bg-blue-100 text-blue-700 font-bold">🚢 잇츠 어 스몰월드</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-100">
+                                    <div class="text-xs font-black text-amber-600 mb-2 uppercase tracking-wide">13:00 — 점심 & 휴식</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">팝콘 먹으며 퍼레이드 대기 🍿</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">아이가 좋아하는 미키마우스 모양 피자나 햄버거로 점심. 낮 퍼레이드 명당 자리 선점 후 돗자리 깔고 휴식.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-purple-50 rounded-2xl p-5 border-2 border-purple-100">
+                                    <div class="text-xs font-black text-purple-600 mb-2 uppercase tracking-wide">19:30 — 일렉트리컬 퍼레이드</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">✨ 야간 퍼레이드 & 불꽃놀이</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">화려한 불빛 퍼레이드 관람. 아이가 졸려하면 유모차에서 재우면서 관람. 불꽃놀이 후 퇴장 인파를 피해 조금 일찍 혹은 늦게 복귀.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 3 -->
+            <section id="day3" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-2xl px-4 py-2 text-center border-2 border-gray-200">
+                            <div class="text-sm font-black text-gray-500">DAY 3</div>
+                            <div class="text-2xl font-black text-gray-900">9/14</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">시각을 자극하는 오다이바 ✨</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">빛과 물의 전시, 그리고 거대한 건담!</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-4 border-2 border-gray-100">
+                                    <div class="text-xs font-black text-gray-500 mb-1 tracking-wide">09:30</div>
+                                    <h4 class="font-black text-gray-900">늦잠 후 유리카모메 탑승 🚝</h4>
+                                    <p class="text-sm font-medium text-gray-600 mt-1">전날의 피로를 풀고 늦은 출발. 맨 앞자리에 타서 아이에게 운전수 시점 보여주기.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-blue-50 rounded-2xl p-5 border-2 border-blue-200">
+                                    <div class="text-xs font-black text-blue-600 mb-2 uppercase tracking-wide">11:00 — 도요스 팀랩 플래내츠</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">빛과 물 속을 걷는 체험 전시 🔮</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">맨발로 물속을 걷고 거대한 풍선들을 만지는 오감 만족 전시. (아이 여벌 바지, 수건 필수 지참!)</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-blue-100 text-blue-700 font-bold">🎟️ 사전예약 필수</span>
+                                        <span class="activity-tag bg-white border-2 border-gray-200 text-gray-700 font-bold">👖 무릎 위로 걷는 바지 필수</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border-2 border-gray-100">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">14:00 — 다이버시티 도쿄</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">실물 크기 유니콘 건담 & 푸드코트 🤖</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">거대한 건담 앞에서 사진 찍기. 푸드코트에서 각자 먹고 싶은 음식(타코야키, 라멘 등) 편하게 먹기.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-emerald-50 rounded-2xl p-5 border-2 border-emerald-100">
+                                    <div class="text-xs font-black text-emerald-600 mb-2 uppercase tracking-wide">16:30 — 오다이바 해변공원</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">해변 모래놀이 & 야경 🌅</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">자유의 여신상과 레인보우 브릿지를 배경으로 산책. 아이는 모래사장에서 잠시 모래놀이.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 4 -->
+            <section id="day4" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-2xl px-4 py-2 text-center border-2 border-gray-200">
+                            <div class="text-sm font-black text-gray-500">DAY 4</div>
+                            <div class="text-2xl font-black text-gray-900">9/15</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">아사쿠사 & 스미다 수족관 🐧</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">전통과 현대, 그리고 바다 생물들!</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-100">
+                                    <div class="text-xs font-black text-amber-600 mb-2 uppercase tracking-wide">10:00 — 아사쿠사 센소지</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">전통 거리 산책 및 군것질 🍡</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">가미나리몬 큰 등불 앞에서 가족 사진. 나카미세도리에서 당고, 인형빵 등 달콤한 간식 먹기.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-cyan-50 rounded-2xl p-5 border-2 border-cyan-200">
+                                    <div class="text-xs font-black text-cyan-600 mb-2 uppercase tracking-wide">14:00 — 스카이트리 타운</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">스미다 수족관 (펭귄 & 해파리) 🐠</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">스카이트리 아래 위치한 현대적인 수족관. 대형 펭귄 수조가 아이들에게 인기 만점! 유모차 다니기 쾌적함.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-white border-2 border-cyan-200 text-cyan-700 font-bold">🐧 펭귄 먹이주기 시간 확인!</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border-2 border-gray-200">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">18:00 — 소라마치 쇼핑몰</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">장난감 쇼핑 & 저녁 식사 🎁</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">소라마치(스카이트리 몰) 내의 지브리 샵(동구리 공화국), 포켓몬 센터 구경 후 식당가에서 저녁.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 5 -->
+            <section id="day5" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-2xl px-4 py-2 text-center border-2 border-gray-200">
+                            <div class="text-sm font-black text-gray-500">DAY 5</div>
+                            <div class="text-2xl font-black text-gray-900">9/16</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">캐릭터 친구들 안녕! ✈️</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">도쿄역 쇼핑 후 집으로 돌아가는 날</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border-2 border-gray-200">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">10:00 — 체크아웃</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">짐 보관 후 도쿄역 이동 🚂</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">호텔 체크아웃 후, 야마노테선 타고 도쿄역으로 이동. 코인락커에 짐 보관.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-yellow-50 rounded-2xl p-5 border-2 border-yellow-200">
+                                    <div class="text-xs font-black text-yellow-600 mb-2 uppercase tracking-wide">11:00 — 도쿄역 1번가</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">캐릭터 스트리트 쇼핑 🧸</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">짱구, 산리오, 토미카 등 수많은 캐릭터 샵 밀집 지역. 아이의 여행 기념 장난감 하나 사주기!</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-4 border-2 border-gray-200">
+                                    <div class="text-xs font-black text-gray-500 mb-1 tracking-wide">15:00 — 공항으로</div>
+                                    <h4 class="font-black text-gray-900 mb-1">하네다 공항 도착 & 저녁 식사</h4>
+                                    <p class="text-sm font-medium text-gray-600">공항 라운지나 푸드코트에서 저녁 해결. 남은 엔화로 공항 면세점에서 도쿄 바나나 등 간식 구매.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-orange-50 rounded-2xl p-5 border-2 border-orange-100">
+                                    <div class="text-xs font-black text-orange-600 mb-2 uppercase tracking-wide">19:45 — 대한항공 KE2104</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">아쉬움을 뒤로하고 귀국 ✈️</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">22:10 김포공항 도착. 택시 타고 편안하게 집으로 귀가.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BUDGET & CHECKLIST -->
+            <section id="budget" class="content-section mb-16">
+                <div class="section-kicker">Budget &amp; Checklist</div>
+                <h3 class="section-heading">예산 &amp; 짐 챙기기</h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- 예산 -->
+                    <div class="bg-white rounded-3xl p-6 md:p-8 border-2 border-gray-200 shadow-sm">
+                        <h4 class="font-black text-xl mb-6 flex items-center gap-2 text-gray-900">💰 예상 경비 (3인)</h4>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between text-sm font-bold mb-2">
+                                    <span class="text-gray-700">✈️ 항공권 (대한항공)</span>
+                                    <span class="text-gray-900">₩1,500,000</span>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-1000 bg-blue-500" style="width:42%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm font-bold mb-2">
+                                    <span class="text-gray-700">🏠 MIMARU 숙박 (4박)</span>
+                                    <span class="text-gray-900">₩1,180,000</span>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full bg-amber-500" style="width:33%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm font-bold mb-2">
+                                    <span class="text-gray-700">🏰 디즈니/팀랩 등 티켓</span>
+                                    <span class="text-gray-900">₩300,000</span>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full bg-pink-500" style="width:8%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm font-bold mb-2">
+                                    <span class="text-gray-700">🍣 식비 및 교통 (예상)</span>
+                                    <span class="text-gray-900">₩600,000</span>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full bg-emerald-500" style="width:17%;"></div>
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t-2 dashed border-gray-200">
+                                <div class="flex justify-between mb-1">
+                                    <span class="font-black text-xl text-gray-900">총 예상 비용</span>
+                                    <span class="font-black text-2xl text-primary">₩3,580,000</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8" style="position:relative; height:200px;">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 체크리스트 -->
+                    <div class="bg-white rounded-3xl p-6 md:p-8 border-2 border-gray-200 shadow-sm flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-black text-xl flex items-center gap-2 text-gray-900">🧳 아이 동반 짐싸기</h4>
+                            <span id="checklist-count" class="text-xs font-black px-3 py-1.5 rounded-xl bg-gray-100 text-gray-600">0/10</span>
+                        </div>
+                        <div class="h-3 bg-gray-100 rounded-full overflow-hidden mb-6">
+                            <div id="checklist-progress" class="h-full rounded-full transition-all duration-500" style="width:0%; background: var(--color-primary)"></div>
+                        </div>
+                        <div id="checklist-container" class="space-y-1 overflow-y-auto pr-2 flex-1 custom-scrollbar">
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="passport_kids"><span class="checklist-label text-sm font-bold text-gray-800">아이 여권 (유효기간 확인 필수)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="stroller"><span class="checklist-label text-sm font-bold text-gray-800">기내 반입용 휴대용 유모차 (요요 등)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="medicine"><span class="checklist-label text-sm font-bold text-red-500">아이 상비약 (해열제, 체온계, 밴드)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="milk"><span class="checklist-label text-sm font-bold text-gray-800">멸균우유 및 비상용 아이 간식</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="clothes"><span class="checklist-label text-sm font-bold text-gray-800">여벌 옷 넉넉히 (팀랩 갈 때 반바지 필수)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="kids_meal"><span class="checklist-label text-sm font-bold text-gray-800">대한항공 특별기내식(키즈밀) 사전신청</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="disney_app"><span class="checklist-label text-sm font-bold text-gray-800">도쿄 디즈니 리조트 앱 설치 및 가입</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="visit_web"><span class="checklist-label text-sm font-bold text-gray-800">Visit Japan Web 등록 (빠른 입국용)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="esim_wifi"><span class="checklist-label text-sm font-bold text-gray-800">eSIM 또는 포켓 와이파이 예약</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="cash"><span class="checklist-label text-sm font-bold text-gray-800">엔화 환전 (트래블로그/트래블월렛 + 소액현금)</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 여행 유용 정보 -->
+                <div class="mt-8 rounded-3xl p-6 border-2" style="background: rgba(var(--color-primary-rgb), 0.05); border-color: rgba(var(--color-primary-rgb), 0.15)">
+                    <h4 class="font-black text-lg mb-4 flex items-center gap-2">🎌 도쿄 여행 TMI</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white rounded-2xl p-4 text-center border-2 border-gray-100 shadow-sm">
+                            <div class="text-3xl mb-2">🔌</div>
+                            <div class="text-sm font-black text-gray-900">전압 (110V)</div>
+                            <div class="text-xs font-medium text-gray-500 mt-1">일명 '돼지코' 어댑터 필수!</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-4 text-center border-2 border-gray-100 shadow-sm">
+                            <div class="text-3xl mb-2">💳</div>
+                            <div class="text-sm font-black text-gray-900">카드 결제</div>
+                            <div class="text-xs font-medium text-gray-500 mt-1">대부분 카드 가능하나<br>자판기/작은가게는 현금 필요</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-4 text-center border-2 border-gray-100 shadow-sm">
+                            <div class="text-3xl mb-2">🌡️</div>
+                            <div class="text-sm font-black text-gray-900">9월 날씨</div>
+                            <div class="text-xs font-medium text-gray-500 mt-1">한국의 초가을과 비슷.<br>얇은 겉옷 챙기기.</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-4 text-center border-2 border-gray-100 shadow-sm">
+                            <div class="text-3xl mb-2">🍼</div>
+                            <div class="text-sm font-black text-gray-900">수유실/기저귀</div>
+                            <div class="text-xs font-medium text-gray-500 mt-1">대형 백화점, 디즈니 내<br>'베이비 센터' 시설 최상</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center py-10 text-sm text-gray-400 font-medium">
+                <p>Tokyo Family Trip 2026 🇯🇵</p>
+                <p class="mt-2 font-black text-gray-600">지우네 가족 첫 도쿄 나들이</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<style>
+/* Custom Scrollbar for checklist */
+.custom-scrollbar::-webkit-scrollbar { width: 8px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var root = document.documentElement;
+    var THEME_KEY = 'tokyo-family-theme-2026';
+    var themeButtons = document.querySelectorAll('[data-theme-toggle]');
+    var budgetChart = null;
+
+    function getCV(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
+
+    function updateThemeButtons(theme) {
+        var isDark = theme === 'dark';
+        themeButtons.forEach(function(btn) {
+            var icon = btn.querySelector('[data-theme-icon]');
+            var label = btn.querySelector('[data-theme-label]');
+            if (icon) icon.textContent = isDark ? '☀' : '☾';
+            if (label) label.textContent = isDark ? '라이트' : '다크';
+            btn.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
+        });
+    }
+
+    function updateChartTheme() {
+        if (!budgetChart) return;
+        budgetChart.data.datasets[0].backgroundColor = [
+            getCV('--color-blue'), getCV('--color-primary'), getCV('--color-accent'), getCV('--color-success')
+        ];
+        budgetChart.data.datasets[0].borderColor = getCV('--surface');
+        budgetChart.options.plugins.legend.labels.color = getCV('--text-strong');
+        budgetChart.options.plugins.tooltip.backgroundColor = getCV('--tooltip-bg');
+        budgetChart.options.plugins.tooltip.titleColor = getCV('--text-strong');
+        budgetChart.options.plugins.tooltip.bodyColor = getCV('--text-body');
+        budgetChart.options.plugins.tooltip.borderColor = getCV('--border-strong');
+        budgetChart.update();
+    }
+
+    function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        updateThemeButtons(theme);
+        updateChartTheme();
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch(e) {}
+    applyTheme(saved || 'light'); // Default to light mode for family theme
+
+    themeButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            try { localStorage.setItem(THEME_KEY, next); } catch(e) {}
+        });
+    });
+
+    // Mobile menu
+    var sidebar = document.getElementById('sidebar');
+    var menuBtn = document.getElementById('mobile-menu-button');
+    var overlay = document.getElementById('sidebar-overlay');
+    if (menuBtn && sidebar && overlay) {
+        menuBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        });
+        overlay.addEventListener('click', function() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    }
+
+    var navLinks = document.querySelectorAll('#main-nav a');
+    navLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth < 768 && sidebar) {
+                sidebar.classList.add('-translate-x-full');
+                if (overlay) overlay.classList.add('hidden');
+            }
+        });
+    });
+
+    // ScrollSpy
+    var sections = document.querySelectorAll('.content-section');
+    function updateNav() {
+        var current = '';
+        sections.forEach(function(s) { if (s.getBoundingClientRect().top <= 150) current = s.id; });
+        navLinks.forEach(function(l) {
+            l.classList.remove('active');
+            if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+        });
+    }
+    window.addEventListener('scroll', updateNav);
+    updateNav();
+
+    // D-Day
+    var tripDate = new Date('2026-09-12T00:00:00+09:00');
+    var today = new Date(); today.setHours(0,0,0,0);
+    var diff = Math.ceil((tripDate - today) / 86400000);
+    var ddayEl = document.getElementById('dday-count');
+    var ddayBox = document.getElementById('dday-box');
+    if (ddayEl) {
+        if (diff > 0) ddayEl.textContent = 'D-' + diff;
+        else if (diff === 0) { ddayEl.textContent = 'D-DAY'; if (ddayBox) ddayBox.style.background = 'var(--color-success)'; }
+        else { ddayEl.textContent = 'D+' + Math.abs(diff); if (ddayBox) ddayBox.style.background = 'var(--text-muted)'; }
+    }
+
+    // Leaflet map
+    var places = {
+        haneda:       { lat: 35.5494, lng: 139.7798, emoji: '✈️', name: '하네다 공항', desc: 'HND · 김포에서 2시간' },
+        mimaru:       { lat: 35.7138, lng: 139.7820, emoji: '🏠', name: 'MIMARU 우에노 East', desc: '넓은 패밀리 아파트먼트' },
+        disney:       { lat: 35.6329, lng: 139.8804, emoji: '🏰', name: '도쿄 디즈니랜드', desc: '아이들이 환장하는 꿈의 나라' },
+        teamlab:      { lat: 35.6266, lng: 139.7885, emoji: '✨', name: '팀랩 플래내츠', desc: '도요스 · 신비한 몰입형 전시' },
+        skytree:      { lat: 35.7100, lng: 139.8107, emoji: '🗼', name: '스카이트리 & 스미다 수족관', desc: '수족관 구경 후 쇼핑' },
+        tokyostation: { lat: 35.6812, lng: 139.7671, emoji: '🚂', name: '도쿄역 캐릭터스트리트', desc: '귀국 전 장난감/기념품 털기' }
+    };
+
+    var mapEl = document.getElementById('leaflet-map');
+    var map = null;
+    var markers = {};
+    if (mapEl && typeof L !== 'undefined') {
+        map = L.map('leaflet-map', { scrollWheelZoom: false }).setView([35.66, 139.80], 11);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
+        }).addTo(map);
+
+        Object.keys(places).forEach(function(key) {
+            var p = places[key];
+            var icon = L.divIcon({ html: '<div style="font-size:1.8rem;text-align:center;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.2))">' + p.emoji + '</div>', className: '', iconSize: [36,36], iconAnchor: [18,18], popupAnchor: [0,-18] });
+            var m = L.marker([p.lat, p.lng], { icon: icon }).addTo(map);
+            m.bindPopup('<h4 style="font-weight:900;margin:0 0 6px;">' + p.name + '</h4><p style="margin:0;font-size:13px;font-weight:500">' + p.desc + '</p>');
+            markers[key] = m;
+        });
+    }
+
+    document.querySelectorAll('.place-card-link').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var key = card.getAttribute('data-place');
+            if (map && markers[key] && places[key]) {
+                map.setView([places[key].lat, places[key].lng], 14, { animate: true, duration: 1 });
+                markers[key].openPopup();
+                document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Checklist
+    var SKEY = 'tokyo-family-checklist-2026';
+    var checkboxes = document.querySelectorAll('.checklist-cb');
+    var countEl = document.getElementById('checklist-count');
+    var progEl = document.getElementById('checklist-progress');
+
+    function loadCL() {
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem(SKEY)) || {}; } catch(e) {}
+        checkboxes.forEach(function(cb) {
+            if (saved.hasOwnProperty(cb.getAttribute('data-id'))) cb.checked = saved[cb.getAttribute('data-id')];
+            updateItem(cb);
+        });
+        updateProg();
+    }
+    function saveCL() {
+        var d = {};
+        checkboxes.forEach(function(cb) { d[cb.getAttribute('data-id')] = cb.checked; });
+        try { localStorage.setItem(SKEY, JSON.stringify(d)); } catch(e) {}
+    }
+    function updateItem(cb) {
+        var item = cb.closest('.checklist-item');
+        if (item) { cb.checked ? item.classList.add('checked') : item.classList.remove('checked'); }
+    }
+    function updateProg() {
+        var total = checkboxes.length, done = 0;
+        checkboxes.forEach(function(cb) { if (cb.checked) done++; });
+        if (countEl) countEl.textContent = done + '/' + total;
+        if (progEl) progEl.style.width = (total > 0 ? Math.round(done/total*100) : 0) + '%';
+    }
+    checkboxes.forEach(function(cb) {
+        cb.addEventListener('change', function() { updateItem(cb); saveCL(); updateProg(); });
+    });
+    loadCL();
+
+    // Budget chart
+    var canvas = document.getElementById('budgetChart');
+    if (canvas) {
+        budgetChart = new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels: ['항공권', 'MIMARU 숙박', '티켓(디즈니 등)', '식비/교통'],
+                datasets: [{
+                    data: [1500000, 1180000, 300000, 600000],
+                    backgroundColor: ['#3A86FF', '#FF9F1C', '#FF4081', '#8CB369'], /* Fallbacks */
+                    borderWidth: 2, hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '65%',
+                plugins: {
+                    legend: { position: 'right', labels: { padding: 16, usePointStyle: true, pointStyleWidth: 14, font: { family: 'Paperlogy', size: 13, weight: '800' } } },
+                    tooltip: {
+                        borderWidth: 2, padding: 12, cornerRadius: 12,
+                        callbacks: { label: function(ctx) { return ' ₩' + ctx.parsed.toLocaleString(); } }
+                    }
+                }
+            }
+        });
+        // Initial theme application
+        setTimeout(updateChartTheme, 100);
+    }
+});
+</script>
+</body>
+</html>

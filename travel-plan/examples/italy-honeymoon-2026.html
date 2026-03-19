@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이탈리아 신혼여행 2026 · 로마 & 피렌체 & 아말피</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        /* * [NEW THEME] Boutique Hotel & Amalfi Coast
+         */
+        :root {
+            /* DARK MODE (Default) - Roman Night Theme */
+            color-scheme: dark;
+            --color-primary: #D4AF37;       /* Champagne Gold */
+            --color-primary-rgb: 212, 175, 55;
+            --color-accent: #E27D60;        /* Soft Terracotta */
+            --color-accent-rgb: 226, 125, 96;
+            --color-success: #81B29A;       /* Sage Green */
+            --color-success-rgb: 129, 178, 154;
+            --color-blue: #6A98D7;          /* Muted Blue */
+            --color-blue-rgb: 106, 152, 215;
+
+            --bg: #121417;                  /* Deep Slate Black */
+            --bg-secondary: #191B1F;
+            --surface: #22252A;
+            --surface-strong: #2A2D33;
+            
+            --text-strong: #FFFFFF;
+            --text-body: #D1D5DB;
+            --text-muted: #9CA3AF;
+            --text-inverse: #121417;
+
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.15);
+
+            --hero-start: #141E30;          /* Deep Night Blue */
+            --hero-end: #243B55;            /* Slate Blue */
+            
+            --sidebar-start: #121417;
+            --sidebar-end: #191B1F;
+
+            --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --tooltip-bg: rgba(30, 32, 36, 0.95);
+        }
+
+        html[data-theme="light"] {
+            /* LIGHT MODE - Amalfi Breeze Theme */
+            color-scheme: light;
+            --color-primary: #1D4E89;       /* Deep Amalfi Navy */
+            --color-primary-rgb: 29, 78, 137;
+            --color-accent: #C15C3D;        /* Italian Terracotta */
+            --color-accent-rgb: 193, 92, 61;
+            --color-success: #556B2F;       /* Olive Green */
+            --color-success-rgb: 85, 107, 47;
+            --color-blue: #2A75D3;          /* Azure Blue */
+            --color-blue-rgb: 42, 117, 211;
+
+            --bg: #F8F9FA;                  /* Clean Pearl White */
+            --bg-secondary: #F1F3F5;
+            --surface: #FFFFFF;
+            --surface-strong: #FFFFFF;
+            
+            --text-strong: #111827;
+            --text-body: #4B5563;
+            --text-muted: #6B7280;
+            --text-inverse: #FFFFFF;
+
+            --border: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.15);
+
+            --hero-start: #1D4E89;          /* Navy */
+            --hero-end: #0A244A;            /* Deep Navy */
+            
+            --sidebar-start: #FFFFFF;
+            --sidebar-end: #F8F9FA;
+
+            --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 12px 35px rgba(0, 0, 0, 0.08);
+            --tooltip-bg: rgba(255, 255, 255, 0.98);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-body);
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Subtle noise texture for premium feel instead of complex radial gradients */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.6;
+        }
+
+        main, aside, .mobile-topbar { position: relative; z-index: 1; }
+        a, button { transition: all 0.2s ease; }
+
+        /* Navigation & Topbar */
+        .mobile-topbar {
+            background: rgba(var(--bg-rgb), 0.85); /* Updated dynamically via JS or falls back nicely */
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .sidebar-shell {
+            background: linear-gradient(180deg, var(--sidebar-start) 0%, var(--sidebar-end) 100%);
+            border-right: 1px solid var(--border);
+        }
+
+        .sidebar-overline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+            background: rgba(var(--color-primary-rgb), 0.1);
+            color: var(--color-primary);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle, .menu-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 9999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-strong);
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+        }
+        .desktop-theme-toggle { display: none; }
+        .theme-toggle:hover, .menu-button:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-1px);
+        }
+
+        /* Nav Links */
+        .nav-link { color: var(--text-muted); }
+        .nav-link:hover {
+            color: var(--color-primary);
+            background: rgba(var(--color-primary-rgb), 0.05);
+            transform: translateX(4px);
+        }
+        .nav-link.active {
+            color: var(--color-primary);
+            background: rgba(var(--color-primary-rgb), 0.1);
+            font-weight: 700;
+        }
+        #main-nav .section-number {
+            width: 1.6rem; height: 1.6rem;
+            margin-right: 0.6rem;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 6px;
+            color: var(--color-primary);
+            font-size: 0.7rem; font-weight: 800;
+            background: rgba(var(--color-primary-rgb), 0.15);
+        }
+        .nav-link.active .section-number {
+            background: var(--color-primary);
+            color: var(--surface);
+        }
+
+        /* Hero Section */
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--hero-start) 0%, var(--hero-end) 100%);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            color: #ffffff; /* Always white text on hero */
+        }
+        .hero-gradient::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .hero-layout {
+            position: relative; z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr);
+            gap: 2.5rem;
+            align-items: end;
+        }
+
+        .hero-pill {
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+            backdrop-filter: blur(8px);
+        }
+
+        .hero-stat {
+            min-width: 110px;
+            padding: 1rem 1.05rem;
+            border-radius: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+        }
+        .hero-stat-label { color: rgba(255, 255, 255, 0.6); }
+
+        .hero-panel {
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(16px);
+        }
+        .hero-panel-eyebrow {
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1rem;
+        }
+        .hero-panel-row {
+            display: grid; grid-template-columns: 80px minmax(0,1fr); gap: 1rem;
+            padding: 0.8rem 0;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .hero-panel-row:first-of-type { border-top: none; padding-top: 0; }
+        .hero-panel-label {
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+        }
+        .hero-panel-value { color: #fff; font-size: 0.95rem; font-weight: 700; }
+        .hero-panel-copy { margin-top: 0.2rem; font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+
+        /* Typography & Headings */
+        .section-kicker {
+            display: inline-flex; align-items: center;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            background: rgba(var(--color-primary-rgb), 0.1);
+            color: var(--color-primary);
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .section-heading {
+            color: var(--text-strong);
+            font-size: clamp(1.75rem, 2vw, 2.25rem);
+            font-weight: 800; letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+        .content-section { scroll-margin-top: 100px; }
+
+        /* Cards */
+        .kpi-card, .day-card, .hotel-card, .flight-card {
+            border-radius: 1.25rem;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        .kpi-card { padding: 1.5rem; }
+        .kpi-card:hover, .day-card:hover, .hotel-card:hover, .flight-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-strong);
+        }
+
+        /* Timeline & Day Cards */
+        .day-card { overflow: hidden; }
+        .day-header {
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, var(--hero-start), var(--hero-end));
+            color: #ffffff;
+            position: relative;
+        }
+        .day-header .text-gray-500, .day-header [style*="color"] {
+            color: rgba(255,255,255,0.7) !important;
+        }
+
+        .timeline-container { position: relative; padding-left: 2.5rem; }
+        .timeline-container::before {
+            content: ""; position: absolute;
+            left: 0.85rem; top: 0; bottom: 0; width: 2px;
+            background: var(--border-strong);
+        }
+        .timeline-item { position: relative; margin-bottom: 1.5rem; }
+        .timeline-dot {
+            position: absolute; left: -2.05rem; top: 0.5rem;
+            width: 0.9rem; height: 0.9rem;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 2px solid var(--color-primary);
+        }
+        .timeline-dot.accent { border-color: var(--color-accent); }
+
+        /* Badges & Tags */
+        .info-badge {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.3rem 0.75rem; border-radius: 9999px;
+            font-size: 0.75rem; font-weight: 700;
+        }
+        .activity-tag {
+            display: inline-flex; align-items: center; gap: 0.25rem;
+            padding: 0.25rem 0.6rem; border-radius: 0.4rem;
+            font-size: 0.7rem; font-weight: 600;
+        }
+
+        /* Forms & Interactive */
+        .checklist-item {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.6rem 0; border-bottom: 1px dashed var(--border);
+            cursor: pointer;
+        }
+        .checklist-item:last-child { border-bottom: none; }
+        .checklist-cb { width: 1.25rem; height: 1.25rem; accent-color: var(--color-primary); cursor: pointer; flex-shrink: 0; }
+        .checklist-item.checked .checklist-label { text-decoration: line-through; color: var(--text-muted); opacity: 0.6; }
+
+        /* Map */
+        .map-container { border-radius: 1.25rem; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+        #leaflet-map { height: 450px; width: 100%; z-index: 0; }
+        /* Dark mode map filter for better blending */
+        html[data-theme="dark"] .leaflet-layer { filter: brightness(0.8) contrast(1.1) saturate(0.8); }
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: var(--surface-strong); color: var(--text-body); box-shadow: var(--shadow-md);
+        }
+        .leaflet-popup-content h4 { font-weight: 800; color: var(--text-strong); }
+
+        .place-card-link { cursor: pointer; transition: all 0.2s ease; }
+        .place-card-link:hover { border-color: var(--color-primary) !important; background: var(--bg-secondary); }
+
+        .dday-badge {
+            background: linear-gradient(135deg, var(--color-accent), #9E3F30) !important;
+            color: #ffffff !important;
+            border: none !important;
+        }
+
+        /* * ==========================================
+         * DYNAMIC TAILWIND OVERRIDES (The Magic)
+         * ==========================================
+         * Instead of hardcoding hex colors, these map directly 
+         * to the theme variables, making Light/Dark mode flawless.
+         */
+        .bg-white { background: var(--surface) !important; }
+        .bg-white\/80 { background: rgba(var(--surface-rgb, 255,255,255), 0.8) !important; }
+        .bg-gray-50 { background: var(--bg-secondary) !important; }
+        .bg-gray-100 { background: var(--surface-strong) !important; }
+        .text-gray-900, .text-gray-800 { color: var(--text-strong) !important; }
+        .text-gray-700, .text-gray-600 { color: var(--text-body) !important; }
+        .text-gray-500, .text-gray-400 { color: var(--text-muted) !important; }
+        .border-gray-200 { border-color: var(--border) !important; }
+        .shadow-sm { box-shadow: var(--shadow-sm) !important; }
+
+        /* Semantic Colors (Amber = Primary, Red = Accent, Emerald = Success, Blue = Blue) */
+        .bg-amber-50, .bg-yellow-50 { background: rgba(var(--color-primary-rgb), 0.1) !important; }
+        .bg-amber-100, .bg-yellow-100 { background: rgba(var(--color-primary-rgb), 0.15) !important; }
+        .text-amber-700, .text-yellow-700 { color: var(--color-primary) !important; }
+        .border-amber-100, .border-amber-200, .border-yellow-100 { border-color: rgba(var(--color-primary-rgb), 0.2) !important; }
+
+        .bg-red-50, .bg-orange-50, .bg-pink-50 { background: rgba(var(--color-accent-rgb), 0.1) !important; }
+        .bg-red-100, .bg-orange-100, .bg-pink-100 { background: rgba(var(--color-accent-rgb), 0.15) !important; }
+        .text-red-500, .text-red-600, .text-red-700, .text-orange-700, .text-pink-700 { color: var(--color-accent) !important; }
+        .border-red-100, .border-red-200, .border-orange-100, .border-pink-100 { border-color: rgba(var(--color-accent-rgb), 0.2) !important; }
+
+        .bg-emerald-50, .bg-green-50 { background: rgba(var(--color-success-rgb), 0.1) !important; }
+        .bg-emerald-100, .bg-green-100 { background: rgba(var(--color-success-rgb), 0.15) !important; }
+        .text-emerald-700, .text-green-800 { color: var(--color-success) !important; }
+        .border-emerald-100, .border-green-100 { border-color: rgba(var(--color-success-rgb), 0.2) !important; }
+
+        .bg-blue-50, .bg-cyan-50, .bg-purple-50 { background: rgba(var(--color-blue-rgb), 0.1) !important; }
+        .bg-blue-100, .bg-cyan-100, .bg-purple-100 { background: rgba(var(--color-blue-rgb), 0.15) !important; }
+        .text-blue-600, .text-blue-700, .text-cyan-700, .text-purple-700 { color: var(--color-blue) !important; }
+        .border-blue-100, .border-blue-200, .border-cyan-100, .border-purple-100 { border-color: rgba(var(--color-blue-rgb), 0.2) !important; }
+
+        /* Media Queries */
+        @media (max-width: 1024px) { .hero-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 767px) {
+            .hero-gradient h2 { font-size: 2.25rem !important; }
+            .hero-panel { padding: 1.25rem; }
+            .hero-panel-row { grid-template-columns: 1fr; gap: 0.25rem; }
+            .theme-toggle .theme-label { display: none; }
+            #leaflet-map { height: 350px; }
+        }
+        @media (min-width: 768px) { .desktop-theme-toggle { display: inline-flex; } }
+    </style>
+</head>
+<body class="antialiased">
+<div class="relative min-h-screen flex">
+
+    <!-- 모바일 상단 바 -->
+    <div class="mobile-topbar md:hidden fixed top-0 left-0 right-0 flex justify-between items-center p-4 z-50">
+        <div>
+            <div class="text-[10px] tracking-[0.2em] uppercase text-gray-500 font-bold">Honeymoon 2026</div>
+            <h1 class="text-lg font-black text-gray-900">이탈리아 신혼여행</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <button type="button" data-theme-toggle class="theme-toggle" aria-label="라이트 모드로 전환">
+                <span class="theme-icon" data-theme-icon>☀</span>
+                <span class="theme-label" data-theme-label>라이트</span>
+            </button>
+            <button id="mobile-menu-button" class="menu-button" aria-label="메뉴 열기">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- 사이드바 -->
+    <aside id="sidebar" class="sidebar-shell w-64 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40 overflow-y-auto pt-20 md:pt-0 pb-8 flex flex-col h-screen">
+        <div class="p-6 pb-4">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <div class="sidebar-overline">Luna di Miele</div>
+                    <span class="text-[10px] font-bold tracking-wider uppercase" style="color: var(--color-primary)">Honeymoon 2026</span>
+                    <h2 class="text-xl font-black text-gray-900 leading-tight mt-1">이탈리아<br>신혼여행 일정</h2>
+                    <p class="text-xs mt-2 text-gray-500">5/2 (토) — 5/9 (토)</p>
+                </div>
+                <button type="button" data-theme-toggle class="theme-toggle desktop-theme-toggle" aria-label="라이트 모드로 전환">
+                    <span class="theme-icon" data-theme-icon>☀</span>
+                </button>
+            </div>
+        </div>
+        <nav id="main-nav" class="flex flex-col space-y-1 px-3 mt-4">
+            <a href="#overview" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">✈</span>여행 개요</a>
+            <a href="#flights" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">🛫</span>항공편 정보</a>
+            <a href="#hotels" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">🏨</span>숙소 정보</a>
+            <a href="#map" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">🗺</span>지도</a>
+            <div class="my-2 border-t border-gray-200 mx-4"></div>
+            <a href="#day1" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">1</span>DAY 1 · 5/2 (토)</a>
+            <a href="#day2" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">2</span>DAY 2 · 5/3 (일)</a>
+            <a href="#day3" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">3</span>DAY 3 · 5/4 (월)</a>
+            <a href="#day4" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">4</span>DAY 4 · 5/5 (화)</a>
+            <a href="#day5" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">5</span>DAY 5 · 5/6 (수)</a>
+            <a href="#day6" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">6</span>DAY 6 · 5/7 (목)</a>
+            <a href="#day7" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">7</span>DAY 7 · 5/8 (금)</a>
+            <a href="#day8" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">8</span>DAY 8 · 5/9 (토)</a>
+            <div class="my-2 border-t border-gray-200 mx-4"></div>
+            <a href="#budget" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">💰</span>예산 · 체크리스트</a>
+        </nav>
+        <div class="mt-auto pt-6 px-6 text-xs text-gray-400">
+            <p>🇮🇹 Roma · Firenze · Amalfi</p>
+            <p class="mt-1">7박 8일 프리미엄 허니문</p>
+        </div>
+    </aside>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden"></div>
+
+    <!-- 메인 -->
+    <main class="flex-1 min-w-0 md:ml-64 pt-16 md:pt-0 pb-24">
+
+        <!-- HERO -->
+        <div class="hero-gradient px-6 sm:px-10 lg:px-14 py-14 md:py-20">
+            <div class="max-w-6xl mx-auto hero-layout">
+                <div class="max-w-3xl">
+                    <p class="text-xs font-bold tracking-[0.2em] uppercase mb-4" style="color:rgba(255,255,255,0.7)">Honeymoon · May 2026</p>
+                    <div class="flex flex-wrap gap-2 mb-5 text-sm">
+                        <span class="info-badge hero-pill">이탈리아</span>
+                        <span class="info-badge hero-pill">2인 신혼부부</span>
+                        <span class="info-badge hero-pill">7박 8일</span>
+                        <span class="info-badge hero-pill">로마 → 피렌체 → 아말피</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-black mb-5 tracking-tight leading-tight">
+                        이탈리아<br>신혼여행 일정표
+                    </h2>
+                    <p class="text-base md:text-lg max-w-2xl leading-relaxed" style="color:rgba(255,255,255,0.85)">
+                        2026년 5월 2일(토) — 5월 9일(토)<br>
+                        로마의 역사, 피렌체의 예술, 아말피의 낭만 — 이탈리아 황금 루트 7박 8일
+                    </p>
+                    <div class="flex flex-wrap gap-3 mt-8">
+                        <div id="dday-box" class="dday-badge hero-stat text-center">
+                            <div id="dday-count" class="text-2xl font-black">D-?</div>
+                            <div class="hero-stat-label text-[11px] font-bold uppercase tracking-wider mt-1">출발까지</div>
+                        </div>
+                        <div class="hero-stat text-center">
+                            <div class="text-2xl font-black">8일</div>
+                            <div class="hero-stat-label text-[11px] font-bold uppercase tracking-wider mt-1">여행 기간</div>
+                        </div>
+                        <div class="hero-stat text-center">
+                            <div class="text-2xl font-black">3도시</div>
+                            <div class="hero-stat-label text-[11px] font-bold uppercase tracking-wider mt-1">주요 스팟</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-panel shadow-lg">
+                    <div class="hero-panel-eyebrow">Travel Brief</div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Route</div>
+                        <div>
+                            <div class="hero-panel-value">인천 → 로마 → 피렌체 → 아말피 → 로마 → 인천</div>
+                            <p class="hero-panel-copy">도시 간 이동은 고속철 Frecciarossa 이용. 아말피는 렌터카 및 페리.</p>
+                        </div>
+                    </div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Stay</div>
+                        <div>
+                            <div class="hero-panel-value">부티크 호텔 & 클리프 리조트</div>
+                            <p class="hero-panel-copy">로마 역사지구 5성급, 피렌체 두오모 뷰, 아말피 절벽 뷰 인피니티 풀.</p>
+                        </div>
+                    </div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Focus</div>
+                        <div>
+                            <div class="hero-panel-value">문화 + 미식 + 낭만</div>
+                            <p class="hero-panel-copy">바티칸·우피치 프라이빗 투어, 미슐랭 다이닝 2회, 아말피 보트 투어.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-4 sm:px-8 lg:px-12 max-w-5xl mx-auto">
+
+            <!-- OVERVIEW -->
+            <section id="overview" class="content-section mt-12 mb-16">
+                <div class="section-kicker">Overview</div>
+                <h3 class="section-heading">여행 개요</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+                    <div class="kpi-card border-t-4" style="border-top-color: var(--color-primary);">
+                        <div class="text-3xl mb-2">✈️</div>
+                        <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">항공편</div>
+                        <div class="text-lg font-black text-gray-900 mt-1">대한항공 직항</div>
+                        <div class="text-xs text-gray-500 mt-1">280만원 (2인 왕복)</div>
+                    </div>
+                    <div class="kpi-card border-t-4" style="border-top-color: var(--color-accent);">
+                        <div class="text-3xl mb-2">🏛️</div>
+                        <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">로마 숙소</div>
+                        <div class="text-lg font-black text-gray-900 mt-1">Hotel de Russie</div>
+                        <div class="text-xs text-gray-500 mt-1">2박 · 112만원</div>
+                    </div>
+                    <div class="kpi-card border-t-4" style="border-top-color: var(--color-success);">
+                        <div class="text-3xl mb-2">🌸</div>
+                        <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">피렌체 숙소</div>
+                        <div class="text-lg font-black text-gray-900 mt-1">Palazzo Vecchietti</div>
+                        <div class="text-xs text-gray-500 mt-1">2박 · 136만원</div>
+                    </div>
+                    <div class="kpi-card border-t-4" style="border-top-color: var(--color-blue);">
+                        <div class="text-3xl mb-2">🌊</div>
+                        <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">아말피 숙소</div>
+                        <div class="text-lg font-black text-gray-900 mt-1">Santa Caterina</div>
+                        <div class="text-xs text-gray-500 mt-1">3박 · 180만원</div>
+                    </div>
+                </div>
+
+                <!-- 일정 요약 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm">
+                    <h4 class="font-bold text-lg mb-5 flex items-center gap-2 text-gray-900">📅 일정 한눈에 보기</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-amber-50 border border-amber-100 transition-colors hover:bg-amber-100">
+                            <div class="text-center min-w-[60px]"><div class="text-xs font-bold text-amber-700">DAY 1</div><div class="text-sm font-black text-gray-900">5/2</div><div class="text-xs text-gray-500">토</div></div>
+                            <div class="flex-1"><div class="font-bold text-sm text-gray-900">인천 → 로마 피우미치노 ✈️</div><div class="text-xs text-gray-500 mt-0.5">대한항공 11:30 출발 · 로마 도착 후 Hotel de Russie 체크인</div></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-amber-50 border border-amber-100 transition-colors hover:bg-amber-100">
+                            <div class="text-center min-w-[60px]"><div class="text-xs font-bold text-amber-700">DAY 2</div><div class="text-sm font-black text-gray-900">5/3</div><div class="text-xs text-gray-500">일</div></div>
+                            <div class="flex-1"><div class="font-bold text-sm text-gray-900">🏛️ 로마 역사지구 탐방</div><div class="text-xs text-gray-500 mt-0.5">바티칸 박물관 · 콜로세움 · 트레비 분수 · 파인다이닝</div></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-emerald-50 border border-emerald-100 transition-colors hover:bg-emerald-100">
+                            <div class="text-center min-w-[60px]"><div class="text-xs font-bold text-emerald-700">DAY 3</div><div class="text-sm font-black text-gray-900">5/4</div><div class="text-xs text-gray-500">월</div></div>
+                            <div class="flex-1"><div class="font-bold text-sm text-gray-900">🚄 로마 → 피렌체 이동</div><div class="text-xs text-gray-500 mt-0.5">Frecciarossa · Palazzo Vecchietti 체크인 · 두오모 광장</div></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-emerald-50 border border-emerald-100 transition-colors hover:bg-emerald-100">
+                            <div class="text-center min-w-[60px]"><div class="text-xs font-bold text-emerald-700">DAY 4</div><div class="text-sm font-black text-gray-900">5/5</div><div class="text-xs text-gray-500">화</div></div>
+                            <div class="flex-1"><div class="font-bold text-sm text-gray-900">🎨 피렌체 예술 & 와이너리</div><div class="text-xs text-gray-500 mt-0.5">우피치 미술관 · 키안티 와이너리 투어 · 올트라르노</div></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-blue-50 border border-blue-100 transition-colors hover:bg-blue-100">
+                            <div class="text-center min-w-[60px]"><div class="text-xs font-bold text-blue-700">DAY 5</div><div class="text-sm font-black text-gray-900">5/6</div><div class="text-xs text-gray-500">수</div></div>
+                            <div class="flex-1"><div class="font-bold text-sm text-gray-900">🚗 피렌체 → 아말피 이동</div><div class="text-xs text-gray-500 mt-0.5">렌터카 · 폼페이 경유 · Hotel Santa Caterina 체크인</div></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-blue-50 border border-blue-100 transition-colors hover:bg-blue-100">
+                            <div class="text-center min-w-[60px]"><div class="text-xs font-bold text-blue-700">DAY 6</div><div class="text-sm font-black text-gray-900">5/7</div><div class="text-xs text-gray-500">목</div></div>
+                            <div class="flex-1"><div class="font-bold text-sm text-gray-900">🛥️ 아말피 해안 & 포시타노</div><div class="text-xs text-gray-500 mt-0.5">해안 드라이브 · 포시타노 · 보트 투어 · 절벽 수영</div></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-blue-50 border border-blue-100 transition-colors hover:bg-blue-100">
+                            <div class="text-center min-w-[60px]"><div class="text-xs font-bold text-blue-700">DAY 7</div><div class="text-sm font-black text-gray-900">5/8</div><div class="text-xs text-gray-500">금</div></div>
+                            <div class="flex-1"><div class="font-bold text-sm text-gray-900">🌊 라벨로 & 에메랄드 동굴</div><div class="text-xs text-gray-500 mt-0.5">라벨로 빌라 루폴로 · 에메랄드 동굴 · 미슐랭 다이닝</div></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-orange-50 border border-orange-100 transition-colors hover:bg-orange-100">
+                            <div class="text-center min-w-[60px]"><div class="text-xs font-bold text-orange-700">DAY 8</div><div class="text-sm font-black text-gray-900">5/9</div><div class="text-xs text-gray-500">토</div></div>
+                            <div class="flex-1"><div class="font-bold text-sm text-gray-900">아말피 → 로마 → 인천 ✈️</div><div class="text-xs text-gray-500 mt-0.5">체크아웃 · 로마 공항 이동 · 귀국편 탑승</div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FLIGHTS -->
+            <section id="flights" class="content-section mb-16">
+                <div class="section-kicker">Flights</div>
+                <h3 class="section-heading">항공편 정보</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="flight-card p-6 md:p-8">
+                        <div class="flex items-center gap-2 mb-6">
+                            <span class="info-badge bg-amber-100 text-amber-700">🛫 가는편</span>
+                            <span class="info-badge bg-gray-100 text-gray-700">대한항공 KE925</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">11:30</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">인천 ICN</div>
+                            </div>
+                            <div class="flex-1 px-4">
+                                <div class="flex items-center">
+                                    <div class="h-[2px] flex-1 rounded-full" style="background: var(--color-primary)"></div>
+                                    <div class="mx-3 text-xl opacity-80">✈️</div>
+                                    <div class="h-[2px] flex-1 rounded-full" style="background: var(--color-primary)"></div>
+                                </div>
+                                <div class="text-xs font-medium text-center text-gray-500 mt-2 tracking-wide">12H 35M</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">16:05</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">로마 FCO</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-700 bg-gray-50 rounded-lg p-3 border border-gray-200 text-center">
+                            <strong>26.05.02 (토)</strong> · 직항 · 비즈니스클래스
+                        </div>
+                    </div>
+                    <div class="flight-card p-6 md:p-8">
+                        <div class="flex items-center gap-2 mb-6">
+                            <span class="info-badge bg-orange-100 text-orange-700">🛬 오는편</span>
+                            <span class="info-badge bg-gray-100 text-gray-700">대한항공 KE926</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">18:40</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">로마 FCO</div>
+                            </div>
+                            <div class="flex-1 px-4">
+                                <div class="flex items-center">
+                                    <div class="h-[2px] flex-1 rounded-full" style="background: var(--color-accent)"></div>
+                                    <div class="mx-3 text-xl opacity-80" style="transform: scaleX(-1);">✈️</div>
+                                    <div class="h-[2px] flex-1 rounded-full" style="background: var(--color-accent)"></div>
+                                </div>
+                                <div class="text-xs font-medium text-center text-gray-500 mt-2 tracking-wide">12H 20M</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">13:00</div>
+                                <div class="text-sm font-bold text-red-600 mt-1">인천 ICN <span class="text-[10px]">(+1일)</span></div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-700 bg-gray-50 rounded-lg p-3 border border-gray-200 text-center">
+                            <strong>26.05.09 (토)</strong> 출발 · <strong>5.10 (일)</strong> 도착
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-sm text-gray-900 mb-4 tracking-wide">📋 예약 상세</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between p-2.5 bg-gray-50 rounded-lg">
+                                <span class="font-bold text-amber-700">예약 번호</span>
+                                <span class="text-gray-700 font-medium">KE-20260502-HNY</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-gray-50 rounded-lg">
+                                <span class="font-bold text-amber-700">탑승자</span>
+                                <span class="text-gray-700 font-medium">홍민준 · 이서연 (2인)</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-gray-50 rounded-lg">
+                                <span class="font-bold text-amber-700">수하물</span>
+                                <span class="text-gray-700 font-medium">위탁 32kg × 2 / 기내 18kg</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-sm text-gray-900 mb-4 tracking-wide">🚄 이탈리아 내 이동</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-lg">
+                                <div class="font-bold text-emerald-700 flex justify-between">
+                                    <span>로마 → 피렌체</span>
+                                    <span>€98</span>
+                                </div>
+                                <div class="text-gray-600 text-xs mt-1">Frecciarossa FR9538 · 1H 29M (5/4 09:05)</div>
+                            </div>
+                            <div class="p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                                <div class="font-bold text-blue-700 flex justify-between">
+                                    <span>피렌체 → 아말피</span>
+                                    <span>Europcar</span>
+                                </div>
+                                <div class="text-gray-600 text-xs mt-1">렌터카 · 폼페이 경유 · 약 4H 30M 주행</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HOTELS -->
+            <section id="hotels" class="content-section mb-16">
+                <div class="section-kicker">Hotels</div>
+                <h3 class="section-heading">숙소 정보</h3>
+                <div class="space-y-6">
+                    <!-- 로마 Hotel de Russie -->
+                    <div class="hotel-card p-6 md:p-8">
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <span class="info-badge bg-amber-100 text-amber-700">5/2 (토) ~ 5/4 (월)</span>
+                            <span class="info-badge bg-emerald-100 text-emerald-700">2박</span>
+                            <span class="info-badge bg-gray-100 text-gray-700">조식 포함</span>
+                        </div>
+                        <h4 class="text-2xl font-black text-gray-900 mb-2">🏛️ Hotel de Russie · Roma</h4>
+                        <p class="text-sm text-gray-600 mb-5">Deluxe Garden View Room · 포폴로 광장 도보 2분 · 스파 포함</p>
+                        
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 mb-4 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+                            <div><span class="text-gray-500 mr-2">요금:</span><strong class="text-gray-900">€730 (약 112만원)</strong></div>
+                            <div><span class="text-gray-500 mr-2">무료취소:</span><strong class="text-gray-900">4/25까지</strong></div>
+                            <div><span class="text-gray-500 mr-2">등급:</span><strong class="text-amber-700">⭐⭐⭐⭐⭐</strong></div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="activity-tag bg-amber-100 text-amber-700">🌿 비밀정원 뷰</span>
+                            <span class="activity-tag bg-emerald-100 text-emerald-700">🧖 스파 포함</span>
+                            <span class="activity-tag bg-blue-100 text-blue-700">🏊 루프탑 풀</span>
+                        </div>
+                    </div>
+
+                    <!-- 피렌체 메인 -->
+                    <div class="hotel-card relative overflow-hidden p-6 md:p-8" style="border-width: 2px; border-color: var(--color-success);">
+                        <div class="absolute top-0 right-0 text-white text-[10px] md:text-xs font-black px-4 py-1.5 rounded-bl-xl uppercase tracking-widest" style="background: var(--color-success);">Recommend</div>
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <span class="info-badge bg-emerald-100 text-emerald-700">5/4 (월) ~ 5/6 (수)</span>
+                            <span class="info-badge bg-emerald-100 text-emerald-700">2박</span>
+                        </div>
+                        <h4 class="text-2xl font-black text-gray-900 mb-2">🌸 Palazzo Vecchietti · Firenze</h4>
+                        <p class="text-sm text-gray-600 mb-5">Junior Suite · 두오모 도보 5분 · 16세기 피렌체 궁전 개조 부티크 호텔</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+                            <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
+                                <div class="text-xl mb-1">🎨</div>
+                                <div class="text-xs font-bold text-emerald-700">우피치 도보 8분</div>
+                            </div>
+                            <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
+                                <div class="text-xl mb-1">🏰</div>
+                                <div class="text-xs font-bold text-emerald-700">16세기 궁전 건물</div>
+                            </div>
+                            <div class="bg-emerald-50 rounded-xl p-3 text-center border border-emerald-100">
+                                <div class="text-xl mb-1">🛁</div>
+                                <div class="text-xs font-bold text-emerald-700">프리미엄 어메니티</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+                            <div><span class="text-gray-500 mr-2">요금:</span><strong class="text-gray-900">€880 (약 136만원)</strong></div>
+                            <div><span class="text-red-500 mr-2">무료취소:</span><strong class="text-red-600">4/27까지</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- 아말피 Hotel Santa Caterina -->
+                    <div class="hotel-card relative overflow-hidden p-6 md:p-8" style="border-width: 2px; border-color: var(--color-blue);">
+                        <div class="absolute top-0 right-0 text-white text-[10px] md:text-xs font-black px-4 py-1.5 rounded-bl-xl uppercase tracking-widest" style="background: var(--color-blue);">Highlight</div>
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <span class="info-badge bg-blue-100 text-blue-700">5/6 (수) ~ 5/9 (토)</span>
+                            <span class="info-badge bg-blue-100 text-blue-700">3박</span>
+                            <span class="info-badge bg-orange-100 text-orange-700">하프보드(조식+석식)</span>
+                        </div>
+                        <h4 class="text-2xl font-black text-gray-900 mb-2">🌊 Hotel Santa Caterina · Amalfi</h4>
+                        <p class="text-sm text-gray-600 mb-5">Sea View Suite · 절벽 위 인피니티 풀 · 해안 직접 접근 엘리베이터</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+                            <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
+                                <div class="text-xl mb-1">🌅</div>
+                                <div class="text-xs font-bold text-blue-700">절벽 씨뷰 스위트</div>
+                            </div>
+                            <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
+                                <div class="text-xl mb-1">🏊</div>
+                                <div class="text-xs font-bold text-blue-700">인피니티 풀</div>
+                            </div>
+                            <div class="bg-blue-50 rounded-xl p-3 text-center border border-blue-100">
+                                <div class="text-xl mb-1">🥂</div>
+                                <div class="text-xs font-bold text-blue-700">파인다이닝 포함</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+                            <div><span class="text-gray-500 mr-2">요금:</span><strong class="text-gray-900">€1,170 (약 180만원)</strong></div>
+                            <div><span class="text-red-500 mr-2">무료취소:</span><strong class="text-red-600">4/29까지</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MAP -->
+            <section id="map" class="content-section mb-16">
+                <div class="section-kicker">Map</div>
+                <h3 class="section-heading">주요 장소 지도</h3>
+                <div class="map-container mb-6">
+                    <div id="leaflet-map"></div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="place-card-link bg-white rounded-xl p-4 border border-gray-200 shadow-sm" data-place="roma_fco">
+                        <div class="text-xl mb-2">✈️</div>
+                        <h5 class="font-bold text-sm text-gray-900">로마 공항 (FCO)</h5>
+                        <p class="text-xs text-gray-500 mt-1">Leonardo da Vinci Int'l</p>
+                    </div>
+                    <div class="place-card-link bg-white rounded-xl p-4 border border-gray-200 shadow-sm" data-place="de_russie">
+                        <div class="text-xl mb-2">🏛️</div>
+                        <h5 class="font-bold text-sm text-gray-900">Hotel de Russie</h5>
+                        <p class="text-xs text-gray-500 mt-1">로마 · 포폴로 광장</p>
+                    </div>
+                    <div class="place-card-link bg-white rounded-xl p-4 border border-gray-200 shadow-sm" data-place="colosseo">
+                        <div class="text-xl mb-2">🏟️</div>
+                        <h5 class="font-bold text-sm text-gray-900">콜로세움</h5>
+                        <p class="text-xs text-gray-500 mt-1">로마 역사의 심장</p>
+                    </div>
+                    <div class="place-card-link bg-white rounded-xl p-4 border border-gray-200 shadow-sm" data-place="vaticano">
+                        <div class="text-xl mb-2">⛪</div>
+                        <h5 class="font-bold text-sm text-gray-900">바티칸 박물관</h5>
+                        <p class="text-xs text-gray-500 mt-1">시스티나 예배당</p>
+                    </div>
+                    <div class="place-card-link bg-white rounded-xl p-4 border border-gray-200 shadow-sm" data-place="palazzo_vecchietti">
+                        <div class="text-xl mb-2">🌸</div>
+                        <h5 class="font-bold text-sm text-gray-900">Palazzo Vecchietti</h5>
+                        <p class="text-xs text-gray-500 mt-1">피렌체 · 두오모 도보 5분</p>
+                    </div>
+                    <div class="place-card-link bg-white rounded-xl p-4 border border-gray-200 shadow-sm" data-place="uffizi">
+                        <div class="text-xl mb-2">🎨</div>
+                        <h5 class="font-bold text-sm text-gray-900">우피치 미술관</h5>
+                        <p class="text-xs text-gray-500 mt-1">르네상스 컬렉션</p>
+                    </div>
+                    <div class="place-card-link bg-white rounded-xl p-4 border border-gray-200 shadow-sm" data-place="pompeii">
+                        <div class="text-xl mb-2">🌋</div>
+                        <h5 class="font-bold text-sm text-gray-900">폼페이 유적지</h5>
+                        <p class="text-xs text-gray-500 mt-1">이동 중 경유</p>
+                    </div>
+                    <div class="place-card-link bg-white rounded-xl p-4 border border-gray-200 shadow-sm" data-place="santa_caterina">
+                        <div class="text-xl mb-2">🌊</div>
+                        <h5 class="font-bold text-sm text-gray-900">Hotel Santa Caterina</h5>
+                        <p class="text-xs text-gray-500 mt-1">아말피 절벽 리조트</p>
+                    </div>
+                    <div class="place-card-link bg-white rounded-xl p-4 border border-gray-200 shadow-sm" data-place="positano">
+                        <div class="text-xl mb-2">🍋</div>
+                        <h5 class="font-bold text-sm text-gray-900">포시타노</h5>
+                        <p class="text-xs text-gray-500 mt-1">아말피 해안 최고의 마을</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 1 -->
+            <section id="day1" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/10 rounded-xl px-4 py-2 backdrop-blur-md border border-white/20"><div class="text-2xl font-black">DAY 1</div></div>
+                            <div>
+                                <div class="text-xl md:text-2xl font-black">5월 2일 (토)</div>
+                                <div class="text-sm text-gray-500 mt-1">인천 출발 → 로마 도착</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                                    <div class="text-xs font-bold text-amber-700 mb-2 uppercase tracking-wide">09:00 — 인천공항 T2</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">공항 도착 & 비즈니스 라운지</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">출발 2시간 30분 전 도착. KE 라운지(모닝캄 라운지) 이용. 아침 식사 및 여유로운 출국 준비.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-orange-50 rounded-xl p-5 border border-orange-100">
+                                    <div class="text-xs font-bold text-orange-700 mb-2 uppercase tracking-wide">11:30 — 대한항공 KE925 출발 ✈️</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">인천 → 로마 피우미치노 (12H 35M)</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">비즈니스 클래스 플랫베드 좌석. 기내 파인다이닝 & 와인 페어링. 충분한 수면으로 시차 적응.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                                    <div class="text-xs font-bold text-amber-700 mb-2 uppercase tracking-wide">16:05 (현지) — 로마 FCO 도착</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">입국 심사 & 호텔 이동</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">시차 -7시간. 프라이빗 트랜스퍼 픽업(사전 예약). 호텔까지 편안하게 45분 이동.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
+                                    <div class="text-xs font-bold text-emerald-700 mb-2 uppercase tracking-wide">18:00 — Hotel de Russie 체크인</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🏛️ 첫 저녁식사 및 휴식</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">웰컴 샴페인 & 아메니티. 비밀정원 레스토랑 Le Jardin de Russie에서 분위기 있는 첫 식사 후 산책.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-emerald-100 text-emerald-700">🌿 정원 산책</span>
+                                        <span class="activity-tag bg-amber-100 text-amber-700">🥂 웰컴 드링크</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 2 -->
+            <section id="day2" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/10 rounded-xl px-4 py-2 backdrop-blur-md border border-white/20"><div class="text-2xl font-black">DAY 2</div></div>
+                            <div>
+                                <div class="text-xl md:text-2xl font-black">5월 3일 (일)</div>
+                                <div class="text-sm text-gray-500 mt-1">로마 역사지구 — 바티칸 & 고대 로마</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-1 tracking-wide">08:00</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🍳 조식 & 가벼운 스파</h4>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
+                                    <div class="text-xs font-bold text-blue-700 mb-2 tracking-wide uppercase">09:30 — 바티칸</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">⛪ 바티칸 박물관 & 시스티나 성당</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">얼리어드미션 티켓으로 오픈 런. 프라이빗 가이드 투어(2H)를 통해 미켈란젤로 천장화 집중 감상.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-blue-100 text-blue-700">🎟️ 사전예약 필수</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-1 tracking-wide">13:30 — 점심</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🍝 Ristorante Il Sorpasso</h4>
+                                    <p class="text-sm text-gray-600">프라티 지구 현지 트라토리아. 정통 카치오 에 페페와 로마식 파스타.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-amber-50 rounded-xl p-5 border border-amber-100">
+                                    <div class="text-xs font-bold text-amber-700 mb-2 tracking-wide uppercase">15:00 — 고대 로마</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🏟️ 콜로세움 & 로마 포럼</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">스킵더라인 콤보 티켓으로 여유롭게 입장. 황혼이 질 무렵 팔라티노 언덕에서 바라보는 뷰가 압권.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-1 tracking-wide">19:00 — 트레비 분수</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🪙 트레비 분수 & 젤라토</h4>
+                                    <p class="text-sm text-gray-600">동전 던지기 의식. 아름다운 로마 야경 산책.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-red-50 rounded-xl p-5 border border-red-100">
+                                    <div class="text-xs font-bold text-red-600 mb-2 tracking-wide uppercase">21:00 — 파인다이닝</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🍷 La Pergola (미슐랭 3스타)</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">로마 유일의 미슐랭 3스타 레스토랑. 로마 시내가 내려다보이는 파노라마 뷰와 와인 페어링.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-red-100 text-red-700">⭐⭐⭐ 미슐랭 3스타</span>
+                                        <span class="activity-tag bg-orange-100 text-orange-700">🍷 와인 페어링</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 3 -->
+            <section id="day3" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/10 rounded-xl px-4 py-2 backdrop-blur-md border border-white/20"><div class="text-2xl font-black">DAY 3</div></div>
+                            <div>
+                                <div class="text-xl md:text-2xl font-black">5월 4일 (월)</div>
+                                <div class="text-sm text-gray-500 mt-1">로마 → 피렌체 이동 & 두오모</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-1 tracking-wide">07:30</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🍳 조식 & 호텔 체크아웃</h4>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
+                                    <div class="text-xs font-bold text-emerald-700 mb-2 tracking-wide uppercase">09:05 — 고속열차</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🚄 Frecciarossa · 로마 → 피렌체</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">1H 29M 소요. 프리미엄 1등석. 좌석에서 에스프레소 & 스낵 서비스. 10:34 피렌체 SMN 역 도착.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
+                                    <div class="text-xs font-bold text-emerald-700 mb-2 tracking-wide uppercase">11:00 — Palazzo Vecchietti</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🏰 부티크 호텔 체크인 & 두오모</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">16세기 피렌체 궁전을 개조한 프라이빗 호텔 체크인. 도보 5분 거리의 두오모 광장 및 조토의 종탑 산책.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-1 tracking-wide">13:00 — 점심</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🥩 Trattoria Mario</h4>
+                                    <p class="text-sm text-gray-600">피렌체식 티본스테이크(비스테카 알라 피오렌티나). 로컬 분위기 물씬.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
+                                    <div class="text-xs font-bold text-blue-700 mb-2 tracking-wide uppercase">15:00 — 오후 산책</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🌉 베키오 다리 & 올트라르노</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">베키오 다리의 금세공품 상점 구경. 아르노 강 건너편 올트라르노 지구의 장인 공방 & 수공예품 쇼핑.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                                    <div class="text-xs font-bold text-amber-700 mb-1 tracking-wide uppercase">19:30 — 저녁</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🍷 Buca Mario (1886년 창업)</h4>
+                                    <p class="text-sm text-gray-600">석조 지하 홀에서 즐기는 트러플 파스타와 키안티 클래시코 와인.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 4 -->
+            <section id="day4" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/10 rounded-xl px-4 py-2 backdrop-blur-md border border-white/20"><div class="text-2xl font-black">DAY 4</div></div>
+                            <div>
+                                <div class="text-xl md:text-2xl font-black">5월 5일 (화)</div>
+                                <div class="text-sm text-gray-500 mt-1">우피치 미술관 & 키안티 와이너리 투어</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-amber-50 rounded-xl p-5 border border-amber-100">
+                                    <div class="text-xs font-bold text-amber-700 mb-2 tracking-wide uppercase">09:00 — 우피치</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🎨 우피치 미술관 (3H)</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">르네상스 예술의 정수. 보티첼리「비너스의 탄생」, 레오나르도 다빈치 작품 감상. 아침 일찍 여유롭게 프라이빗 가이드 투어 권장.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-1 tracking-wide">12:30 — 점심</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🥪 가벼운 파니니</h4>
+                                    <p class="text-sm text-gray-600">All'Antico Vinaio 등에서 파니니 테이크아웃 혹은 광장 카페 휴식.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
+                                    <div class="text-xs font-bold text-emerald-700 mb-2 tracking-wide uppercase">14:00 — 와이너리 투어</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🍷 Antinori nel Chianti Classico</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">피렌체 근교의 세계적인 현대식 와이너리. 포도밭 산책 → 지하 와인 셀러 투어 → 와인 5종 및 치즈 페어링 테이스팅.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-emerald-100 text-emerald-700">🍷 와인 테이스팅</span>
+                                        <span class="activity-tag bg-amber-100 text-amber-700">🚗 전용차량 이동</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-orange-50 rounded-xl p-5 border border-orange-100">
+                                    <div class="text-xs font-bold text-orange-700 mb-2 tracking-wide uppercase">19:30 — 저녁 & 야경</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🌆 미켈란젤로 언덕 석양</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">피렌체 최고의 뷰포인트에서 석양 감상 후, 에노테카(와인바)에서 가벼운 타파스와 와인으로 로맨틱한 하루 마무리.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 5 -->
+            <section id="day5" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/10 rounded-xl px-4 py-2 backdrop-blur-md border border-white/20"><div class="text-2xl font-black">DAY 5</div></div>
+                            <div>
+                                <div class="text-xl md:text-2xl font-black">5월 6일 (수)</div>
+                                <div class="text-sm text-gray-500 mt-1">피렌체 → 폼페이 경유 → 아말피 입성</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-1 tracking-wide">08:30</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🚗 체크아웃 & 렌터카 픽업</h4>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-orange-50 rounded-xl p-5 border border-orange-100">
+                                    <div class="text-xs font-bold text-orange-700 mb-2 tracking-wide uppercase">10:00 — A1 고속도로</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🌋 폼페이 유적지 경유</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">피렌체에서 약 4시간 주행. 폼페이 도착 후 2시간 정도 유적지 탐험. 과거 시간 속에 멈춘 고대 도시 산책.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
+                                    <div class="text-xs font-bold text-blue-700 mb-2 tracking-wide uppercase">15:30 — 해안 드라이브</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🌊 SS163 아말피 해안도로</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">세계에서 가장 아름다운 드라이브 코스. 구불구불한 절벽 길을 따라 지중해의 절경 감상 및 포토존 정차.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-blue-50 rounded-xl p-5 border border-blue-200">
+                                    <div class="text-xs font-bold text-blue-700 mb-2 tracking-wide uppercase">17:00 — Hotel Santa Caterina</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🌅 리조트 체크인 & 선셋</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">오션뷰 스위트룸 체크인. 전용 엘리베이터를 타고 내려가 절벽 인피니티 풀에서 여유로운 첫 수영.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-blue-100 text-blue-700">🏊 인피니티 풀</span>
+                                        <span class="activity-tag bg-amber-100 text-amber-700">🍝 하프보드 석식</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 6 -->
+            <section id="day6" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/10 rounded-xl px-4 py-2 backdrop-blur-md border border-white/20"><div class="text-2xl font-black">DAY 6</div></div>
+                            <div>
+                                <div class="text-xl md:text-2xl font-black">5월 7일 (목)</div>
+                                <div class="text-sm text-gray-500 mt-1">아말피 해안 & 프라이빗 보트 투어</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-1 tracking-wide">08:00</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🍳 테라스 조식</h4>
+                                    <p class="text-sm text-gray-600">푸른 지중해를 보며 카푸치노와 신선한 레몬 주스.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
+                                    <div class="text-xs font-bold text-blue-700 mb-2 tracking-wide uppercase">10:00 — 아말피 마리나</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🛥️ 프라이빗 보트 투어 (5H)</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">2인 전세 스피드보트. 아말피에서 포시타노를 거쳐 해안 절벽 탐험. 프라이빗 수영 포인트에서 스노클링 및 선상 와인 피크닉.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-blue-100 text-blue-700">🤿 스노클링</span>
+                                        <span class="activity-tag bg-amber-100 text-amber-700">🥂 샴페인</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-yellow-50 rounded-xl p-5 border border-yellow-100">
+                                    <div class="text-xs font-bold text-yellow-700 mb-2 tracking-wide uppercase">15:30 — 포시타노</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🍋 포시타노 타운 산책</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">알록달록한 절벽 마을 구경. 수제 레몬 비누, 린넨 셔츠, 세라믹 그릇 쇼핑. 레몬 셔벗(Granita) 맛보기.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-2 tracking-wide uppercase">20:00 — 저녁</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🌟 리조트 캔들라이트 디너</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">호텔 레스토랑 Glicine(미슐랭 1스타)에서 우아한 저녁 식사.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 7 -->
+            <section id="day7" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/10 rounded-xl px-4 py-2 backdrop-blur-md border border-white/20"><div class="text-2xl font-black">DAY 7</div></div>
+                            <div>
+                                <div class="text-xl md:text-2xl font-black">5월 8일 (금)</div>
+                                <div class="text-sm text-gray-500 mt-1">라벨로 & 에메랄드 동굴 & 미슐랭 다이닝</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
+                                    <div class="text-xs font-bold text-emerald-700 mb-2 tracking-wide uppercase">10:00 — 라벨로</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🌹 라벨로 & 빌라 루폴로</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">해발 350m의 평화로운 예술 마을. 바그너가 사랑한 빌라 루폴로의 환상적인 정원과 아말피 코스트의 파노라마 전경 감상.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-1 tracking-wide">12:30 — 점심</div>
+                                    <h4 class="font-bold text-gray-900 mb-1">🍝 로컬 레스토랑</h4>
+                                    <p class="text-sm text-gray-600">라벨로 광장 근처에서 신선한 해산물 파스타와 화이트 와인.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
+                                    <div class="text-xs font-bold text-blue-700 mb-2 tracking-wide uppercase">14:30 — 에메랄드 동굴</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">💎 그로타 델로 스메랄도</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">엘리베이터를 타고 절벽 아래로 내려가 작은 보트로 동굴 탐험. 빛의 산란으로 빛나는 신비로운 에메랄드빛 바다.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-red-50 rounded-xl p-5 border border-red-100">
+                                    <div class="text-xs font-bold text-red-600 mb-2 tracking-wide uppercase">19:30 — 마지막 만찬</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🍷 Zass (미슐랭 1스타)</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">Il San Pietro di Positano의 절벽 레스토랑. 무료 프라이빗 보트로 포시타노로 이동 후 지중해가 발아래 펼쳐지는 테라스에서 완벽한 신혼여행 마지막 만찬.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 8 -->
+            <section id="day8" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/10 rounded-xl px-4 py-2 backdrop-blur-md border border-white/20"><div class="text-2xl font-black">DAY 8</div></div>
+                            <div>
+                                <div class="text-xl md:text-2xl font-black">5월 9일 (토)</div>
+                                <div class="text-sm text-gray-500 mt-1">체크아웃 → 로마 FCO → 귀국</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-500 mb-2 tracking-wide uppercase">08:00</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">아쉬운 마지막 아침</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">바다를 보며 룸서비스 조식. 짐 정리 전 마지막 수영과 사진 촬영.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-amber-50 rounded-xl p-5 border border-amber-100">
+                                    <div class="text-xs font-bold text-amber-700 mb-2 tracking-wide uppercase">11:00 — 체크아웃</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">아말피 기념품 쇼핑</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">호텔 체크아웃 후 아말피 타운에서 지인들을 위한 리몬첼로, 세라믹 자석 등 최종 쇼핑.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
+                                    <div class="text-xs font-bold text-blue-700 mb-2 tracking-wide uppercase">14:00 — 프라이빗 트랜스퍼</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">🚗 아말피 → 로마 공항</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">전용 미니밴으로 편안하게 공항 이동 (약 3시간 소요).</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                                    <div class="text-xs font-bold text-gray-900 mb-2 tracking-wide uppercase">18:40 — 귀국 ✈️</div>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">대한항공 KE926 탑승</h4>
+                                    <p class="text-sm text-gray-600 leading-relaxed">로마 출발. 5월 10일(일) 오후 1시 인천 도착으로 안전하게 허니문 종료.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BUDGET & CHECKLIST -->
+            <section id="budget" class="content-section mb-16">
+                <div class="section-kicker">Budget &amp; Checklist</div>
+                <h3 class="section-heading">예산 &amp; 체크리스트</h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- 예산 -->
+                    <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-xl mb-6 flex items-center gap-2 text-gray-900">💰 예산 총정리</h4>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="font-bold text-gray-800">✈️ 항공권 (비즈니스)</span>
+                                    <span class="font-bold text-gray-900">₩2,800,000</span>
+                                </div>
+                                <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-1000 bg-amber-500" style="width:44%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="font-bold text-gray-800">🏛️ Hotel de Russie (2박)</span>
+                                    <span class="font-bold text-gray-900">₩1,120,000</span>
+                                </div>
+                                <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full bg-red-500" style="width:18%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="font-bold text-gray-800">🌸 Palazzo Vecchietti (2박)</span>
+                                    <span class="font-bold text-gray-900">₩1,360,000</span>
+                                </div>
+                                <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full bg-emerald-500" style="width:22%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="font-bold text-gray-800">🌊 Hotel Santa Caterina (3박)</span>
+                                    <span class="font-bold text-gray-900">₩1,800,000</span>
+                                </div>
+                                <div class="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full bg-blue-500" style="width:29%;"></div>
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t border-gray-200">
+                                <div class="flex justify-between mb-1">
+                                    <span class="font-black text-lg text-gray-900">합계 (항공+숙소)</span>
+                                    <span class="font-black text-xl text-amber-700">₩7,080,000</span>
+                                </div>
+                                <div class="text-xs text-gray-500">* 식비, 렌터카, 투어 비용 별도 (총 예상 1,100만원)</div>
+                            </div>
+                        </div>
+                        <div class="mt-8" style="position:relative; height:240px;">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 체크리스트 -->
+                    <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm flex flex-col">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-bold text-xl flex items-center gap-2 text-gray-900">✅ 준비 체크리스트</h4>
+                            <span id="checklist-count" class="text-xs font-bold px-3 py-1 rounded-full bg-amber-50 text-amber-700">0/13</span>
+                        </div>
+                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden mb-6">
+                            <div id="checklist-progress" class="h-full rounded-full transition-all duration-500" style="width:0%; background: var(--color-primary)"></div>
+                        </div>
+                        <div id="checklist-container" class="space-y-1 overflow-y-auto pr-2 flex-1 custom-scrollbar">
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="passport"><span class="checklist-label text-sm font-medium">여권 유효기간 확인 (6개월 이상)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="insurance"><span class="checklist-label text-sm font-medium">여행자 보험 가입 (영문 증명서)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="lapergola"><span class="checklist-label text-sm font-bold text-red-600">La Pergola 미슐랭 디너 예약 (최소 2달 전)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="uffizi"><span class="checklist-label text-sm font-bold text-red-600">우피치 미술관 프라이빗 투어 예약</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="vatican"><span class="checklist-label text-sm font-medium">바티칸 얼리어드미션 티켓 발권</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="trainticket"><span class="checklist-label text-sm font-medium">고속철도 Frecciarossa 사전 예매</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="rentalcar"><span class="checklist-label text-sm font-medium">렌터카 예약 (국제운전면허증 발급)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="transfer"><span class="checklist-label text-sm font-medium">공항-호텔 픽업 트랜스퍼 예약</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="zass"><span class="checklist-label text-sm font-medium">Zass 레스토랑 & 보트 픽업 예약</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="boattour"><span class="checklist-label text-sm font-medium">아말피 프라이빗 보트 렌탈</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="winery"><span class="checklist-label text-sm font-medium">키안티 Antinori 와이너리 투어</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="esim"><span class="checklist-label text-sm font-medium">유럽 통합 eSIM 구매</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="currency"><span class="checklist-label text-sm font-medium">소액 유로화 환전 (팁/소규모 상점용)</span></label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center py-10 text-sm text-gray-500 border-t border-gray-200">
+                <p class="tracking-wide">🇮🇹 Roma · Firenze · Costiera Amalfitana — Honeymoon 2026</p>
+                <p class="mt-2 font-black text-gray-900">홍민준 &amp; 이서연</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<style>
+/* Custom Scrollbar for checklist */
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var root = document.documentElement;
+    var THEME_KEY = 'italy-honeymoon-theme';
+    var themeButtons = document.querySelectorAll('[data-theme-toggle]');
+    var budgetChart = null;
+
+    function getCV(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
+
+    function updateThemeButtons(theme) {
+        var isDark = theme === 'dark';
+        themeButtons.forEach(function(btn) {
+            var icon = btn.querySelector('[data-theme-icon]');
+            var label = btn.querySelector('[data-theme-label]');
+            if (icon) icon.textContent = isDark ? '☀' : '☾';
+            if (label) label.textContent = isDark ? '라이트' : '다크';
+            btn.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
+        });
+    }
+
+    function updateChartTheme() {
+        if (!budgetChart) return;
+        budgetChart.data.datasets[0].backgroundColor = [
+            getCV('--color-primary'), getCV('--color-accent'), getCV('--color-success'), getCV('--color-blue')
+        ];
+        budgetChart.options.plugins.legend.labels.color = getCV('--text-body');
+        budgetChart.options.plugins.tooltip.backgroundColor = getCV('--tooltip-bg');
+        budgetChart.options.plugins.tooltip.titleColor = getCV('--text-strong');
+        budgetChart.options.plugins.tooltip.bodyColor = getCV('--text-body');
+        budgetChart.options.plugins.tooltip.borderColor = getCV('--border-strong');
+        budgetChart.update();
+    }
+
+    function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        updateThemeButtons(theme);
+        updateChartTheme();
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch(e) {}
+    applyTheme(saved || 'dark');
+
+    themeButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            try { localStorage.setItem(THEME_KEY, next); } catch(e) {}
+        });
+    });
+
+    // Mobile menu
+    var sidebar = document.getElementById('sidebar');
+    var menuBtn = document.getElementById('mobile-menu-button');
+    var overlay = document.getElementById('sidebar-overlay');
+    if (menuBtn && sidebar && overlay) {
+        menuBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        });
+        overlay.addEventListener('click', function() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    }
+
+    var navLinks = document.querySelectorAll('#main-nav a');
+    navLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth < 768 && sidebar) {
+                sidebar.classList.add('-translate-x-full');
+                if (overlay) overlay.classList.add('hidden');
+            }
+        });
+    });
+
+    // ScrollSpy
+    var sections = document.querySelectorAll('.content-section');
+    function updateNav() {
+        var current = '';
+        sections.forEach(function(s) { if (s.getBoundingClientRect().top <= 150) current = s.id; });
+        navLinks.forEach(function(l) {
+            l.classList.remove('active');
+            if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+        });
+    }
+    window.addEventListener('scroll', updateNav);
+    updateNav();
+
+    // D-Day
+    var tripDate = new Date('2026-05-02T00:00:00+09:00');
+    var today = new Date(); today.setHours(0,0,0,0);
+    var diff = Math.ceil((tripDate - today) / 86400000);
+    var ddayEl = document.getElementById('dday-count');
+    var ddayBox = document.getElementById('dday-box');
+    if (ddayEl) {
+        if (diff > 0) ddayEl.textContent = 'D-' + diff;
+        else if (diff === 0) { ddayEl.textContent = 'D-DAY'; if (ddayBox) ddayBox.style.background = 'linear-gradient(135deg,#556B2F,#3b4a20)'; }
+        else { ddayEl.textContent = 'D+' + Math.abs(diff); if (ddayBox) ddayBox.style.background = 'linear-gradient(135deg,#6b7280,#4b5563)'; }
+    }
+
+    // Leaflet map
+    var places = {
+        roma_fco:           { lat: 41.7999, lng: 12.2462, emoji: '✈️', name: '공항 (FCO)', desc: '로마 피우미치노 공항' },
+        de_russie:          { lat: 41.9089, lng: 12.4770, emoji: '🏛️', name: 'Hotel de Russie', desc: '포폴로 광장 · 2박' },
+        colosseo:           { lat: 41.8902, lng: 12.4922, emoji: '🏟️', name: '콜로세움', desc: '고대 로마 유적' },
+        vaticano:           { lat: 41.9065, lng: 12.4536, emoji: '⛪', name: '바티칸 박물관', desc: '시스티나 성당' },
+        palazzo_vecchietti: { lat: 43.7705, lng: 11.2533, emoji: '🌸', name: 'Palazzo Vecchietti', desc: '피렌체 두오모 근처 · 2박' },
+        uffizi:             { lat: 43.7677, lng: 11.2551, emoji: '🎨', name: '우피치 미술관', desc: '르네상스 걸작 감상' },
+        pompeii:            { lat: 40.7514, lng: 14.4869, emoji: '🌋', name: '폼페이', desc: '고대 유적지 산책' },
+        santa_caterina:     { lat: 40.6327, lng: 14.6025, emoji: '🌊', name: 'Santa Caterina', desc: '아말피 절벽 리조트 · 3박' },
+        positano:           { lat: 40.6280, lng: 14.4843, emoji: '🍋', name: '포시타노', desc: '절벽 위 아름다운 마을' }
+    };
+
+    var mapEl = document.getElementById('leaflet-map');
+    var map = null;
+    var markers = {};
+    if (mapEl && typeof L !== 'undefined') {
+        map = L.map('leaflet-map', { scrollWheelZoom: false }).setView([42.5, 13.0], 6);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
+        }).addTo(map);
+
+        Object.keys(places).forEach(function(key) {
+            var p = places[key];
+            var icon = L.divIcon({ html: '<div style="font-size:1.6rem;text-align:center;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3))">' + p.emoji + '</div>', className: '', iconSize: [30,30], iconAnchor: [15,15], popupAnchor: [0,-15] });
+            var m = L.marker([p.lat, p.lng], { icon: icon }).addTo(map);
+            m.bindPopup('<h4 style="font-weight:800;margin:0 0 6px;">' + p.name + '</h4><p style="margin:0;font-size:12px;">' + p.desc + '</p>');
+            markers[key] = m;
+        });
+        var coords = Object.values(places).map(function(p) { return [p.lat, p.lng]; });
+        map.fitBounds(coords, { padding: [40, 40] });
+    }
+
+    document.querySelectorAll('.place-card-link').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var key = card.getAttribute('data-place');
+            if (map && markers[key] && places[key]) {
+                map.setView([places[key].lat, places[key].lng], 15, { animate: true, duration: 1 });
+                markers[key].openPopup();
+                document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Checklist
+    var SKEY = 'italy-honeymoon-checklist-2026-v2';
+    var checkboxes = document.querySelectorAll('.checklist-cb');
+    var countEl = document.getElementById('checklist-count');
+    var progEl = document.getElementById('checklist-progress');
+
+    function loadCL() {
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem(SKEY)) || {}; } catch(e) {}
+        checkboxes.forEach(function(cb) {
+            if (saved.hasOwnProperty(cb.getAttribute('data-id'))) cb.checked = saved[cb.getAttribute('data-id')];
+            updateItem(cb);
+        });
+        updateProg();
+    }
+    function saveCL() {
+        var d = {};
+        checkboxes.forEach(function(cb) { d[cb.getAttribute('data-id')] = cb.checked; });
+        try { localStorage.setItem(SKEY, JSON.stringify(d)); } catch(e) {}
+    }
+    function updateItem(cb) {
+        var item = cb.closest('.checklist-item');
+        if (item) { cb.checked ? item.classList.add('checked') : item.classList.remove('checked'); }
+    }
+    function updateProg() {
+        var total = checkboxes.length, done = 0;
+        checkboxes.forEach(function(cb) { if (cb.checked) done++; });
+        if (countEl) countEl.textContent = done + '/' + total;
+        if (progEl) progEl.style.width = (total > 0 ? Math.round(done/total*100) : 0) + '%';
+    }
+    checkboxes.forEach(function(cb) {
+        cb.addEventListener('change', function() { updateItem(cb); saveCL(); updateProg(); });
+    });
+    loadCL();
+
+    // Budget chart
+    var canvas = document.getElementById('budgetChart');
+    if (canvas) {
+        budgetChart = new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels: ['항공권', '호텔 (로마)', '호텔 (피렌체)', '호텔 (아말피)'],
+                datasets: [{
+                    data: [2800000, 1120000, 1360000, 1800000],
+                    backgroundColor: ['#D4AF37', '#E27D60', '#81B29A', '#6A98D7'], /* Fallbacks */
+                    borderWidth: 0, hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '65%',
+                plugins: {
+                    legend: { position: 'right', labels: { padding: 16, usePointStyle: true, pointStyleWidth: 12, font: { family: 'Paperlogy', size: 12, weight: '600' } } },
+                    tooltip: {
+                        borderWidth: 1, padding: 12,
+                        callbacks: { label: function(ctx) { return ' ₩' + ctx.parsed.toLocaleString(); } }
+                    }
+                }
+            }
+        });
+        // Initial theme application
+        setTimeout(updateChartTheme, 100);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도쿄 가족 여행 일정표 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        /* ===== Urban Slate Theme — Dark ===== */
+        :root {
+            color-scheme: dark;
+            --color-primary: #a8b4c8;
+            --color-primary-dark: #7a8ba6;
+            --color-primary-light: #c8d2e0;
+            --color-accent: #e8976f;
+            --color-accent-light: rgba(232, 151, 111, 0.16);
+            --color-neon: #c4b5fd;
+            --color-concrete: rgba(168, 180, 200, 0.14);
+            --color-steel: #94a3b8;
+            --color-night: #64748b;
+            --bg: #0c0e14;
+            --bg-secondary: #12151e;
+            --surface: rgba(18, 21, 30, 0.85);
+            --surface-strong: #161a25;
+            --surface-soft: rgba(22, 26, 37, 0.78);
+            --surface-contrast: rgba(255, 255, 255, 0.04);
+            --text-strong: #e8ecf2;
+            --text-body: #b8c4d4;
+            --text-muted: #7889a0;
+            --text-inverse: #f8fafc;
+            --border: rgba(148, 163, 184, 0.14);
+            --border-strong: rgba(148, 163, 184, 0.22);
+            --hero-start: #0a0c12;
+            --hero-mid: #1a1e2e;
+            --hero-end: #2a3348;
+            --sidebar-start: #0c0e16;
+            --sidebar-end: #1a2030;
+            --glow-primary: rgba(168, 180, 200, 0.18);
+            --glow-accent: rgba(232, 151, 111, 0.14);
+            --shadow-soft: 0 18px 60px -32px rgba(0,0,0,0.85);
+            --shadow-card: 0 16px 36px -24px rgba(0,0,0,0.9);
+            --tag-primary-bg: rgba(168,180,200,0.14);    --tag-primary-text: #b8c8dc;
+            --tag-success-bg: rgba(134,172,142,0.14);    --tag-success-text: #9cc8a6;
+            --tag-accent-bg: rgba(232,151,111,0.14);     --tag-accent-text: #f0b48e;
+            --tag-danger-bg: rgba(220,130,120,0.14);     --tag-danger-text: #f0a098;
+            --tag-warm-bg: rgba(232,200,160,0.14);       --tag-warm-text: #e8c898;
+            --chart-primary: #a8b4c8;
+            --chart-success: #86ac8e;
+            --chart-accent: #e8976f;
+            --chart-muted: #6b7a8e;
+            --chart-legend: #a0b0c4;
+            --tooltip-bg: rgba(12, 14, 20, 0.95);
+        }
+
+        /* ===== Urban Slate Theme — Light ===== */
+        html[data-theme="light"] {
+            color-scheme: light;
+            --color-primary: #5a6a82;
+            --color-primary-dark: #3a4a62;
+            --color-primary-light: #94a4b8;
+            --color-accent: #c47a52;
+            --color-accent-light: rgba(196, 122, 82, 0.14);
+            --color-neon: #8b7ec8;
+            --color-concrete: rgba(90, 106, 130, 0.12);
+            --color-steel: #6a7a90;
+            --color-night: #94a3b8;
+            --bg: #e8e6e2;
+            --bg-secondary: #f2f0ec;
+            --surface: rgba(255, 253, 250, 0.78);
+            --surface-strong: #faf8f5;
+            --surface-soft: rgba(248, 246, 242, 0.82);
+            --surface-contrast: rgba(15, 23, 42, 0.04);
+            --text-strong: #1a2030;
+            --text-body: #3a4a5e;
+            --text-muted: #6a7a8e;
+            --text-inverse: #f8fafc;
+            --border: rgba(30, 42, 58, 0.12);
+            --border-strong: rgba(30, 42, 58, 0.2);
+            --hero-start: #141822;
+            --hero-mid: #2a3245;
+            --hero-end: #485068;
+            --sidebar-start: #161a24;
+            --sidebar-end: #2a3244;
+            --glow-primary: rgba(90, 106, 130, 0.14);
+            --glow-accent: rgba(196, 122, 82, 0.12);
+            --shadow-soft: 0 18px 60px -34px rgba(15,23,42,0.38);
+            --shadow-card: 0 18px 38px -28px rgba(15,23,42,0.24);
+            --tag-primary-bg: rgba(90,106,130,0.12);     --tag-primary-text: #4a5a72;
+            --tag-success-bg: rgba(90,130,100,0.14);     --tag-success-text: #4a6e54;
+            --tag-accent-bg: rgba(196,122,82,0.14);      --tag-accent-text: #96603a;
+            --tag-danger-bg: rgba(190,110,100,0.14);     --tag-danger-text: #904a42;
+            --tag-warm-bg: rgba(210,180,140,0.16);       --tag-warm-text: #8a6e4a;
+            --chart-primary: #5a6a82;
+            --chart-success: #5a8264;
+            --chart-accent: #c47a52;
+            --chart-muted: #8494a6;
+            --chart-legend: #4a5a72;
+            --tooltip-bg: rgba(250, 248, 245, 0.96);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background:
+                radial-gradient(circle at top left, var(--glow-primary), transparent 32%),
+                radial-gradient(circle at top right, var(--glow-accent), transparent 28%),
+                linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg) 55%, var(--bg-secondary) 100%);
+            background-color: var(--bg);
+            color: var(--text-body);
+            min-height: 100vh;
+            position: relative;
+            transition: background-color 0.35s ease, color 0.35s ease;
+        }
+
+        body::before, body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+        body::before {
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 100px 100px;
+            opacity: 0.35;
+            mask-image: linear-gradient(180deg, rgba(0,0,0,0.9), transparent 100%);
+        }
+        body::after {
+            background: radial-gradient(circle at 14% 18%, var(--glow-primary), transparent 22%), radial-gradient(circle at 82% 10%, var(--glow-accent), transparent 18%);
+            opacity: 0.6;
+        }
+
+        main, aside, .mobile-topbar { position: relative; z-index: 1; }
+        a, button { transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; }
+
+        .mobile-topbar { background: rgba(12,14,20,0.78); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-soft); backdrop-filter: blur(24px); }
+        html[data-theme="light"] .mobile-topbar { background: rgba(242,240,236,0.84); }
+
+        .sidebar-shell {
+            background: linear-gradient(180deg, var(--sidebar-start) 0%, var(--sidebar-end) 100%);
+            border-right: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 18px 0 40px -34px rgba(0,0,0,0.65);
+        }
+        .sidebar-shell::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top left, rgba(255,255,255,0.06), transparent 42%); pointer-events: none; }
+
+        .sidebar-overline {
+            display: inline-flex; align-items: center; gap: 0.45rem; margin-bottom: 0.9rem;
+            padding: 0.35rem 0.7rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.07); color: rgba(236,242,248,0.78);
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+        }
+        .sidebar-overline::before { content: ""; width: 0.45rem; height: 0.45rem; border-radius: 9999px; background: rgba(196,181,253,0.9); box-shadow: 0 0 0 6px rgba(196,181,253,0.08); }
+
+        .theme-toggle {
+            display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 0.95rem; border-radius: 9999px;
+            border: 1px solid var(--border); background: var(--surface-soft); color: var(--text-strong);
+            font-size: 0.78rem; font-weight: 700; letter-spacing: 0.02em; box-shadow: var(--shadow-card); backdrop-filter: blur(18px); cursor: pointer;
+        }
+        .desktop-theme-toggle { display: none; }
+        .theme-toggle:hover, .menu-button:hover { transform: translateY(-1px); border-color: var(--border-strong); background: var(--surface-strong); }
+
+        .menu-button {
+            display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem;
+            border-radius: 1rem; border: 1px solid var(--border); background: var(--surface-soft);
+            color: var(--text-strong); box-shadow: var(--shadow-card); backdrop-filter: blur(18px); cursor: pointer;
+        }
+
+        .nav-link { color: rgba(236,242,248,0.72); border: 1px solid transparent; }
+        .nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.08); transform: translateX(4px); }
+        .nav-link.active { color: #fff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.12); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08); }
+
+        #main-nav .section-number {
+            width: 1.75rem; height: 1.75rem; margin-right: 0.5rem; flex-shrink: 0;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 50%; color: #fff; font-size: 0.75rem; font-weight: 800;
+            background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 10px 20px -18px rgba(0,0,0,0.7);
+        }
+
+        .hero-gradient {
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, var(--hero-start) 0%, var(--hero-mid) 44%, var(--hero-end) 100%);
+            border-bottom: 1px solid var(--border);
+        }
+        .hero-gradient::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 15% 18%, rgba(196,181,253,0.18), transparent 24%), radial-gradient(circle at 82% 12%, rgba(232,151,111,0.12), transparent 20%); }
+        .hero-gradient::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 100px 100px; opacity: 0.35; mask-image: linear-gradient(180deg, rgba(0,0,0,0.92), transparent 100%); }
+
+        .hero-layout { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,1.35fr) minmax(280px,0.75fr); gap: 2rem; align-items: end; }
+        .hero-kicker { margin-bottom: 1rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(236,242,248,0.56); }
+        .hero-description { color: rgba(236,242,248,0.78); }
+
+        .hero-pill { border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.08); color: rgba(248,250,252,0.92); backdrop-filter: blur(16px); }
+
+        .hero-stat {
+            min-width: 110px; padding: 1rem 1.05rem; border-radius: 1.15rem;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: var(--shadow-card); backdrop-filter: blur(22px);
+        }
+        .hero-stat-label { color: rgba(236,242,248,0.62); }
+
+        .hero-panel {
+            padding: 1.35rem; border-radius: 1.5rem;
+            background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+            border: 1px solid rgba(255,255,255,0.1); box-shadow: var(--shadow-soft); backdrop-filter: blur(24px);
+        }
+        .hero-panel-eyebrow { font-size: 0.76rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(236,242,248,0.55); margin-bottom: 0.75rem; }
+        .hero-panel-row { display: grid; grid-template-columns: 82px minmax(0,1fr); gap: 1rem; align-items: start; padding: 0.9rem 0; border-top: 1px solid rgba(255,255,255,0.08); }
+        .hero-panel-row:first-of-type { padding-top: 0.15rem; border-top: none; }
+        .hero-panel-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(236,242,248,0.42); }
+        .hero-panel-value { color: #fff; font-size: 1rem; font-weight: 800; line-height: 1.35; }
+        .hero-panel-copy { margin-top: 0.3rem; font-size: 0.84rem; line-height: 1.55; color: rgba(236,242,248,0.72); }
+
+        .section-kicker {
+            display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.4rem 0.85rem; border-radius: 9999px;
+            background: var(--tag-primary-bg); color: var(--tag-primary-text); border: 1px solid var(--border);
+            font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 1rem;
+        }
+        .section-heading { color: var(--text-strong); font-size: clamp(1.85rem,2.35vw,2.35rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+        .content-section { scroll-margin-top: 96px; }
+
+        .kpi-card, .day-card, .hotel-card, .flight-card {
+            border-radius: 1.2rem; border: 1px solid var(--border);
+            background: linear-gradient(180deg, var(--surface-soft) 0%, var(--surface-strong) 100%);
+            box-shadow: var(--shadow-card); backdrop-filter: blur(18px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .kpi-card { padding: 1.45rem; }
+        .kpi-card:hover, .day-card:hover, .hotel-card:hover, .flight-card:hover { transform: translateY(-3px); border-color: var(--border-strong); box-shadow: 0 22px 45px -28px rgba(0,0,0,0.68); }
+
+        .day-card { overflow: hidden; }
+        .day-header { padding: 1.25rem 1.5rem; color: var(--text-inverse); position: relative; overflow: hidden; }
+        .day-header::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(42,51,72,0.98) 0%, rgba(18,21,30,0.98) 100%); z-index: 0; }
+        .day-header::after { content: ""; position: absolute; right: -40px; bottom: -70px; width: 220px; height: 220px; border-radius: 9999px; background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 66%); z-index: 0; }
+        .day-header > * { position: relative; z-index: 1; }
+
+        .timeline-container { position: relative; padding-left: 2.5rem; }
+        .timeline-container::before { content: ""; position: absolute; left: 0.75rem; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, rgba(168,180,200,0.16), var(--color-primary), rgba(232,151,111,0.2)); border-radius: 2px; }
+        .timeline-item { position: relative; margin-bottom: 1.5rem; }
+        .timeline-dot { position: absolute; left: -2.35rem; top: 0.5rem; width: 1.1rem; height: 1.1rem; border-radius: 50%; background: var(--color-primary); border: 3px solid var(--surface-strong); box-shadow: 0 0 0 2px rgba(168,180,200,0.22); }
+        .timeline-dot.accent { background: var(--color-accent); box-shadow: 0 0 0 2px var(--color-accent-light); }
+
+        .info-badge { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; }
+        .activity-tag { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.3rem 0.7rem; border-radius: 0.5rem; font-size: 0.7rem; font-weight: 600; }
+
+        .checklist-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px dashed var(--border); cursor: pointer; }
+        .checklist-item:last-child { border-bottom: none; }
+        .checklist-cb { width: 1.25rem; height: 1.25rem; accent-color: var(--color-primary); cursor: pointer; flex-shrink: 0; }
+        .checklist-item.checked .checklist-label { text-decoration: line-through; color: var(--text-muted); }
+        .progress-fill { transition: width 0.5s ease; }
+        .expense-bar { height: 10px; border-radius: 5px; transition: width 1s ease; }
+
+        #leaflet-map { height: 450px; width: 100%; border-radius: 1rem; z-index: 0; }
+        .leaflet-popup-content, .leaflet-popup-content-wrapper { font-family: "Paperlogy", sans-serif; }
+        .leaflet-popup-content h4 { font-weight: 800; margin: 0 0 4px 0; }
+        .leaflet-popup-content p { margin: 0; font-size: 12px; color: var(--text-muted); }
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--surface-strong); color: var(--text-body); box-shadow: var(--shadow-card); }
+
+        .map-container { border-radius: 1rem; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-card); background: var(--surface-strong); }
+        .place-card-link { cursor: pointer; }
+        .place-card-link:hover { border-color: var(--color-primary) !important; }
+
+        .dday-badge { background: linear-gradient(135deg, rgba(196,181,253,0.9), rgba(168,180,200,0.9)); }
+        .footer-copy { color: var(--text-muted); border-top: 1px solid var(--border); }
+
+        .bg-white { background: var(--surface-strong) !important; }
+        .bg-white\/90, .bg-white\/80, .bg-white\/70 { background: var(--surface) !important; }
+        .bg-gray-50 { background: rgba(127,148,168,0.08) !important; }
+        .bg-gray-100 { background: rgba(127,148,168,0.12) !important; }
+        .bg-blue-50, .bg-blue-100, .bg-cyan-50, .bg-cyan-100, .bg-indigo-50 { background: var(--tag-primary-bg) !important; }
+        .bg-emerald-50, .bg-emerald-100, .bg-green-100 { background: var(--tag-success-bg) !important; }
+        .bg-orange-50, .bg-orange-100, .bg-amber-50 { background: var(--tag-accent-bg) !important; }
+        .bg-red-50, .bg-red-100 { background: var(--tag-danger-bg) !important; }
+        .bg-yellow-50, .bg-yellow-100 { background: var(--tag-warm-bg) !important; }
+        .bg-pink-50, .bg-purple-50 { background: rgba(196,181,253,0.12) !important; }
+
+        .text-gray-900, .text-gray-800 { color: var(--text-strong) !important; }
+        .text-gray-700, .text-gray-600 { color: var(--text-body) !important; }
+        .text-gray-500, .text-gray-400 { color: var(--text-muted) !important; }
+        .text-cyan-800, .text-cyan-700, .text-blue-800, .text-blue-600, .text-indigo-700 { color: var(--tag-primary-text) !important; }
+        .text-emerald-800, .text-emerald-700, .text-emerald-600, .text-green-800 { color: var(--tag-success-text) !important; }
+        .text-orange-800, .text-orange-700, .text-orange-600, .text-amber-700, .text-amber-800, .text-yellow-700 { color: var(--tag-accent-text) !important; }
+        .text-red-700, .text-red-500, .text-red-600 { color: var(--tag-danger-text) !important; }
+        .text-purple-700 { color: var(--color-neon) !important; }
+
+        .border-gray-200, .border-cyan-100, .border-blue-100, .border-emerald-100, .border-orange-100, .border-red-100, .border-green-100, .border-yellow-100, .border-indigo-100, .border-amber-200, .border-purple-100, .border-pink-100, .border-red-200 { border-color: var(--border) !important; }
+        .shadow-sm { box-shadow: var(--shadow-card) !important; }
+
+        @media (max-width: 1024px) { .hero-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 767px) {
+            .hero-gradient h2 { font-size: 2rem !important; }
+            .hero-panel { padding: 1.15rem; }
+            .hero-panel-row { grid-template-columns: 1fr; gap: 0.35rem; }
+            .theme-toggle .theme-label { display: none; }
+            #leaflet-map { height: 350px; }
+        }
+        @media (min-width: 768px) { .desktop-theme-toggle { display: inline-flex; } }
+    </style>
+</head>
+<body class="antialiased">
+
+<div class="relative min-h-screen flex">
+
+    <!-- 모바일 상단 바 -->
+    <div class="mobile-topbar md:hidden fixed top-0 left-0 right-0 flex justify-between items-center p-4 z-50">
+        <div>
+            <div class="text-[11px] tracking-[0.22em] uppercase font-bold" style="color:var(--text-muted)">Family Trip 2026</div>
+            <h1 class="text-lg font-bold" style="color:var(--text-strong)">도쿄 · 요코하마 일정</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <button type="button" data-theme-toggle class="theme-toggle" aria-label="라이트 모드로 전환"><span class="theme-icon" data-theme-icon>☀</span><span class="theme-label" data-theme-label>라이트</span></button>
+            <button id="mobile-menu-button" class="menu-button" aria-label="메뉴 열기"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button>
+        </div>
+    </div>
+
+    <!-- 고정 사이드바 -->
+    <aside id="sidebar" class="sidebar-shell w-64 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40 overflow-y-auto pt-20 md:pt-0 pb-8 flex flex-col h-screen">
+        <div class="p-6 pb-4">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <div class="sidebar-overline">Urban Explorer</div>
+                    <span class="text-xs font-bold tracking-wider uppercase" style="color:rgba(236,242,248,0.6)">Family Trip 2026</span>
+                    <h2 class="text-xl font-bold text-white leading-tight mt-1">도쿄 · 요코하마<br>가족 여행 일정</h2>
+                    <p class="text-xs mt-2" style="color:rgba(236,242,248,0.6)">5/2 (토) — 5/6 (수)</p>
+                </div>
+                <button type="button" data-theme-toggle class="theme-toggle desktop-theme-toggle" aria-label="라이트 모드로 전환"><span class="theme-icon" data-theme-icon>☀</span><span class="theme-label" data-theme-label>라이트</span></button>
+            </div>
+        </div>
+        <nav id="main-nav" class="flex flex-col space-y-1 px-3">
+            <a href="#overview" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">✈</span>여행 개요</a>
+            <a href="#flights" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">🛫</span>항공편 정보</a>
+            <a href="#hotels" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">🏨</span>숙소 정보</a>
+            <a href="#map" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">🗺</span>지도</a>
+            <a href="#day1" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">1</span>DAY 1 · 5/2 (토)</a>
+            <a href="#day2" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">2</span>DAY 2 · 5/3 (일)</a>
+            <a href="#day3" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">3</span>DAY 3 · 5/4 (월)</a>
+            <a href="#day4" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">4</span>DAY 4 · 5/5 (화)</a>
+            <a href="#day5" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">5</span>DAY 5 · 5/6 (수)</a>
+            <a href="#budget" class="nav-link px-4 py-2.5 rounded-lg font-medium text-sm flex items-center"><span class="section-number">💰</span>예산 · 체크리스트</a>
+        </nav>
+        <div class="mt-auto pt-6 px-6 text-xs" style="color:rgba(236,242,248,0.5)">
+            <p>🏙️ Tokyo · Yokohama, Japan</p>
+            <p class="mt-1">4박 5일 가족 여행</p>
+        </div>
+    </aside>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="flex-1 min-w-0 md:ml-64 pt-16 md:pt-0 pb-24">
+
+        <!-- HERO -->
+        <div class="hero-gradient text-white px-6 sm:px-10 lg:px-14 py-14 md:py-20">
+            <div class="max-w-6xl mx-auto hero-layout">
+                <div class="max-w-3xl">
+                    <p class="hero-kicker">Golden Week Family Trip 2026</p>
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <span class="info-badge hero-pill">일본</span>
+                        <span class="info-badge hero-pill">3인 가족</span>
+                        <span class="info-badge hero-pill">4박 5일</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tight leading-tight">도쿄 · 요코하마<br>가족 여행 일정표</h2>
+                    <p class="hero-description text-lg max-w-2xl leading-relaxed">2026년 5월 2일(토) — 5월 6일(수)<br>아이와 함께하는 도쿄 시내 + 요코하마 당일치기, 걸어서 즐기는 도시 탐험 플랜</p>
+                    <div class="flex flex-wrap gap-3 mt-8">
+                        <div id="dday-box" class="dday-badge hero-stat text-center">
+                            <div id="dday-count" class="text-2xl font-black">D-?</div>
+                            <div class="hero-stat-label text-xs">출발까지</div>
+                        </div>
+                        <div class="hero-stat text-center"><div class="text-2xl font-black">5일</div><div class="hero-stat-label text-xs">여행 기간</div></div>
+                        <div class="hero-stat text-center"><div class="text-2xl font-black">2곳</div><div class="hero-stat-label text-xs">숙소 구성</div></div>
+                        <div class="hero-stat text-center"><div class="text-2xl font-black">~198만</div><div class="hero-stat-label text-xs">항공+숙소 예산</div></div>
+                    </div>
+                </div>
+                <div class="hero-panel">
+                    <div class="hero-panel-eyebrow">Travel Brief</div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Stay</div>
+                        <div><div class="hero-panel-value">신주쿠 중심 호텔 2곳</div><p class="hero-panel-copy">전반부는 신주쿠 역세권, 후반부는 시부야권으로 이동하며 동선 최적화.</p></div>
+                    </div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Move</div>
+                        <div><div class="hero-panel-value">Suica + 도보 중심</div><p class="hero-panel-copy">Suica 교통카드로 전철·버스 자유 이용. 핵심 구간은 도보 10분 이내.</p></div>
+                    </div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Focus</div>
+                        <div><div class="hero-panel-value">아이 맞춤 + 먹방</div><p class="hero-panel-copy">팀랩, 아키하바라, 포켓몬 센터 등 아이가 좋아하는 스팟 + 라멘·스시 투어.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-4 sm:px-8 lg:px-12 max-w-5xl mx-auto">
+
+            <!-- 여행 개요 -->
+            <section id="overview" class="content-section mt-12 mb-16">
+                <div class="section-kicker">Overview</div>
+                <h3 class="section-heading">여행 개요</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+                    <div class="kpi-card border-t-4" style="border-color:var(--color-primary)"><div class="text-2xl mb-1">✈️</div><div class="text-sm font-bold" style="color:var(--text-muted)">항공편</div><div class="text-xl font-black" style="color:var(--text-strong)">대한항공</div><div class="text-xs" style="color:var(--text-muted)">89만원 (2인 성인 + 1인 소아)</div></div>
+                    <div class="kpi-card border-t-4" style="border-color:var(--color-accent)"><div class="text-2xl mb-1">🏨</div><div class="text-sm font-bold" style="color:var(--text-muted)">메인 숙소</div><div class="text-xl font-black" style="color:var(--text-strong)">Tokyu Stay 신주쿠</div><div class="text-xs" style="color:var(--text-muted)">78만원 (3박, 트리플룸)</div></div>
+                    <div class="kpi-card border-t-4" style="border-color:#10b981"><div class="text-2xl mb-1">👨‍👩‍👦</div><div class="text-sm font-bold" style="color:var(--text-muted)">여행자</div><div class="text-xl font-black" style="color:var(--text-strong)">3인 가족</div><div class="text-xs" style="color:var(--text-muted)">준혁 · 소연 · 하준 (7세)</div></div>
+                    <div class="kpi-card border-t-4" style="border-color:var(--color-neon)"><div class="text-2xl mb-1">🚇</div><div class="text-sm font-bold" style="color:var(--text-muted)">교통</div><div class="text-xl font-black" style="color:var(--text-strong)">Suica 카드</div><div class="text-xs" style="color:var(--text-muted)">공항 리무진 + 전철 자유이용</div></div>
+                </div>
+                <div style="background:var(--surface-strong);border:1px solid var(--border);border-radius:1rem;box-shadow:var(--shadow-card)" class="p-6">
+                    <h4 class="font-bold text-lg mb-4 flex items-center gap-2" style="color:var(--text-strong)">📅 일정 한눈에 보기</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-4 p-3 rounded-xl" style="background:var(--tag-primary-bg);border:1px solid var(--border)"><div class="text-center min-w-[60px]"><div class="text-xs font-bold" style="color:var(--tag-primary-text)">DAY 1</div><div class="text-sm font-black" style="color:var(--text-strong)">5/2</div><div class="text-xs" style="color:var(--text-muted)">토</div></div><div class="flex-1"><div class="font-bold text-sm" style="color:var(--text-strong)">인천 → 나리타 ✈️</div><div class="text-xs" style="color:var(--text-muted)">KE703 09:30 출발 · 신주쿠 이동 · 야경 산책</div></div></div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl" style="background:var(--tag-success-bg);border:1px solid var(--border)"><div class="text-center min-w-[60px]"><div class="text-xs font-bold" style="color:var(--tag-success-text)">DAY 2</div><div class="text-sm font-black" style="color:var(--text-strong)">5/3</div><div class="text-xs" style="color:var(--text-muted)">일</div></div><div class="flex-1"><div class="font-bold text-sm" style="color:var(--text-strong)">🎨 팀랩 + 오다이바</div><div class="text-xs" style="color:var(--text-muted)">teamLab Borderless · 건담 베이스 · 레인보우 브릿지</div></div></div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl" style="background:var(--tag-success-bg);border:1px solid var(--border)"><div class="text-center min-w-[60px]"><div class="text-xs font-bold" style="color:var(--tag-success-text)">DAY 3</div><div class="text-sm font-black" style="color:var(--text-strong)">5/4</div><div class="text-xs" style="color:var(--text-muted)">월</div></div><div class="flex-1"><div class="font-bold text-sm" style="color:var(--text-strong)">🎮 아키하바라 + 우에노</div><div class="text-xs" style="color:var(--text-muted)">포켓몬 센터 · 아메요코 · 우에노 동물원</div></div></div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl" style="background:var(--tag-accent-bg);border:1px solid var(--border)"><div class="text-center min-w-[60px]"><div class="text-xs font-bold" style="color:var(--tag-accent-text)">DAY 4</div><div class="text-sm font-black" style="color:var(--text-strong)">5/5</div><div class="text-xs" style="color:var(--text-muted)">화</div></div><div class="flex-1"><div class="font-bold text-sm" style="color:var(--text-strong)">⛵ 요코하마 당일치기</div><div class="text-xs" style="color:var(--text-muted)">컵누들 뮤지엄 · 차이나타운 · 코스모월드</div></div></div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl" style="background:var(--tag-danger-bg);border:1px solid var(--border)"><div class="text-center min-w-[60px]"><div class="text-xs font-bold" style="color:var(--tag-danger-text)">DAY 5</div><div class="text-sm font-black" style="color:var(--text-strong)">5/6</div><div class="text-xs" style="color:var(--text-muted)">수</div></div><div class="flex-1"><div class="font-bold text-sm" style="color:var(--text-strong)">나리타 → 인천 ✈️</div><div class="text-xs" style="color:var(--text-muted)">시부야 아침 산책 · KE706 14:20 출발</div></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 항공편 정보 -->
+            <section id="flights" class="content-section mb-16">
+                <div class="section-kicker">Flights</div>
+                <h3 class="section-heading">항공편 정보</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="flight-card p-5">
+                        <div class="flex items-center gap-2 mb-4"><span class="info-badge" style="background:var(--tag-primary-bg);color:var(--tag-primary-text)">🛫 가는편</span><span class="info-badge" style="background:var(--surface-contrast);color:var(--text-body)">대한항공 KE703</span></div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-center"><div class="text-2xl font-black" style="color:var(--text-strong)">09:30</div><div class="text-sm font-bold" style="color:var(--text-muted)">인천 ICN</div></div>
+                            <div class="flex-1 px-4"><div class="flex items-center"><div class="h-0.5 flex-1" style="background:var(--color-primary)"></div><div class="mx-2 text-lg">✈️</div><div class="h-0.5 flex-1" style="background:var(--color-primary)"></div></div><div class="text-xs text-center" style="color:var(--text-muted)">약 2시간 30분</div></div>
+                            <div class="text-center"><div class="text-2xl font-black" style="color:var(--text-strong)">11:50</div><div class="text-sm font-bold" style="color:var(--text-muted)">나리타 NRT</div></div>
+                        </div>
+                        <div class="text-sm rounded-lg p-3" style="color:var(--text-body);background:var(--surface-strong);border:1px solid var(--border)"><strong>2026년 5월 2일 (토)</strong> · 현지시간 기준 도착</div>
+                    </div>
+                    <div class="flight-card p-5">
+                        <div class="flex items-center gap-2 mb-4"><span class="info-badge" style="background:var(--tag-accent-bg);color:var(--tag-accent-text)">🛬 오는편</span><span class="info-badge" style="background:var(--surface-contrast);color:var(--text-body)">대한항공 KE706</span></div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-center"><div class="text-2xl font-black" style="color:var(--text-strong)">14:20</div><div class="text-sm font-bold" style="color:var(--text-muted)">나리타 NRT</div></div>
+                            <div class="flex-1 px-4"><div class="flex items-center"><div class="h-0.5 flex-1" style="background:var(--color-accent)"></div><div class="mx-2 text-lg">✈️</div><div class="h-0.5 flex-1" style="background:var(--color-accent)"></div></div><div class="text-xs text-center" style="color:var(--text-muted)">약 2시간 40분</div></div>
+                            <div class="text-center"><div class="text-2xl font-black" style="color:var(--text-strong)">17:00</div><div class="text-sm font-bold" style="color:var(--text-muted)">인천 ICN</div></div>
+                        </div>
+                        <div class="text-sm rounded-lg p-3" style="color:var(--text-body);background:var(--surface-strong);border:1px solid var(--border)"><strong>2026년 5월 6일 (수)</strong> · 한국시간 기준 도착</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="rounded-xl p-5" style="background:var(--surface-strong);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+                        <h4 class="font-bold text-sm mb-3 flex items-center gap-2" style="color:var(--text-strong)">📋 예약 정보</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2 p-2 rounded-lg" style="background:var(--surface-contrast)"><span class="font-bold" style="color:var(--tag-primary-text)">준혁 · 소연</span><span class="text-xs" style="color:var(--text-muted)">예약번호 ABCDEF</span></div>
+                            <div class="flex items-center gap-2 p-2 rounded-lg" style="background:var(--surface-contrast)"><span class="font-bold" style="color:var(--tag-primary-text)">하준 (소아)</span><span class="text-xs" style="color:var(--text-muted)">예약번호 ABCDEF (동일)</span></div>
+                        </div>
+                        <div class="mt-3 p-3 rounded-lg" style="background:var(--tag-success-bg);border:1px solid var(--border)">
+                            <p class="text-xs font-bold" style="color:var(--tag-success-text)">✅ 좌석 사전 배정 완료 (3인 나란히)</p>
+                            <p class="text-xs mt-1" style="color:var(--tag-success-text)">✅ 소아 기내식 사전 요청 완료</p>
+                        </div>
+                    </div>
+                    <div class="rounded-xl p-5" style="background:var(--surface-strong);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+                        <h4 class="font-bold text-sm mb-3 flex items-center gap-2" style="color:var(--text-strong)">💳 결제 정보</h4>
+                        <div class="text-sm space-y-2" style="color:var(--text-body)">
+                            <p class="font-bold" style="color:var(--tag-primary-text)">항공권 총 89만원 · 현대카드 M 포인트 15만 차감</p>
+                            <p>실결제 <strong>74만원</strong> · 현대카드 무이자 3개월</p>
+                        </div>
+                        <div class="overflow-x-auto rounded-lg mt-3" style="border:1px solid var(--border)">
+                            <table class="w-full text-xs">
+                                <thead><tr style="background:var(--hero-mid)"><th class="px-3 py-2 text-left text-white">구분</th><th class="px-3 py-2 text-right text-white">수수료</th></tr></thead>
+                                <tbody>
+                                    <tr style="border-bottom:1px solid var(--border)"><td class="px-3 py-2" style="color:var(--text-body)">출발 61일 이전</td><td class="px-3 py-2 text-right font-bold" style="color:var(--text-strong)">₩30,000</td></tr>
+                                    <tr style="border-bottom:1px solid var(--border)"><td class="px-3 py-2" style="color:var(--text-body)">출발 31~60일 이전</td><td class="px-3 py-2 text-right font-bold" style="color:var(--text-strong)">₩50,000</td></tr>
+                                    <tr><td class="px-3 py-2" style="color:var(--text-body)">출발 8~30일 이전</td><td class="px-3 py-2 text-right font-bold" style="color:var(--tag-danger-text)">₩80,000</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 숙소 정보 -->
+            <section id="hotels" class="content-section mb-16">
+                <div class="section-kicker">Hotels</div>
+                <h3 class="section-heading">숙소 정보</h3>
+                <div class="space-y-6">
+                    <!-- 메인 숙소: Tokyu Stay 신주쿠 -->
+                    <div class="relative overflow-hidden rounded-2xl shadow-lg" style="border:2px solid var(--color-primary)">
+                        <div class="absolute top-0 right-0 text-white text-xs font-black px-4 py-1 rounded-bl-xl" style="background:var(--color-primary)">⭐ 메인 숙소</div>
+                        <div class="p-6" style="background:linear-gradient(135deg, rgba(42,51,72,0.3) 0%, rgba(22,26,37,0.6) 100%)">
+                            <div class="flex flex-wrap items-center gap-2 mb-3"><span class="info-badge" style="background:var(--tag-primary-bg);color:var(--tag-primary-text)">5/2 (토) ~ 5/5 (화)</span><span class="info-badge" style="background:var(--tag-success-bg);color:var(--tag-success-text)">3박</span></div>
+                            <h4 class="text-2xl font-black mb-1" style="color:var(--text-strong)">🏨 Tokyu Stay 신주쿠</h4>
+                            <p class="text-sm mb-4" style="color:var(--text-body)">트리플룸 · 세탁기 구비 · 신주쿠 역 도보 5분</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                                <div class="rounded-xl p-4 text-center" style="background:var(--surface);border:1px solid var(--border)"><div class="text-2xl mb-1">🚇</div><div class="text-xs font-bold" style="color:var(--text-body)">신주쿠 역 도보 5분</div></div>
+                                <div class="rounded-xl p-4 text-center" style="background:var(--surface);border:1px solid var(--border)"><div class="text-2xl mb-1">👕</div><div class="text-xs font-bold" style="color:var(--text-body)">객실 내 세탁기</div></div>
+                                <div class="rounded-xl p-4 text-center" style="background:var(--surface);border:1px solid var(--border)"><div class="text-2xl mb-1">🛏️</div><div class="text-xs font-bold" style="color:var(--text-body)">트리플 베드</div></div>
+                            </div>
+                            <div class="flex flex-wrap gap-4 text-sm" style="color:var(--text-body)">
+                                <div><strong>💰 요금:</strong> 78만원 (1박 26만원)</div>
+                                <div><strong>📱 예약처:</strong> Booking.com</div>
+                                <div><strong>🔄 무료취소:</strong> 4/28 23:59까지</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 마지막 날: 시부야 호텔 -->
+                    <div class="hotel-card p-5">
+                        <div class="flex flex-wrap items-center gap-2 mb-3"><span class="info-badge" style="background:var(--tag-accent-bg);color:var(--tag-accent-text)">5/5 (화) 1박</span></div>
+                        <h4 class="text-xl font-black mb-1" style="color:var(--text-strong)">🌃 Sequence 미야시타파크</h4>
+                        <p class="text-sm mb-3" style="color:var(--text-body)">스탠다드 트윈 + 엑스트라 베드 — 시부야 미야시타파크 직결</p>
+                        <div class="flex flex-wrap gap-4 text-sm" style="color:var(--text-body)">
+                            <div><strong>💰 요금:</strong> 31만원</div>
+                            <div><strong>📱 예약처:</strong> 공식 홈페이지</div>
+                            <div><strong>🔄 무료취소:</strong> 5/3 23:59까지</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 지도 -->
+            <section id="map" class="content-section mb-16">
+                <div class="section-kicker">Map</div>
+                <h3 class="section-heading">주요 장소 지도</h3>
+                <div class="map-container mb-6"><div id="leaflet-map"></div></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="place-card-link rounded-xl p-4 shadow-sm hover:shadow-md transition-all" style="background:var(--surface-strong);border:1px solid var(--border)" data-place="narita"><div class="text-lg mb-1">🛫</div><h5 class="font-bold text-sm" style="color:var(--text-strong)">나리타 국제공항 (NRT)</h5><p class="text-xs mt-1" style="color:var(--text-muted)">Narita International Airport</p></div>
+                    <div class="place-card-link rounded-xl p-4 shadow-sm hover:shadow-md transition-all" style="background:var(--surface-strong);border:1px solid var(--border)" data-place="shinjuku"><div class="text-lg mb-1">🏨</div><h5 class="font-bold text-sm" style="color:var(--text-strong)">Tokyu Stay 신주쿠</h5><p class="text-xs mt-1" style="color:var(--text-muted)">메인 숙소 · 신주쿠역 도보 5분</p></div>
+                    <div class="place-card-link rounded-xl p-4 shadow-sm hover:shadow-md transition-all" style="background:var(--surface-strong);border:1px solid var(--border)" data-place="teamlab"><div class="text-lg mb-1">🎨</div><h5 class="font-bold text-sm" style="color:var(--text-strong)">teamLab Borderless</h5><p class="text-xs mt-1" style="color:var(--text-muted)">아자부다이 힐즈 · 디지털 아트 뮤지엄</p></div>
+                    <div class="place-card-link rounded-xl p-4 shadow-sm hover:shadow-md transition-all" style="background:var(--surface-strong);border:1px solid var(--border)" data-place="akihabara"><div class="text-lg mb-1">🎮</div><h5 class="font-bold text-sm" style="color:var(--text-strong)">아키하바라</h5><p class="text-xs mt-1" style="color:var(--text-muted)">포켓몬 센터 · 전자상가 · 캡슐토이</p></div>
+                    <div class="place-card-link rounded-xl p-4 shadow-sm hover:shadow-md transition-all" style="background:var(--surface-strong);border:1px solid var(--border)" data-place="yokohama"><div class="text-lg mb-1">⛵</div><h5 class="font-bold text-sm" style="color:var(--text-strong)">요코하마 미나토미라이</h5><p class="text-xs mt-1" style="color:var(--text-muted)">컵누들 뮤지엄 · 차이나타운 · 코스모월드</p></div>
+                    <div class="place-card-link rounded-xl p-4 shadow-sm hover:shadow-md transition-all" style="background:var(--surface-strong);border:1px solid var(--border)" data-place="shibuya"><div class="text-lg mb-1">🌃</div><h5 class="font-bold text-sm" style="color:var(--text-strong)">시부야</h5><p class="text-xs mt-1" style="color:var(--text-muted)">스크램블 교차로 · 미야시타파크 · 하치코</p></div>
+                </div>
+            </section>
+
+            <!-- DAY 1 -->
+            <section id="day1" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header"><div class="flex items-center gap-3"><div class="bg-white/20 rounded-xl px-3 py-1 backdrop-blur-sm"><div class="text-2xl font-black">DAY 1</div></div><div><div class="text-xl font-black">5월 2일 (토)</div><div class="text-sm" style="color:var(--color-primary-light)">인천 → 나리타 → 신주쿠</div></div></div></div>
+                    <div class="p-6"><div class="timeline-container">
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-primary-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-primary-text)">07:30 — 인천공항</div><h4 class="font-bold" style="color:var(--text-strong)">공항 도착 & 출국</h4><p class="text-sm" style="color:var(--text-body)">출발 2시간 전 도착. 셀프 체크인 키오스크. 하준 여권 확인. 면세구역에서 간식 구매.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot accent"></div><div class="rounded-lg p-4" style="background:var(--tag-accent-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-accent-text)">09:30 — 대한항공 KE703 ✈️</div><h4 class="font-bold" style="color:var(--text-strong)">인천 → 나리타 (약 2시간 30분)</h4><p class="text-sm" style="color:var(--text-body)">기내식 제공. 아이 태블릿 준비. 입국카드 기내 작성 (비짓 재팬 웹 사전등록 권장).</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-primary-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-primary-text)">11:50 (현지) — 나리타 도착</div><h4 class="font-bold" style="color:var(--text-strong)">입국 심사 & 신주쿠 이동</h4><p class="text-sm" style="color:var(--text-body)">시차 없음 (한국 = 일본 시간). 나리타 익스프레스(NEX)로 신주쿠까지 약 80분. Suica 카드 공항에서 구매.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-success-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-success-text)">14:00 — 호텔 체크인</div><h4 class="font-bold" style="color:var(--text-strong)">🏨 Tokyu Stay 신주쿠</h4><p class="text-sm" style="color:var(--text-body)">트리플룸 입실. 짐 정리 후 주변 편의점에서 간식 보충.</p><div class="flex flex-wrap gap-2 mt-2"><span class="activity-tag" style="background:var(--tag-primary-bg);color:var(--tag-primary-text)">🚇 역세권</span><span class="activity-tag" style="background:var(--tag-success-bg);color:var(--tag-success-text)">👕 세탁기</span></div></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-warm-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-warm-text)">15:30 — 신주쿠</div><h4 class="font-bold" style="color:var(--text-strong)">🍜 첫 끼니: 후지소바 or 이치란</h4><p class="text-sm" style="color:var(--text-body)">신주쿠 역 주변 라멘으로 도쿄 첫 식사. 하준은 미니 사이즈 가능.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:rgba(196,181,253,0.12);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--color-neon)">18:00 — 저녁</div><h4 class="font-bold" style="color:var(--text-strong)">🌃 가부키초 & 신주쿠 야경 산책</h4><p class="text-sm" style="color:var(--text-body)">도쿄도청 전망대(무료) 45층에서 도쿄 야경. 돈키호테 쇼핑 후 호텔 복귀.</p></div></div>
+                    </div></div>
+                </div>
+            </section>
+
+            <!-- DAY 2 -->
+            <section id="day2" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header"><div class="flex items-center gap-3"><div class="bg-white/20 rounded-xl px-3 py-1 backdrop-blur-sm"><div class="text-2xl font-black">DAY 2</div></div><div><div class="text-xl font-black">5월 3일 (일)</div><div class="text-sm" style="color:var(--color-primary-light)">teamLab + 오다이바</div></div></div></div>
+                    <div class="p-6"><div class="timeline-container">
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-warm-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-warm-text)">08:00 — 호텔</div><h4 class="font-bold" style="color:var(--text-strong)">🍳 편의점 조식 & 출발 준비</h4><p class="text-sm" style="color:var(--text-body)">세븐일레븐에서 오니기리 + 샌드위치 + 우유. 간편하게 먹고 출발.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot accent"></div><div class="rounded-lg p-4" style="background:rgba(196,181,253,0.12);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--color-neon)">10:00 — 아자부다이 힐즈</div><h4 class="font-bold" style="color:var(--text-strong)">🎨 teamLab Borderless</h4><p class="text-sm" style="color:var(--text-body)">사전 예약 필수! 아이와 함께 몰입형 디지털 아트 체험. 약 2시간 소요. 어두운 공간이니 아이 손 꼭 잡기.</p><div class="flex flex-wrap gap-2 mt-2"><span class="activity-tag" style="background:rgba(196,181,253,0.14);color:var(--color-neon)">🎨 디지털아트</span><span class="activity-tag" style="background:var(--tag-accent-bg);color:var(--tag-accent-text)">📱 사전예약</span></div></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-warm-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-warm-text)">12:30 — 오다이바 이동</div><h4 class="font-bold" style="color:var(--text-strong)">🍣 다이바시티 푸드코트 점심</h4><p class="text-sm" style="color:var(--text-body)">유리카모메 타고 오다이바로 이동. 다이바시티 내 푸드코트에서 아이도 먹기 편한 메뉴 선택.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-primary-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-primary-text)">14:00 — 오다이바</div><h4 class="font-bold" style="color:var(--text-strong)">🤖 건담 베이스 & 실물대 건담</h4><p class="text-sm" style="color:var(--text-body)">유니콘 건담 실물대 입상 관람. 건담 베이스 도쿄 매장 구경. 하준 건프라 하나 구매 가능.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-primary-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-primary-text)">16:30 — 오다이바 해변</div><h4 class="font-bold" style="color:var(--text-strong)">🌅 레인보우 브릿지 석양</h4><p class="text-sm" style="color:var(--text-body)">오다이바 해변공원에서 레인보우 브릿지와 도쿄 타워가 보이는 석양 감상. 가족 사진 찍기 좋은 포인트.</p></div></div>
+                    </div></div>
+                </div>
+            </section>
+
+            <!-- DAY 3 -->
+            <section id="day3" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header"><div class="flex items-center gap-3"><div class="bg-white/20 rounded-xl px-3 py-1 backdrop-blur-sm"><div class="text-2xl font-black">DAY 3</div></div><div><div class="text-xl font-black">5월 4일 (월)</div><div class="text-sm" style="color:var(--color-primary-light)">아키하바라 + 우에노</div></div></div></div>
+                    <div class="p-6"><div class="timeline-container">
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-warm-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-warm-text)">08:30 — 츠키지</div><h4 class="font-bold" style="color:var(--text-strong)">🍣 츠키지 외시장 아침 탐방</h4><p class="text-sm" style="color:var(--text-body)">다마고야키, 신선 스시, 해산물 꼬치 길거리 먹방. 하준은 다마고야키(계란말이) 추천.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot accent"></div><div class="rounded-lg p-4" style="background:var(--tag-accent-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-accent-text)">10:30 — 아키하바라</div><h4 class="font-bold" style="color:var(--text-strong)">🎮 포켓몬 센터 메가도쿄</h4><p class="text-sm" style="color:var(--text-body)">포켓몬 센터에서 한정판 굿즈 쇼핑. 캡슐토이(가챠) 골목 탐험. 하준 예산: 3,000엔.</p><div class="flex flex-wrap gap-2 mt-2"><span class="activity-tag" style="background:var(--tag-accent-bg);color:var(--tag-accent-text)">🎮 게임</span><span class="activity-tag" style="background:var(--tag-primary-bg);color:var(--tag-primary-text)">🛒 쇼핑</span></div></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-warm-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-warm-text)">12:30 — 우에노</div><h4 class="font-bold" style="color:var(--text-strong)">🍜 아메요코 시장 점심</h4><p class="text-sm" style="color:var(--text-body)">활기찬 아메요코 시장에서 점심. 해산물 덮밥 or 야키토리. 과일 디저트 추천.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-success-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-success-text)">14:00 — 우에노</div><h4 class="font-bold" style="color:var(--text-strong)">🐼 우에노 동물원</h4><p class="text-sm" style="color:var(--text-body)">자이언트 판다 관람! 하준 최고 기대 포인트. 동물원 내 아이스크림 휴식. 약 2시간 소요.</p><div class="flex flex-wrap gap-2 mt-2"><span class="activity-tag" style="background:var(--tag-success-bg);color:var(--tag-success-text)">🐼 동물원</span><span class="activity-tag" style="background:var(--tag-primary-bg);color:var(--tag-primary-text)">👦 아이 추천</span></div></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:rgba(196,181,253,0.12);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--color-neon)">17:00 — 신주쿠 복귀</div><h4 class="font-bold" style="color:var(--text-strong)">🍺 오모이데 요코초 저녁</h4><p class="text-sm" style="color:var(--text-body)">신주쿠 서쪽 출구 추억의 골목(오모이데 요코초)에서 야키토리와 생맥주. 하준은 야키소바.</p></div></div>
+                    </div></div>
+                </div>
+            </section>
+
+            <!-- DAY 4 -->
+            <section id="day4" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header"><div class="flex items-center gap-3"><div class="bg-white/20 rounded-xl px-3 py-1 backdrop-blur-sm"><div class="text-2xl font-black">DAY 4</div></div><div><div class="text-xl font-black">5월 5일 (화)</div><div class="text-sm" style="color:var(--color-primary-light)">요코하마 당일치기 → 시부야 이동</div></div></div></div>
+                    <div class="p-6"><div class="timeline-container">
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-primary-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-primary-text)">08:00 — 체크아웃</div><h4 class="font-bold" style="color:var(--text-strong)">📦 Tokyu Stay 체크아웃</h4><p class="text-sm" style="color:var(--text-body)">짐 정리. 캐리어는 호텔에 맡기거나 시부야 호텔로 당일 택배 발송 (야마토 운수).</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot accent"></div><div class="rounded-lg p-4" style="background:var(--tag-accent-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-accent-text)">09:30 — 요코하마 미나토미라이</div><h4 class="font-bold" style="color:var(--text-strong)">🍜 컵누들 뮤지엄</h4><p class="text-sm" style="color:var(--text-body)">나만의 컵라면 만들기 체험! 하준 최고 기대 스팟 2. 사전 예약 권장. 약 2시간 소요.</p><div class="flex flex-wrap gap-2 mt-2"><span class="activity-tag" style="background:var(--tag-accent-bg);color:var(--tag-accent-text)">🍜 체험</span><span class="activity-tag" style="background:var(--tag-primary-bg);color:var(--tag-primary-text)">📱 사전예약</span></div></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-warm-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-warm-text)">12:00 — 요코하마 차이나타운</div><h4 class="font-bold" style="color:var(--text-strong)">🥟 차이나타운 점심</h4><p class="text-sm" style="color:var(--text-body)">일본 최대 차이나타운에서 샤오롱바오, 만두, 탄탄멘. 길거리 먹방 투어.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-primary-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-primary-text)">14:00 — 코스모월드</div><h4 class="font-bold" style="color:var(--text-strong)">🎡 요코하마 코스모월드</h4><p class="text-sm" style="color:var(--text-body)">대관람차(코스모클락 21)에서 항구 전경 감상. 놀이기구 몇 개 타고 즐기기. 입장 무료, 놀이기구별 과금.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-success-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-success-text)">17:00 — 시부야 이동</div><h4 class="font-bold" style="color:var(--text-strong)">🌃 Sequence 미야시타파크 체크인</h4><p class="text-sm" style="color:var(--text-body)">도쿄큐코선으로 시부야까지 약 30분. 호텔 체크인 후 미야시타파크 산책.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:rgba(196,181,253,0.12);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--color-neon)">19:00 — 시부야</div><h4 class="font-bold" style="color:var(--text-strong)">🥩 시부야 야키니쿠 디너</h4><p class="text-sm" style="color:var(--text-body)">마지막 밤 특별 저녁. 시부야 센터가이의 야키니쿠 맛집에서. 스크램블 교차로 야경 감상.</p></div></div>
+                    </div></div>
+                </div>
+            </section>
+
+            <!-- DAY 5 -->
+            <section id="day5" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header"><div class="flex items-center gap-3"><div class="bg-white/20 rounded-xl px-3 py-1 backdrop-blur-sm"><div class="text-2xl font-black">DAY 5</div></div><div><div class="text-xl font-black">5월 6일 (수)</div><div class="text-sm" style="color:var(--color-primary-light)">시부야 → 나리타 → 인천</div></div></div></div>
+                    <div class="p-6"><div class="timeline-container">
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-warm-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-warm-text)">07:30 — 시부야</div><h4 class="font-bold" style="color:var(--text-strong)">🍳 호텔 조식 & 아침 산책</h4><p class="text-sm" style="color:var(--text-body)">Sequence 조식 이용. 체크아웃 전 미야시타파크에서 마지막 산책. 하치코 동상 앞 기념 촬영.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-primary-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-primary-text)">09:30 — 체크아웃</div><h4 class="font-bold" style="color:var(--text-strong)">📦 호텔 체크아웃 & 나리타 이동</h4><p class="text-sm" style="color:var(--text-body)">시부야 → 나리타 익스프레스(NEX) 약 90분. 출발 3시간 전 공항 도착 목표.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot"></div><div class="rounded-lg p-4" style="background:var(--tag-primary-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-primary-text)">11:00 — 나리타 공항</div><h4 class="font-bold" style="color:var(--text-strong)">🛒 면세 쇼핑 & 체크인</h4><p class="text-sm" style="color:var(--text-body)">체크인 수속. 면세점에서 과자·화장품 쇼핑. 하준 공항 키즈존에서 시간 보내기.</p></div></div>
+                        <div class="timeline-item"><div class="timeline-dot accent"></div><div class="rounded-lg p-4" style="background:var(--tag-danger-bg);border:1px solid var(--border)"><div class="text-xs font-bold mb-1" style="color:var(--tag-danger-text)">14:20 — 대한항공 KE706 ✈️</div><h4 class="font-bold" style="color:var(--text-strong)">나리타 → 인천 (17:00 도착)</h4><p class="text-sm" style="color:var(--text-body)">오후 비행. 기내에서 하준 낮잠 유도. 인천 도착 후 공항 리무진 or 자가용으로 귀가.</p></div></div>
+                    </div></div>
+                </div>
+            </section>
+
+            <!-- 예산 & 체크리스트 -->
+            <section id="budget" class="content-section mb-16">
+                <div class="section-kicker">Budget &amp; Checklist</div>
+                <h3 class="section-heading">예산 · 체크리스트</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="rounded-2xl p-6" style="background:var(--surface-strong);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+                        <h4 class="font-bold text-lg mb-4 flex items-center gap-2" style="color:var(--text-strong)">💰 예산 총정리</h4>
+                        <div class="space-y-4">
+                            <div><div class="flex justify-between text-sm mb-1"><span class="font-bold" style="color:var(--text-strong)">✈️ 항공권 (대한항공)</span><span class="font-bold" style="color:var(--tag-primary-text)">₩890,000</span></div><div class="h-2.5 rounded-full overflow-hidden" style="background:var(--surface-contrast)"><div class="expense-bar rounded-full" style="width:45%;background:var(--color-primary)"></div></div><div class="text-xs mt-1" style="color:var(--text-muted)">현대카드 M 포인트 15만 차감 → 실결제 74만</div></div>
+                            <div><div class="flex justify-between text-sm mb-1"><span class="font-bold" style="color:var(--text-strong)">🏨 Tokyu Stay (3박)</span><span class="font-bold" style="color:var(--tag-success-text)">₩780,000</span></div><div class="h-2.5 rounded-full overflow-hidden" style="background:var(--surface-contrast)"><div class="expense-bar rounded-full" style="width:40%;background:var(--chart-success)"></div></div><div class="text-xs mt-1" style="color:var(--text-muted)">Booking.com · 무료취소 4/28까지</div></div>
+                            <div><div class="flex justify-between text-sm mb-1"><span class="font-bold" style="color:var(--text-strong)">🌃 Sequence (1박)</span><span class="font-bold" style="color:var(--tag-accent-text)">₩310,000</span></div><div class="h-2.5 rounded-full overflow-hidden" style="background:var(--surface-contrast)"><div class="expense-bar rounded-full" style="width:16%;background:var(--color-accent)"></div></div><div class="text-xs mt-1" style="color:var(--text-muted)">공식 홈페이지 · 무료취소 5/3까지</div></div>
+                            <div class="pt-3" style="border-top:2px solid var(--border)"><div class="flex justify-between"><span class="font-black text-lg" style="color:var(--text-strong)">합계 (항공+숙소)</span><span class="font-black text-lg" style="color:var(--tag-primary-text)">₩1,980,000</span></div><div class="text-xs mt-1" style="color:var(--text-muted)">* 현지 식비·교통·액티비티·쇼핑 별도 (예상 약 50~70만원)</div></div>
+                        </div>
+                        <div class="mt-6" style="position:relative;height:220px"><canvas id="budgetChart"></canvas></div>
+                    </div>
+                    <div class="rounded-2xl p-6" style="background:var(--surface-strong);border:1px solid var(--border);box-shadow:var(--shadow-card)">
+                        <div class="flex items-center justify-between mb-2"><h4 class="font-bold text-lg flex items-center gap-2" style="color:var(--text-strong)">✅ 출발 전 체크리스트</h4><span id="checklist-count" class="text-xs font-bold px-2 py-1 rounded-full" style="color:var(--tag-primary-text);background:var(--tag-primary-bg)">0/12</span></div>
+                        <div class="h-2 rounded-full overflow-hidden mb-4" style="background:var(--surface-contrast)"><div id="checklist-progress" class="progress-fill h-full rounded-full" style="width:0%;background:linear-gradient(to right,var(--color-primary),var(--chart-success))"></div></div>
+                        <div id="checklist-container" class="space-y-1">
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="visit-japan-web"><span class="checklist-label text-sm" style="color:var(--text-body)">Visit Japan Web 사전 등록</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="teamlab-ticket"><span class="checklist-label text-sm font-bold" style="color:var(--tag-danger-text)">teamLab Borderless 티켓 예약 (필수!)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="cupnoodle-ticket"><span class="checklist-label text-sm" style="color:var(--text-body)">컵누들 뮤지엄 사전 예약</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="passport-check"><span class="checklist-label text-sm" style="color:var(--text-body)">여권 유효기간 확인 (3인 모두)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="suica-plan"><span class="checklist-label text-sm" style="color:var(--text-body)">Suica / Pasmo 카드 구매 계획</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="nex-ticket"><span class="checklist-label text-sm" style="color:var(--text-body)">나리타 익스프레스(NEX) 왕복권 예약</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="esim"><span class="checklist-label text-sm" style="color:var(--text-body)">일본 eSIM 구매 (데이터 전용)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="travel-insurance"><span class="checklist-label text-sm" style="color:var(--text-body)">여행자 보험 가입</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="yen-exchange"><span class="checklist-label text-sm" style="color:var(--text-body)">엔화 환전 (약 10만엔)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="kids-bag"><span class="checklist-label text-sm" style="color:var(--text-body)">하준 가방 (태블릿, 간식, 여벌옷)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="medicine"><span class="checklist-label text-sm" style="color:var(--text-body)">상비약 (해열제, 밴드, 벌레물림약)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="rain-gear"><span class="checklist-label text-sm" style="color:var(--text-body)">우비 or 접이식 우산 (5월 간헐적 비)</span></label>
+                        </div>
+                        <div class="mt-6 p-4 rounded-xl" style="background:var(--tag-danger-bg);border:1px solid var(--border)">
+                            <h5 class="font-bold text-sm mb-2" style="color:var(--tag-danger-text)">🚨 중요 일정</h5>
+                            <div class="space-y-1 text-xs" style="color:var(--tag-danger-text)">
+                                <p><strong>4/2</strong> — teamLab Borderless 예약 오픈 (1달 전)</p>
+                                <p><strong>4/28 23:59</strong> — Tokyu Stay 무료 취소 마감</p>
+                                <p><strong>5/3 23:59</strong> — Sequence 무료 취소 마감</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 유용한 정보 -->
+                <div class="mt-8 rounded-2xl p-6" style="background:linear-gradient(135deg, var(--tag-primary-bg), var(--surface-soft));border:1px solid var(--border)">
+                    <h4 class="font-bold text-lg mb-4 flex items-center gap-2" style="color:var(--text-strong)">🌏 여행 유용 정보</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="rounded-xl p-4 text-center" style="background:var(--surface)"><div class="text-2xl mb-2">🕐</div><div class="text-sm font-bold" style="color:var(--text-strong)">시차</div><div class="text-xs mt-1" style="color:var(--text-body)">없음 (한국 = 일본)</div></div>
+                        <div class="rounded-xl p-4 text-center" style="background:var(--surface)"><div class="text-2xl mb-2">💱</div><div class="text-sm font-bold" style="color:var(--text-strong)">환율</div><div class="text-xs mt-1" style="color:var(--text-body)">100엔 ≈ 900~950원</div></div>
+                        <div class="rounded-xl p-4 text-center" style="background:var(--surface)"><div class="text-2xl mb-2">🌡️</div><div class="text-sm font-bold" style="color:var(--text-strong)">5월 날씨</div><div class="text-xs mt-1" style="color:var(--text-body)">18~25°C · 간헐적 비</div></div>
+                        <div class="rounded-xl p-4 text-center" style="background:var(--surface)"><div class="text-2xl mb-2">🔌</div><div class="text-sm font-bold" style="color:var(--text-strong)">전압 · 플러그</div><div class="text-xs mt-1" style="color:var(--text-body)">100V · A타입 (변환 어댑터 필요)</div></div>
+                    </div>
+                </div>
+
+                <!-- 긴급 연락처 -->
+                <div class="mt-8 rounded-2xl p-6" style="background:linear-gradient(135deg, var(--tag-danger-bg), var(--surface-soft));border:1px solid var(--border)">
+                    <h4 class="font-bold text-lg mb-4 flex items-center gap-2" style="color:var(--text-strong)">🚨 긴급 연락처</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div class="rounded-xl p-4" style="background:var(--surface);border:1px solid var(--border)">
+                            <div class="text-sm font-black mb-2" style="color:var(--tag-danger-text)">일본 긴급전화</div>
+                            <div class="space-y-1.5 text-sm"><div class="flex items-center gap-2"><span>🚔</span><span class="font-bold" style="color:var(--text-body)">경찰:</span><a href="tel:110" style="color:var(--tag-primary-text);font-weight:700">110</a></div><div class="flex items-center gap-2"><span>🚑</span><span class="font-bold" style="color:var(--text-body)">구급차 / 소방:</span><a href="tel:119" style="color:var(--tag-primary-text);font-weight:700">119</a></div></div>
+                        </div>
+                        <div class="rounded-xl p-4" style="background:var(--surface);border:1px solid var(--border)">
+                            <div class="text-sm font-black mb-2" style="color:var(--tag-danger-text)">주일 한국 대사관</div>
+                            <div class="space-y-1.5 text-sm"><div class="flex items-center gap-2"><span>📞</span><span class="font-bold" style="color:var(--text-body)">대사관 (도쿄):</span><a href="tel:+81-3-3452-7611" style="color:var(--tag-primary-text);font-weight:700">+81-3-3452-7611</a></div><div class="flex items-center gap-2"><span>🌐</span><span class="font-bold" style="color:var(--text-body)">긴급 (24시간):</span><a href="tel:+81-90-4172-2048" style="color:var(--tag-primary-text);font-weight:700">+81-90-4172-2048</a></div></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="rounded-xl p-4" style="background:var(--surface);border:1px solid var(--border)">
+                            <div class="text-sm font-black mb-2" style="color:var(--tag-danger-text)">한국 영사콜센터</div>
+                            <div class="space-y-1.5 text-sm"><div class="flex items-center gap-2"><span>📞</span><span class="font-bold" style="color:var(--text-body)">24시간:</span><a href="tel:+82-2-3210-0404" style="color:var(--tag-primary-text);font-weight:700">+82-2-3210-0404</a></div><div class="flex items-center gap-2"><span>📱</span><span class="font-bold" style="color:var(--text-body)">카카오톡:</span><span style="color:var(--text-body)">@영사콜센터</span></div></div>
+                        </div>
+                        <div class="rounded-xl p-4" style="background:var(--surface);border:1px solid var(--border)">
+                            <div class="text-sm font-black mb-2" style="color:var(--tag-danger-text)">현지 병원 (영어 가능)</div>
+                            <div class="space-y-1.5 text-sm"><div class="flex items-center gap-2"><span>🏥</span><span class="font-bold" style="color:var(--text-body)">St. Luke's International:</span></div><div class="pl-6"><a href="tel:+81-3-3541-5151" style="color:var(--tag-primary-text);font-weight:700">+81-3-3541-5151</a></div><div class="flex items-center gap-2"><span>🏥</span><span class="font-bold" style="color:var(--text-body)">Tokyo Medical University:</span></div><div class="pl-6"><a href="tel:+81-3-3342-6111" style="color:var(--tag-primary-text);font-weight:700">+81-3-3342-6111</a></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center py-8 text-sm" style="color:var(--text-muted);border-top:1px solid var(--border)">
+                <p>Tokyo · Yokohama Family Trip 2026</p>
+                <p class="mt-1">준혁 · 소연 · 하준</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var root = document.documentElement;
+    var THEME_KEY = 'tokyo-trip-theme';
+    var themeButtons = document.querySelectorAll('[data-theme-toggle]');
+    var budgetChart = null;
+
+    function getThemeValue(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
+
+    function updateThemeButtons(theme) {
+        var isDark = theme === 'dark';
+        themeButtons.forEach(function(btn) {
+            var icon = btn.querySelector('[data-theme-icon]');
+            var label = btn.querySelector('[data-theme-label]');
+            if (icon) icon.textContent = isDark ? '☀' : '☾';
+            if (label) label.textContent = isDark ? '라이트' : '다크';
+            btn.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
+        });
+    }
+
+    function updateBudgetChartTheme() {
+        if (!budgetChart) return;
+        budgetChart.data.datasets[0].backgroundColor = [getThemeValue('--chart-primary'), getThemeValue('--chart-success'), getThemeValue('--chart-accent')];
+        budgetChart.options.plugins.legend.labels.color = getThemeValue('--chart-legend');
+        budgetChart.options.plugins.tooltip.backgroundColor = getThemeValue('--tooltip-bg');
+        budgetChart.options.plugins.tooltip.borderColor = getThemeValue('--border-strong');
+        budgetChart.options.plugins.tooltip.titleColor = getThemeValue('--text-strong');
+        budgetChart.options.plugins.tooltip.bodyColor = getThemeValue('--text-body');
+        budgetChart.update();
+    }
+
+    function applyTheme(theme) { root.setAttribute('data-theme', theme); updateThemeButtons(theme); updateBudgetChartTheme(); }
+
+    var savedTheme = null;
+    try { savedTheme = localStorage.getItem(THEME_KEY); } catch(e) {}
+    applyTheme(savedTheme || 'dark');
+
+    themeButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            try { localStorage.setItem(THEME_KEY, next); } catch(e) {}
+        });
+    });
+
+    // Mobile menu
+    var sidebar = document.getElementById('sidebar');
+    var menuBtn = document.getElementById('mobile-menu-button');
+    var overlay = document.getElementById('sidebar-overlay');
+    if (menuBtn && sidebar && overlay) {
+        menuBtn.addEventListener('click', function() { sidebar.classList.toggle('-translate-x-full'); overlay.classList.toggle('hidden'); });
+        overlay.addEventListener('click', function() { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); });
+    }
+    document.querySelectorAll('#main-nav a').forEach(function(link) {
+        link.addEventListener('click', function() { if (window.innerWidth < 768) { if (sidebar) sidebar.classList.add('-translate-x-full'); if (overlay) overlay.classList.add('hidden'); } });
+    });
+
+    // ScrollSpy
+    var sections = document.querySelectorAll('.content-section');
+    var navLinks = document.querySelectorAll('#main-nav a');
+    function updateNav() {
+        var current = '';
+        sections.forEach(function(s) { if (s.getBoundingClientRect().top <= 120) current = s.id; });
+        navLinks.forEach(function(l) { l.classList.remove('active'); if (l.getAttribute('href') === '#' + current) l.classList.add('active'); });
+    }
+    window.addEventListener('scroll', updateNav);
+    updateNav();
+
+    // D-Day
+    var tripDate = new Date('2026-05-02T00:00:00+09:00');
+    var today = new Date(); today.setHours(0,0,0,0);
+    var diffDays = Math.ceil((tripDate.getTime() - today.getTime()) / 86400000);
+    var ddayEl = document.getElementById('dday-count');
+    var ddayBox = document.getElementById('dday-box');
+    if (ddayEl) {
+        if (diffDays > 0) { ddayEl.textContent = 'D-' + diffDays; }
+        else if (diffDays === 0) { ddayEl.textContent = 'D-DAY!'; if (ddayBox) ddayBox.style.background = 'linear-gradient(135deg, #10b981, #059669)'; }
+        else { ddayEl.textContent = 'D+' + Math.abs(diffDays); if (ddayBox) ddayBox.style.background = 'linear-gradient(135deg, #6b7280, #4b5563)'; }
+    }
+
+    // Leaflet map
+    var places = {
+        narita:     { lat: 35.7647, lng: 140.3864, emoji: '🛫', name: '나리타 국제공항 (NRT)', desc: 'Narita International Airport' },
+        shinjuku:   { lat: 35.6938, lng: 139.7034, emoji: '🏨', name: 'Tokyu Stay 신주쿠', desc: '메인 숙소 · 3박 · 역 도보 5분' },
+        teamlab:    { lat: 35.6604, lng: 139.7312, emoji: '🎨', name: 'teamLab Borderless', desc: '아자부다이 힐즈 · 디지털 아트 뮤지엄' },
+        akihabara:  { lat: 35.7023, lng: 139.7745, emoji: '🎮', name: '아키하바라', desc: '포켓몬 센터 · 전자상가 · 캡슐토이' },
+        ueno:       { lat: 35.7146, lng: 139.7732, emoji: '🐼', name: '우에노 동물원', desc: 'Ueno Zoo · 자이언트 판다' },
+        yokohama:   { lat: 35.4555, lng: 139.6368, emoji: '⛵', name: '요코하마 미나토미라이', desc: '컵누들 뮤지엄 · 코스모월드' },
+        shibuya:    { lat: 35.6580, lng: 139.7016, emoji: '🌃', name: '시부야', desc: 'Sequence 미야시타파크 · 스크램블 교차로' },
+        tsukiji:    { lat: 35.6654, lng: 139.7707, emoji: '🍣', name: '츠키지 외시장', desc: '해산물 · 다마고야키 · 길거리 먹방' }
+    };
+
+    var mapEl = document.getElementById('leaflet-map');
+    var map = null, markers = {};
+    if (mapEl && typeof L !== 'undefined') {
+        map = L.map('leaflet-map', { scrollWheelZoom: false }).setView([35.68, 139.75], 11);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors', maxZoom: 18 }).addTo(map);
+        Object.keys(places).forEach(function(key) {
+            var p = places[key];
+            var icon = L.divIcon({ html: '<div style="font-size:1.5rem;text-align:center;line-height:1">' + p.emoji + '</div>', className: '', iconSize: [30,30], iconAnchor: [15,15], popupAnchor: [0,-15] });
+            var marker = L.marker([p.lat, p.lng], { icon: icon }).addTo(map);
+            marker.bindPopup('<h4>' + p.emoji + ' ' + p.name + '</h4><p>' + p.desc + '</p>');
+            markers[key] = marker;
+        });
+        var allCoords = Object.values(places).map(function(p) { return [p.lat, p.lng]; });
+        map.fitBounds(allCoords, { padding: [30, 30] });
+    }
+
+    document.querySelectorAll('.place-card-link').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var key = card.getAttribute('data-place');
+            if (map && markers[key] && places[key]) {
+                map.setView([places[key].lat, places[key].lng], 15, { animate: true });
+                markers[key].openPopup();
+                document.getElementById('leaflet-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+
+    // Checklist
+    var CK_KEY = 'tokyo-trip-checklist-2026';
+    var cbs = document.querySelectorAll('.checklist-cb');
+    var countEl = document.getElementById('checklist-count');
+    var progressEl = document.getElementById('checklist-progress');
+
+    function loadChecklist() {
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem(CK_KEY)) || {}; } catch(e) {}
+        cbs.forEach(function(cb) { var id = cb.getAttribute('data-id'); if (saved.hasOwnProperty(id)) cb.checked = saved[id]; updateItemStyle(cb); });
+        updateProgress();
+    }
+    function saveChecklist() { var data = {}; cbs.forEach(function(cb) { data[cb.getAttribute('data-id')] = cb.checked; }); try { localStorage.setItem(CK_KEY, JSON.stringify(data)); } catch(e) {} }
+    function updateItemStyle(cb) { var item = cb.closest('.checklist-item'); if (cb.checked) item.classList.add('checked'); else item.classList.remove('checked'); }
+    function updateProgress() { var total = cbs.length, done = 0; cbs.forEach(function(cb) { if (cb.checked) done++; }); if (countEl) countEl.textContent = done + '/' + total; if (progressEl) progressEl.style.width = (total > 0 ? Math.round(done / total * 100) : 0) + '%'; }
+    cbs.forEach(function(cb) { cb.addEventListener('change', function() { updateItemStyle(cb); saveChecklist(); updateProgress(); }); });
+    loadChecklist();
+
+    // Budget chart
+    var budgetCanvas = document.getElementById('budgetChart');
+    if (budgetCanvas) {
+        budgetChart = new Chart(budgetCanvas, {
+            type: 'doughnut',
+            data: {
+                labels: ['항공권', 'Tokyu Stay 3박', 'Sequence 1박'],
+                datasets: [{ data: [890000, 780000, 310000], backgroundColor: [getThemeValue('--chart-primary'), getThemeValue('--chart-success'), getThemeValue('--chart-accent')], borderWidth: 0, hoverOffset: 8 }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '60%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: getThemeValue('--chart-legend'), font: { family: 'Paperlogy', size: 11, weight: 'bold' }, padding: 12, usePointStyle: true, pointStyleWidth: 10 } },
+                    tooltip: { backgroundColor: getThemeValue('--tooltip-bg'), borderColor: getThemeValue('--border-strong'), borderWidth: 1, titleColor: getThemeValue('--text-strong'), bodyColor: getThemeValue('--text-body'), callbacks: { label: function(ctx) { return ' ₩' + ctx.parsed.toLocaleString(); } } }
+                }
+            }
+        });
+        updateBudgetChartTheme();
+    }
+});
+</script>
+</body>
+</html>

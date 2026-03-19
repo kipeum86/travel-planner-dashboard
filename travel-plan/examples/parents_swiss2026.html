@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스위스 가족여행 2026 · 부모님 환갑 기념 여행</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        /* * [NEW THEME] Swiss Alpine Nature - Calm, Fresh, Majestic
+         */
+        :root {
+            /* LIGHT MODE (Default) - Alpine Fresh */
+            color-scheme: light;
+            --color-primary: #2A6F4D;       /* Alpine Green */
+            --color-primary-rgb: 42, 111, 77;
+            --color-accent: #D32F2F;        /* Swiss Red */
+            --color-accent-rgb: 211, 47, 47;
+            --color-success: #264653;       /* Slate Navy */
+            --color-success-rgb: 38, 70, 83;
+            --color-blue: #457B9D;          /* Glacier Blue */
+            --color-blue-rgb: 69, 123, 157;
+
+            --bg: #F4F7F6;                  /* Soft Glacier White */
+            --bg-secondary: #E9ECEB;
+            --surface: #FFFFFF;
+            --surface-strong: #FFFFFF;
+            
+            --text-strong: #1B262C;
+            --text-body: #40514E;
+            --text-muted: #829491;
+            --text-inverse: #FFFFFF;
+
+            --border: rgba(42, 111, 77, 0.1);
+            --border-strong: rgba(42, 111, 77, 0.2);
+
+            --hero-start: #A8DADC;          /* Ice Blue */
+            --hero-end: #457B9D;            /* Glacier Blue */
+            
+            --sidebar-start: #FFFFFF;
+            --sidebar-end: #F4F7F6;
+
+            --shadow-sm: 0 4px 15px rgba(69, 123, 157, 0.08);
+            --shadow-md: 0 12px 30px rgba(38, 70, 83, 0.06);
+            --tooltip-bg: rgba(255, 255, 255, 0.98);
+            --radius-card: 1rem;            /* Calmer, more elegant rounded corners */
+        }
+
+        html[data-theme="dark"] {
+            /* DARK MODE - Alpine Starry Night */
+            color-scheme: dark;
+            --color-primary: #52B788;       /* Soft Green */
+            --color-primary-rgb: 82, 183, 136;
+            --color-accent: #E56B6B;        /* Soft Red */
+            --color-accent-rgb: 229, 107, 107;
+            --color-success: #A8DADC;       /* Ice Blue */
+            --color-success-rgb: 168, 218, 220;
+            --color-blue: #4EA8DE;          /* Bright Blue */
+            --color-blue-rgb: 78, 168, 222;
+
+            --bg: #0D1B2A;                  /* Deep Night */
+            --bg-secondary: #1B263B;
+            --surface: #1B263B;
+            --surface-strong: #27344D;
+            
+            --text-strong: #F4F7F6;
+            --text-body: #B2C4CB;
+            --text-muted: #778DA9;
+            --text-inverse: #0D1B2A;
+
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.15);
+
+            --hero-start: #0D1B2A;          /* Deep Night */
+            --hero-end: #1B263B;            /* Alpine Night */
+            
+            --sidebar-start: #0D1B2A;
+            --sidebar-end: #1B263B;
+
+            --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 12px 35px rgba(0, 0, 0, 0.5);
+            --tooltip-bg: rgba(27, 38, 59, 0.95);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-body);
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Topographical / Contour line subtle texture */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: repeating-radial-gradient(
+                circle at 0 0, 
+                transparent 0,
+                var(--text-muted) 1px,
+                transparent 1px,
+                transparent 40px
+            );
+            opacity: 0.06;
+        }
+
+        main, aside, .mobile-topbar { position: relative; z-index: 1; }
+        a, button { transition: all 0.25s ease; }
+
+        /* Navigation & Topbar */
+        .mobile-topbar {
+            background: rgba(var(--bg-rgb), 0.85);
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .sidebar-shell {
+            background: linear-gradient(180deg, var(--sidebar-start) 0%, var(--sidebar-end) 100%);
+            border-right: 1px solid var(--border);
+        }
+
+        .sidebar-overline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.5rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 9999px;
+            background: rgba(var(--color-primary-rgb), 0.1);
+            color: var(--color-primary);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle, .menu-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-strong);
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+        }
+        .desktop-theme-toggle { display: none; }
+        .theme-toggle:hover, .menu-button:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.15);
+        }
+
+        /* Nav Links */
+        .nav-link { color: var(--text-muted); border-radius: 0.5rem; font-weight: 600; margin-bottom: 0.25rem;}
+        .nav-link:hover {
+            color: var(--color-primary);
+            background: rgba(var(--color-primary-rgb), 0.05);
+            transform: translateX(4px);
+        }
+        .nav-link.active {
+            color: var(--color-primary);
+            background: rgba(var(--color-primary-rgb), 0.1);
+            font-weight: 700;
+            border-left: 3px solid var(--color-primary);
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        #main-nav .section-number {
+            width: 1.8rem; height: 1.8rem;
+            margin-right: 0.6rem;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-size: 0.8rem; font-weight: 900;
+            background: var(--bg-secondary);
+        }
+        .nav-link.active .section-number {
+            background: var(--color-primary);
+            color: var(--text-inverse);
+        }
+
+        /* Hero Section */
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--hero-start) 0%, var(--hero-end) 100%);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            color: #ffffff;
+        }
+        .hero-gradient::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.1), transparent 50%);
+            pointer-events: none;
+        }
+        .hero-layout {
+            position: relative; z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .hero-pill {
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.15);
+            color: #ffffff;
+            font-weight: 700;
+            backdrop-filter: blur(8px);
+        }
+
+        .hero-stat {
+            min-width: 100px;
+            padding: 1.25rem 1rem;
+            border-radius: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(12px);
+            color: #ffffff;
+        }
+        .hero-stat-label { color: rgba(255,255,255,0.75); }
+
+        .hero-panel {
+            padding: 1.75rem;
+            border-radius: var(--radius-card);
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(16px);
+            color: #ffffff;
+        }
+        .hero-panel-eyebrow {
+            font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 1rem;
+        }
+        .hero-panel-row {
+            display: grid; grid-template-columns: 80px minmax(0,1fr); gap: 1rem;
+            padding: 1rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .hero-panel-row:first-of-type { border-top: none; padding-top: 0; }
+        .hero-panel-label {
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+        }
+        .hero-panel-value { font-size: 1rem; font-weight: 800; }
+        .hero-panel-copy { margin-top: 0.3rem; font-size: 0.85rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
+
+        /* Typography & Headings */
+        .section-kicker {
+            display: inline-flex; align-items: center;
+            padding: 0.3rem 0.9rem;
+            border-radius: 9999px;
+            background: rgba(var(--color-primary-rgb), 0.08);
+            color: var(--color-primary);
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+        }
+        .section-heading {
+            color: var(--text-strong);
+            font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+            font-weight: 900; letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+        }
+        .content-section { scroll-margin-top: 110px; }
+
+        /* Cards */
+        .kpi-card, .day-card, .hotel-card, .flight-card {
+            border-radius: var(--radius-card);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card { padding: 1.5rem; }
+        .kpi-card:hover, .day-card:hover, .hotel-card:hover, .flight-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-strong);
+        }
+
+        /* Timeline & Day Cards */
+        .day-card { overflow: hidden; }
+        .day-header {
+            padding: 1.5rem;
+            background: linear-gradient(to right, var(--bg-secondary), var(--surface));
+            border-bottom: 1px solid var(--border);
+            color: var(--text-strong);
+        }
+
+        .timeline-container { position: relative; padding-left: 2.2rem; }
+        .timeline-container::before {
+            content: ""; position: absolute;
+            left: 0.65rem; top: 0; bottom: 0; width: 2px;
+            background: var(--border-strong);
+        }
+        .timeline-item { position: relative; margin-bottom: 2rem; }
+        .timeline-dot {
+            position: absolute; left: -1.8rem; top: 0.5rem;
+            width: 1rem; height: 1rem;
+            border-radius: 50%;
+            background: var(--color-primary);
+            border: 3px solid var(--surface);
+            box-shadow: 0 0 0 1px var(--border-strong);
+            z-index: 2;
+        }
+        .timeline-dot.accent { background: var(--color-accent); }
+        .timeline-dot.blue { background: var(--color-blue); }
+
+        /* Badges & Tags */
+        .info-badge {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.8rem; border-radius: 9999px;
+            font-size: 0.75rem; font-weight: 700;
+        }
+        .activity-tag {
+            display: inline-flex; align-items: center; gap: 0.25rem;
+            padding: 0.3rem 0.6rem; border-radius: 0.5rem;
+            font-size: 0.7rem; font-weight: 700;
+        }
+
+        /* Forms & Interactive */
+        .checklist-item {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.75rem 0; border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .checklist-item:last-child { border-bottom: none; }
+        .checklist-cb { 
+            width: 1.25rem; height: 1.25rem; 
+            accent-color: var(--color-primary); 
+            cursor: pointer; flex-shrink: 0; 
+        }
+        .checklist-item.checked .checklist-label { text-decoration: line-through; color: var(--text-muted); opacity: 0.6; }
+
+        /* Map */
+        .map-container { border-radius: var(--radius-card); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+        #leaflet-map { height: 400px; width: 100%; z-index: 0; }
+        html[data-theme="dark"] .leaflet-layer { filter: brightness(0.8) contrast(1.1) saturate(0.8); }
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: var(--surface-strong); color: var(--text-body); box-shadow: var(--shadow-md);
+        }
+        .leaflet-popup-content h4 { font-weight: 800; color: var(--text-strong); }
+
+        .place-card-link { cursor: pointer; transition: all 0.2s ease; }
+        .place-card-link:hover { border-color: var(--color-primary) !important; background: var(--bg-secondary); }
+
+        .dday-badge {
+            background: var(--color-accent) !important;
+            color: #ffffff !important;
+            border: none !important;
+        }
+
+        /* Utilities */
+        .bg-white { background: var(--surface) !important; }
+        .bg-white\/80 { background: rgba(var(--surface-rgb, 255,255,255), 0.8) !important; }
+        .bg-gray-50 { background: var(--bg-secondary) !important; }
+        .bg-gray-100 { background: var(--surface-strong) !important; }
+        .text-gray-900, .text-gray-800 { color: var(--text-strong) !important; }
+        .text-gray-700, .text-gray-600 { color: var(--text-body) !important; }
+        .text-gray-500, .text-gray-400 { color: var(--text-muted) !important; }
+        .border-gray-200 { border-color: var(--border) !important; }
+        .shadow-sm { box-shadow: var(--shadow-sm) !important; }
+
+        .bg-amber-50, .bg-yellow-50 { background: rgba(var(--color-primary-rgb), 0.06) !important; }
+        .bg-amber-100, .bg-yellow-100 { background: rgba(var(--color-primary-rgb), 0.12) !important; }
+        .text-amber-700, .text-yellow-700 { color: var(--color-primary) !important; }
+        .border-amber-100, .border-amber-200, .border-yellow-100 { border-color: rgba(var(--color-primary-rgb), 0.2) !important; }
+
+        .bg-red-50, .bg-orange-50, .bg-pink-50 { background: rgba(var(--color-accent-rgb), 0.06) !important; }
+        .bg-red-100, .bg-orange-100, .bg-pink-100 { background: rgba(var(--color-accent-rgb), 0.12) !important; }
+        .text-red-500, .text-red-600, .text-red-700, .text-orange-700, .text-pink-700 { color: var(--color-accent) !important; }
+        .border-red-100, .border-red-200, .border-orange-100, .border-pink-100 { border-color: rgba(var(--color-accent-rgb), 0.2) !important; }
+
+        .bg-emerald-50, .bg-green-50 { background: rgba(var(--color-success-rgb), 0.06) !important; }
+        .bg-emerald-100, .bg-green-100 { background: rgba(var(--color-success-rgb), 0.12) !important; }
+        .text-emerald-700, .text-green-800 { color: var(--color-success) !important; }
+        .border-emerald-100, .border-green-100 { border-color: rgba(var(--color-success-rgb), 0.2) !important; }
+
+        .bg-blue-50, .bg-cyan-50, .bg-purple-50 { background: rgba(var(--color-blue-rgb), 0.06) !important; }
+        .bg-blue-100, .bg-cyan-100, .bg-purple-100 { background: rgba(var(--color-blue-rgb), 0.12) !important; }
+        .text-blue-600, .text-blue-700, .text-cyan-700, .text-purple-700 { color: var(--color-blue) !important; }
+        .border-blue-100, .border-blue-200, .border-cyan-100, .border-purple-100 { border-color: rgba(var(--color-blue-rgb), 0.2) !important; }
+
+        @media (max-width: 1024px) { .hero-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 767px) {
+            .hero-gradient h2 { font-size: 2.1rem !important; }
+            .hero-panel { padding: 1.25rem; }
+            .hero-panel-row { grid-template-columns: 1fr; gap: 0.25rem; }
+            .theme-toggle .theme-label { display: none; }
+            #leaflet-map { height: 320px; }
+        }
+        @media (min-width: 768px) { .desktop-theme-toggle { display: inline-flex; } }
+    </style>
+</head>
+<body class="antialiased">
+<div class="relative min-h-screen flex">
+
+    <!-- 모바일 상단 바 -->
+    <div class="mobile-topbar md:hidden fixed top-0 left-0 right-0 flex justify-between items-center p-4 z-50">
+        <div>
+            <div class="text-[10px] tracking-widest uppercase text-gray-500 font-bold mb-1">Switzerland 2026</div>
+            <h1 class="text-lg font-black text-gray-900">스위스 힐링 여행</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <button type="button" data-theme-toggle class="theme-toggle" aria-label="다크 모드로 전환">
+                <span class="theme-icon" data-theme-icon>☾</span>
+                <span class="theme-label" data-theme-label>다크</span>
+            </button>
+            <button id="mobile-menu-button" class="menu-button" aria-label="메뉴 열기">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- 사이드바 -->
+    <aside id="sidebar" class="sidebar-shell w-64 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40 overflow-y-auto pt-24 md:pt-0 pb-8 flex flex-col h-screen">
+        <div class="p-6 pb-2">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <div class="sidebar-overline">🇨🇭 Family Trip</div>
+                    <h2 class="text-2xl font-black text-gray-900 leading-tight mt-2">부모님 환갑<br>스위스 여행</h2>
+                    <p class="text-xs font-bold mt-2 text-gray-500 bg-gray-50 inline-block px-2 py-1 border border-gray-200 rounded-md">26.08.15 — 08.20</p>
+                </div>
+                <button type="button" data-theme-toggle class="theme-toggle desktop-theme-toggle" aria-label="다크 모드로 전환">
+                    <span class="theme-icon" data-theme-icon>☾</span>
+                </button>
+            </div>
+        </div>
+        <nav id="main-nav" class="flex flex-col space-y-1 px-4 mt-4">
+            <a href="#overview" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">🏔️</span>여행 개요</a>
+            <a href="#flights" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">✈️</span>항공편 정보</a>
+            <a href="#hotels" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">🏠</span>숙소 (샬레)</a>
+            <a href="#map" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">🗺</span>주요 스팟</a>
+            <div class="my-3 border-t border-gray-200 mx-2"></div>
+            <a href="#day1" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">1</span>DAY 1 · 취리히/루체른</a>
+            <a href="#day2" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">2</span>DAY 2 · 리기산 유람선</a>
+            <a href="#day3" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">3</span>DAY 3 · 융프라우요흐</a>
+            <a href="#day4" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">4</span>DAY 4 · 피르스트 하이킹</a>
+            <a href="#day5" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">5</span>DAY 5 · 체르마트 당일</a>
+            <a href="#day6" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">6</span>DAY 6 · 취리히 & 귀국</a>
+            <div class="my-3 border-t border-gray-200 mx-2"></div>
+            <a href="#budget" class="nav-link px-3 py-2 font-medium text-sm flex items-center"><span class="section-number">📝</span>예산 · 준비물</a>
+        </nav>
+        <div class="mt-auto pt-6 px-6 text-xs text-gray-400 font-medium text-center">
+            <p>Switzerland Trip 2026 🏔️</p>
+        </div>
+    </aside>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 hidden md:hidden"></div>
+
+    <!-- 메인 -->
+    <main class="flex-1 min-w-0 md:ml-64 pt-16 md:pt-0 pb-24">
+
+        <!-- HERO -->
+        <div class="hero-gradient px-6 sm:px-10 lg:px-14 py-12 md:py-16">
+            <div class="max-w-6xl mx-auto hero-layout">
+                <div class="max-w-3xl">
+                    <div class="flex flex-wrap gap-2 mb-6 text-sm">
+                        <span class="info-badge hero-pill">🇨🇭 스위스 힐링투어</span>
+                        <span class="info-badge hero-pill">👨‍👩‍👧 3인 가족 (부모님 동반)</span>
+                        <span class="info-badge hero-pill">📅 5박 6일</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-black mb-4 tracking-tight leading-tight">
+                        부모님과 함께하는<br>알프스 대자연 여행 🌲
+                    </h2>
+                    <p class="text-base md:text-lg max-w-2xl font-medium opacity-90 mb-8">
+                        2026년 8월 15일(토) — 8월 20일(목)<br>
+                        루체른 호수, 장엄한 융프라우, 전통 샬레에서의 따뜻한 밥 한 끼. 환갑을 맞이하신 부모님을 위한 여유롭고 완벽한 힐링 여행.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div id="dday-box" class="dday-badge hero-stat text-center">
+                            <div id="dday-count" class="text-2xl font-black">D-?</div>
+                            <div class="hero-stat-label text-xs font-bold uppercase mt-1">출발까지</div>
+                        </div>
+                        <div class="hero-stat text-center">
+                            <div class="text-2xl font-black">5박 6일</div>
+                            <div class="hero-stat-label text-xs font-bold uppercase mt-1">여행 기간</div>
+                        </div>
+                        <div class="hero-stat text-center">
+                            <div class="text-2xl font-black">그린델발트</div>
+                            <div class="hero-stat-label text-xs font-bold uppercase mt-1">메인 숙소</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-panel">
+                    <div class="hero-panel-eyebrow">Trip Summary</div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Route</div>
+                        <div>
+                            <div class="hero-panel-value">취리히 → 루체른 → 그린델발트 → 체르마트 → 취리히</div>
+                            <p class="hero-panel-copy">스위스 트래블 패스를 이용한 1등석 기차 여행. 짐 이동 서비스(SBB) 적극 활용.</p>
+                        </div>
+                    </div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Stay</div>
+                        <div>
+                            <div class="hero-panel-value">전통 샬레 (Chalet) 숙박</div>
+                            <p class="hero-panel-copy">아이거 북벽 뷰가 보이는 그린델발트의 프라이빗 목조 주택. 한식을 해 먹을 수 있는 주방 완비.</p>
+                        </div>
+                    </div>
+                    <div class="hero-panel-row">
+                        <div class="hero-panel-label">Focus</div>
+                        <div>
+                            <div class="hero-panel-value">자연 관람 & 최소 도보</div>
+                            <p class="hero-panel-copy">유람선, 곤돌라, 산악 열차를 이용해 무릎 무리 없이 스위스의 절경을 눈에 담는 코스.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-4 sm:px-8 lg:px-12 max-w-5xl mx-auto">
+
+            <!-- OVERVIEW -->
+            <section id="overview" class="content-section mb-16">
+                <div class="section-kicker">Overview</div>
+                <h3 class="section-heading">여행 개요</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                    <div class="kpi-card border-t-4" style="border-color: var(--color-blue)">
+                        <div class="text-4xl mb-3">✈️</div>
+                        <div class="text-xs font-black text-blue-600 uppercase tracking-widest mb-1">항공편</div>
+                        <div class="text-lg font-black text-gray-900">스위스 항공</div>
+                        <div class="text-sm font-medium text-gray-500 mt-1">인천 ↔ 취리히 직항</div>
+                    </div>
+                    <div class="kpi-card border-t-4" style="border-color: var(--color-primary)">
+                        <div class="text-4xl mb-3">🏡</div>
+                        <div class="text-xs font-black text-amber-600 uppercase tracking-widest mb-1">숙소</div>
+                        <div class="text-lg font-black text-gray-900">그린델발트 샬레</div>
+                        <div class="text-sm font-medium text-gray-500 mt-1">주방 완비 패밀리룸 3박</div>
+                    </div>
+                    <div class="kpi-card border-t-4" style="border-color: var(--color-accent)">
+                        <div class="text-4xl mb-3">🏔️</div>
+                        <div class="text-xs font-black text-red-600 uppercase tracking-widest mb-1">핵심 액티비티</div>
+                        <div class="text-lg font-black text-gray-900">융프라우요흐</div>
+                        <div class="text-sm font-medium text-gray-500 mt-1">유럽의 지붕 등정 (산악열차)</div>
+                    </div>
+                    <div class="kpi-card border-t-4" style="border-color: var(--color-success)">
+                        <div class="text-4xl mb-3">💳</div>
+                        <div class="text-xs font-black text-emerald-600 uppercase tracking-widest mb-1">예상 경비</div>
+                        <div class="text-lg font-black text-gray-900">약 1,100만원</div>
+                        <div class="text-sm font-medium text-gray-500 mt-1">3인 가족 전체 기준</div>
+                    </div>
+                </div>
+
+                <!-- 일정 요약 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm">
+                    <h4 class="font-black text-xl mb-6 flex items-center gap-2 text-gray-900">📅 일정 한눈에 보기</h4>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-blue-50 rounded-xl py-2 border border-blue-100">
+                                <div class="text-xs font-black text-blue-600">DAY 1</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">8/15</div>
+                            </div>
+                            <div class="flex-1 pb-1 border-b border-gray-100">
+                                <div class="font-black text-base text-gray-900">취리히 입국 및 루체른 이동 🇨🇭</div>
+                                <div class="text-gray-500 font-medium mt-1">오후 취리히 도착 → 1등석 기차로 루체른 이동 → 호텔 휴식</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-amber-50 rounded-xl py-2 border border-amber-100">
+                                <div class="text-xs font-black text-amber-600">DAY 2</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">8/16</div>
+                            </div>
+                            <div class="flex-1 pb-1 border-b border-gray-100">
+                                <div class="font-black text-base text-gray-900">산들의 여왕 리기산 & 루체른 유람선 ⛴️</div>
+                                <div class="text-gray-500 font-medium mt-1">유람선과 산악열차로 리기산 등정 → 루체른 구시가지(카펠교) 관광</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-emerald-50 rounded-xl py-2 border border-emerald-100">
+                                <div class="text-xs font-black text-emerald-600">DAY 3</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">8/17</div>
+                            </div>
+                            <div class="flex-1 pb-1 border-b border-gray-100">
+                                <div class="font-black text-base text-gray-900">알프스의 심장 융프라우요흐 🏔️</div>
+                                <div class="text-gray-500 font-medium mt-1">그린델발트로 이동 후 짐 보관 → 산악열차 타고 융프라우 등정 → 신라면 먹기</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-emerald-50 rounded-xl py-2 border border-emerald-100">
+                                <div class="text-xs font-black text-emerald-600">DAY 4</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">8/18</div>
+                            </div>
+                            <div class="flex-1 pb-1 border-b border-gray-100">
+                                <div class="font-black text-base text-gray-900">피르스트 하이킹 & 샬레에서의 한식 🥩</div>
+                                <div class="text-gray-500 font-medium mt-1">피르스트 곤돌라 등반 및 바흐알프제 산책 → 쿱(Coop) 마트 장보기 → 샬레 저녁</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-red-50 rounded-xl py-2 border border-red-100">
+                                <div class="text-xs font-black text-red-600">DAY 5</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">8/19</div>
+                            </div>
+                            <div class="flex-1 pb-1 border-b border-gray-100">
+                                <div class="font-black text-base text-gray-900">마테호른이 보이는 체르마트 당일치기 🚂</div>
+                                <div class="text-gray-500 font-medium mt-1">고르너그라트 전망대에서 황금 마테호른 감상 → 로시니 식당에서 점심</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-center min-w-[70px] bg-gray-100 rounded-xl py-2 border border-gray-200">
+                                <div class="text-xs font-black text-gray-600">DAY 6</div>
+                                <div class="text-lg font-black text-gray-900 leading-none mt-1">8/20</div>
+                            </div>
+                            <div class="flex-1 pb-1">
+                                <div class="font-bold text-base text-gray-900">취리히 시내 관광 및 귀국 ✈️</div>
+                                <div class="text-gray-500 font-medium mt-1">취리히역 코인락커 짐 보관 → 린덴호프 산책 및 기념품(초콜릿) 쇼핑 → 공항 이동</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FLIGHTS -->
+            <section id="flights" class="content-section mb-16">
+                <div class="section-kicker">Flights</div>
+                <h3 class="section-heading">항공편 정보</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="flight-card p-6 md:p-8 border-t-4 border-t-blue-500">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="info-badge bg-blue-50 text-blue-700 border border-blue-100">🛫 가는편</span>
+                            <span class="font-bold text-gray-700">스위스 국제항공 LX163</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">10:55</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">인천 ICN</div>
+                            </div>
+                            <div class="flex-1 px-4 relative">
+                                <div class="border-t-2 dashed border-gray-300 w-full absolute top-1/2 left-0 transform -translate-y-1/2"></div>
+                                <div class="text-center relative z-10"><span class="bg-surface px-2 text-xl text-blue-600">✈️</span></div>
+                                <div class="text-xs font-bold text-center text-gray-400 mt-2">13H 35M</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">17:30</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">취리히 ZRH</div>
+                            </div>
+                        </div>
+                        <div class="text-sm font-bold text-gray-600 bg-gray-50 rounded-xl p-3 border border-gray-100 text-center">
+                            8월 15일 (토) · 직항 · 이코노미 플러스
+                        </div>
+                    </div>
+                    <div class="flight-card p-6 md:p-8 border-t-4 border-t-red-500">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="info-badge bg-red-50 text-red-700 border border-red-100">🛬 오는편</span>
+                            <span class="font-bold text-gray-700">스위스 국제항공 LX162</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">19:15</div>
+                                <div class="text-sm font-bold text-gray-500 mt-1">취리히 ZRH</div>
+                            </div>
+                            <div class="flex-1 px-4 relative">
+                                <div class="border-t-2 dashed border-gray-300 w-full absolute top-1/2 left-0 transform -translate-y-1/2"></div>
+                                <div class="text-center relative z-10"><span class="bg-surface px-2 text-xl text-red-600" style="transform: scaleX(-1); display:inline-block;">✈️</span></div>
+                                <div class="text-xs font-bold text-center text-gray-400 mt-2">12H 15M</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-black text-gray-900">14:30</div>
+                                <div class="text-sm font-bold text-red-600 mt-1">인천 ICN <span class="text-[10px]">(+1일)</span></div>
+                            </div>
+                        </div>
+                        <div class="text-sm font-bold text-gray-600 bg-gray-50 rounded-xl p-3 border border-gray-100 text-center">
+                            8월 20일 (목) 출발 · 8월 21일 (금) 도착
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-amber-100 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-[-10px] right-[-10px] text-8xl opacity-10">💊</div>
+                    <h4 class="font-black text-lg text-gray-900 mb-4">💡 부모님 동반 항공 및 여행 팁</h4>
+                    <ul class="space-y-3 text-sm font-medium text-gray-700">
+                        <li class="flex items-start gap-2"><span class="text-amber-500">✔</span> 장시간 비행이므로 복도석이나 레그룸이 넓은 이코노미 플러스 사전 지정 권장.</li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500">✔</span> 고산병(융프라우, 마테호른)에 대비해 출국 전 내과에서 처방받은 **고산병 약** 지참 필수.</li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500">✔</span> 기차 환승 시 짐을 끌기 힘드시니, 무거운 캐리어는 **SBB 짐 부치기 서비스**를 이용해 다음 숙소로 바로 보내세요.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- HOTELS -->
+            <section id="hotels" class="content-section mb-16">
+                <div class="section-kicker">Hotels</div>
+                <h3 class="section-heading">숙소 정보</h3>
+                
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="hotel-card relative overflow-hidden p-6 md:p-8" style="border-top: 4px solid var(--color-primary);">
+                        <div class="absolute top-0 right-0 text-white text-xs font-black px-4 py-2 rounded-bl-2xl uppercase tracking-widest" style="background: var(--color-primary);">Main Stay</div>
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <span class="info-badge bg-amber-50 text-amber-700 border border-amber-100">8/16 ~ 8/19 (3박)</span>
+                            <span class="info-badge bg-emerald-50 text-emerald-700 border border-emerald-100">그린델발트</span>
+                        </div>
+                        <h4 class="text-2xl font-black text-gray-900 mb-2">🏠 그린델발트 전통 샬레 (Chalet)</h4>
+                        <p class="text-base font-medium text-gray-600 mb-5">Eiger North Face View Apartment · 주방 및 테라스 완비 · 그린델발트역 도보 10분</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                                <div class="text-3xl mb-2">🍳</div>
+                                <div class="text-sm font-bold text-gray-800">풀 키친 완비</div>
+                                <div class="text-xs text-gray-500 mt-1">인덕션, 오븐, 밥솥 유무 확인<br>부모님 한식 차려드리기 최적</div>
+                            </div>
+                            <div class="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                                <div class="text-3xl mb-2">🏔️</div>
+                                <div class="text-sm font-bold text-gray-800">아이거 북벽 뷰</div>
+                                <div class="text-xs text-gray-500 mt-1">아침에 눈 뜨면 테라스에서<br>마주하는 웅장한 알프스 산맥</div>
+                            </div>
+                            <div class="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                                <div class="text-3xl mb-2">🛒</div>
+                                <div class="text-sm font-bold text-gray-800">Coop 마트 인접</div>
+                                <div class="text-xs text-gray-500 mt-1">스위스의 비싼 외식비 절감<br>신선한 소고기와 야채 구매</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-100 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+                            <div><span class="font-bold text-gray-600 mr-2">요금:</span><strong class="text-gray-900 text-lg">약 1,350,000원</strong> (3박 총액)</div>
+                            <div><span class="font-bold text-gray-600 mr-2">특이사항:</span><strong class="text-gray-900">에어비앤비 예약 / 호스트에게 엘리베이터 여부 확인 필수</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="hotel-card relative p-6 md:p-8" style="border-top: 4px solid var(--color-blue);">
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <span class="info-badge bg-blue-50 text-blue-700 border border-blue-100">8/15 ~ 8/16 (1박)</span>
+                            <span class="info-badge bg-gray-100 text-gray-700 border border-gray-200">루체른</span>
+                        </div>
+                        <h4 class="text-xl font-black text-gray-900 mb-2">🏨 Hotel Des Balances (호텔 데 발랑스)</h4>
+                        <p class="text-sm font-medium text-gray-600 mb-4">River View Room · 로이스 강과 카펠교가 보이는 로맨틱한 루체른 숙소. 도착 첫날 부모님 피로를 풀어드릴 최고급 호텔.</p>
+                        <div class="text-sm">
+                            <span class="font-bold text-gray-600 mr-2">요금:</span><strong class="text-gray-900">약 550,000원</strong> (1박, 조식 포함)
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MAP -->
+            <section id="map" class="content-section mb-16">
+                <div class="section-kicker">Map</div>
+                <h3 class="section-heading">스위스 주요 스팟</h3>
+                <div class="map-container mb-6">
+                    <div id="leaflet-map"></div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <div class="place-card-link bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center" data-place="zrh">
+                        <div class="text-2xl mb-1">✈️</div>
+                        <h5 class="font-black text-sm text-gray-900">취리히 공항</h5>
+                    </div>
+                    <div class="place-card-link bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center" data-place="lucerne">
+                        <div class="text-2xl mb-1">⛴️</div>
+                        <h5 class="font-black text-sm text-gray-900">루체른 (리기산)</h5>
+                    </div>
+                    <div class="place-card-link bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center" data-place="grindelwald">
+                        <div class="text-2xl mb-1">🏡</div>
+                        <h5 class="font-black text-sm text-gray-900">그린델발트</h5>
+                    </div>
+                    <div class="place-card-link bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center" data-place="jungfrau">
+                        <div class="text-2xl mb-1">🏔️</div>
+                        <h5 class="font-black text-sm text-gray-900">융프라우요흐</h5>
+                    </div>
+                    <div class="place-card-link bg-white rounded-2xl p-4 border border-gray-100 shadow-sm text-center" data-place="zermatt">
+                        <div class="text-2xl mb-1">⛰️</div>
+                        <h5 class="font-bold text-sm text-gray-900">체르마트</h5>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 1 -->
+            <section id="day1" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-xl px-4 py-2 text-center shadow-sm">
+                            <div class="text-sm font-black text-gray-500">DAY 1</div>
+                            <div class="text-xl font-black text-gray-900">8/15</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">취리히 입국 & 루체른의 첫날 🇨🇭</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">비행의 피로를 푸는 잔잔한 호수 산책</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot blue"></div>
+                                <div class="bg-blue-50 rounded-2xl p-5 border border-blue-100">
+                                    <div class="text-xs font-black text-blue-600 mb-2 uppercase tracking-wide">10:55 — 인천 출발</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">스위스 항공 탑승</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">직항으로 약 13시간 비행. 부모님을 위해 편안한 복장과 기내용 슬리퍼 준비.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">17:30 — 취리히 공항 도착</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">입국 심사 및 기차 이동 🚂</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">공항역(Zurich Flughafen)에서 루체른행 1등석 기차 탑승 (약 1시간 10분 소요). 스위스 트래블 패스 개시.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-amber-50 rounded-2xl p-5 border border-amber-100">
+                                    <div class="text-xs font-black text-amber-600 mb-2 uppercase tracking-wide">19:30 — 루체른</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">호텔 데 발랑스 체크인 및 저녁</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">로이스 강변에 위치한 호텔. 저녁은 가볍게 카펠교 야경을 보며 호텔 레스토랑 또는 근처 식당에서 뢰스티(스위스식 감자전) 맛보기.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-white border border-gray-200 text-gray-700">🌉 카펠교 야경</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 2 -->
+            <section id="day2" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-xl px-4 py-2 text-center shadow-sm">
+                            <div class="text-sm font-black text-gray-500">DAY 2</div>
+                            <div class="text-xl font-black text-gray-900">8/16</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">산들의 여왕, 리기산 ⛴️</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">유람선 타고 산악열차 타고, 힘들지 않은 완벽한 뷰</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                                    <div class="text-xs font-black text-gray-500 mb-1 tracking-wide">08:00</div>
+                                    <h4 class="font-black text-gray-900">🍳 강변 테라스 조식 & 체크아웃</h4>
+                                    <p class="text-sm font-medium text-gray-600 mt-1">짐은 루체른 역 락커에 보관.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot blue"></div>
+                                <div class="bg-blue-50 rounded-2xl p-5 border border-blue-200">
+                                    <div class="text-xs font-black text-blue-600 mb-2 uppercase tracking-wide">09:12 — 루체른 선착장</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">루체른 호수 유람선 탑승 🛳️</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">스위스 트래블 패스 무료. 1등석 데크에서 아름다운 호수 마을 비츠나우(Vitznau)까지 이동 (약 1시간).</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
+                                    <div class="text-xs font-black text-emerald-600 mb-2 uppercase tracking-wide">10:30 — 리기쿨름</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">리기산 산악열차 등정 ⛰️</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">비츠나우에서 빨간색 산악열차를 타고 정상(Rigi Kulm)에 도착. 스위스의 탁 트인 전망을 즐기고 평탄한 길로 가벼운 산책.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">15:00 — 루체른 복귀 → 그린델발트 이동</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">인터라켄 경유 샬레 입성 🏡</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">기차를 타고 루체른 → 인터라켄 → 그린델발트 이동 (약 2시간 30분). 그린델발트 Coop 마트에서 3일치 식재료 (삼겹살, 과일 등) 장보기.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 3 -->
+            <section id="day3" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-xl px-4 py-2 text-center shadow-sm">
+                            <div class="text-sm font-black text-gray-500">DAY 3</div>
+                            <div class="text-xl font-black text-gray-900">8/17</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">유럽의 지붕, 융프라우요흐 🏔️</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">부모님의 버킷리스트 완수의 날</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                                    <div class="text-xs font-black text-gray-500 mb-1 tracking-wide">07:30</div>
+                                    <h4 class="font-black text-gray-900">따뜻한 누룽지와 고산병 약 복용 💊</h4>
+                                    <p class="text-sm font-medium text-gray-600 mt-1">등반 전 든든하게 한식으로 배를 채우고, 고산병 예방약 복용.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot blue"></div>
+                                <div class="bg-blue-50 rounded-2xl p-5 border border-blue-200">
+                                    <div class="text-xs font-black text-blue-600 mb-2 uppercase tracking-wide">08:30 — 그린델발트 터미널</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">아이거 익스프레스 곤돌라 탑승 🚠</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">가장 빠르고 쾌적한 곤돌라를 타고 아이거글레처(Eigergletscher)역까지 15분만에 이동 후, 산악열차(융프라우 철도) 환승.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
+                                    <div class="text-xs font-black text-emerald-600 mb-2 uppercase tracking-wide">09:45 — 융프라우요흐 정상 (3,454m)</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">만년설과 얼음 궁전 체험 ❄️</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">스핑크스 전망대, 얼음 궁전, 고원(Plateau) 스위스 국기 포토존에서 사진 촬영. 부모님이 어지러워하시지 않게 천천히 걷기.</p>
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <span class="activity-tag bg-red-100 text-red-700 font-bold">🍜 신라면 무료 쿠폰 사용 필수!</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">14:00 — 하산 및 휴식</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">그린델발트 복귀 및 샬레 저녁 🥩</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">오후 일찍 하산하여 고산증세 완화. 샬레에서 아이거 북벽을 바라보며 삼겹살 구이와 와인으로 환갑 축하 파티.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 4 -->
+            <section id="day4" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-xl px-4 py-2 text-center shadow-sm">
+                            <div class="text-sm font-black text-gray-500">DAY 4</div>
+                            <div class="text-xl font-black text-gray-900">8/18</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">피르스트 하이킹과 액티비티 🦅</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">꽃이 핀 알프스 길을 걷고, 아찔한 절벽 전망대 걷기</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-amber-50 rounded-2xl p-5 border border-amber-100">
+                                    <div class="text-xs font-black text-amber-600 mb-2 uppercase tracking-wide">10:00 — 피르스트 곤돌라</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">클리프 워크 (Cliff Walk) 🌉</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">숙소 근처에서 곤돌라를 타고 피르스트 정상 도착. 깎아지른 절벽을 따라 만들어진 철제 다리 걷기 (부모님이 무서워하시면 패스 가능).</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-200">
+                                    <div class="text-xs font-black text-emerald-600 mb-2 uppercase tracking-wide">11:30 — 하이킹</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">바흐알프제 호수 트레킹 🥾</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">정상에서 호수까지 왕복 약 1시간 40분. 경사가 완만해 부모님도 걷기 좋은 스위스 최고의 초보자 하이킹 코스. 벤치에 앉아 싸온 샌드위치 먹기.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border border-gray-200">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">14:00 — 액티비티 하산</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">피르스트 플라이어 / 트로티 바이크 🚲</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">부모님 취향에 맞춰 곤돌라를 타고 내려오시거나, 조금 액티브하게 플라이어(집라인)를 타고 중간역까지 하산 체험.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 5 -->
+            <section id="day5" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-xl px-4 py-2 text-center shadow-sm">
+                            <div class="text-sm font-black text-gray-500">DAY 5</div>
+                            <div class="text-xl font-black text-gray-900">8/19</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">황금빛 마테호른, 체르마트 🚂</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">토블론 초콜릿 산의 위엄 마주하기 (당일치기)</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot blue"></div>
+                                <div class="bg-blue-50 rounded-2xl p-5 border border-blue-200">
+                                    <div class="text-xs font-black text-blue-600 mb-2 uppercase tracking-wide">07:30 — 그린델발트 출발</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">기차 타고 청정마을 체르마트로 🌲</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">인터라켄, 슈피츠를 거쳐 빙하 특급 노선을 지나 전기차만 다니는 청정 마을 체르마트 도착 (편도 약 2.5시간).</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-red-50 rounded-2xl p-5 border border-red-100">
+                                    <div class="text-xs font-black text-red-600 mb-2 uppercase tracking-wide">11:00 — 체르마트 역</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">고르너그라트 산악열차 탑승 🚞</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">스위스에서 가장 오래된 야외 톱니바퀴 열차. 오른쪽 창가에 앉아 뾰족한 마테호른 봉우리 감상.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200">
+                                    <div class="text-xs font-black text-gray-500 mb-1 tracking-wide">13:30 — 늦은 점심</div>
+                                    <h4 class="font-black text-gray-900 mb-1">레스토랑 로시니 (Riffelalp)</h4>
+                                    <p class="text-sm font-medium text-gray-600">내려오는 길 리펠알프 역에 내려 테라스에서 마테호른을 마주보며 퐁듀와 파스타 점심.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border border-gray-200">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">19:00 — 그린델발트 복귀</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">샬레에서의 마지막 밤 🌙</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">긴 기차 여행을 마치고 숙소 복귀. 남은 식재료를 털어 김치찌개와 밥을 해먹으며 피로 회복.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DAY 6 -->
+            <section id="day6" class="content-section mb-12">
+                <div class="day-card">
+                    <div class="day-header flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="bg-white rounded-xl px-4 py-2 text-center shadow-sm">
+                            <div class="text-sm font-black text-gray-500">DAY 6</div>
+                            <div class="text-xl font-black text-gray-900">8/20</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black">취리히 시내 관광 & 귀국 ✈️</div>
+                            <div class="text-sm font-medium mt-1 opacity-80">스위스 초콜릿 쇼핑 후 집으로!</div>
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 bg-surface">
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-gray-50 rounded-2xl p-5 border border-gray-200">
+                                    <div class="text-xs font-black text-gray-500 mb-2 uppercase tracking-wide">09:00 — 체크아웃</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">아쉬운 샬레 체크아웃 🏡</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">숙소 정리 후 기차를 타고 취리히 중앙역으로 이동 (약 2.5시간).</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot accent"></div>
+                                <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200">
+                                    <div class="text-xs font-black text-amber-600 mb-2 uppercase tracking-wide">12:30 — 취리히 중앙역</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">짐 보관 및 린덴호프 산책 ☕</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">역 락커에 짐을 넣고, 취리히 시내가 내려다보이는 린덴호프(Lindenhof) 언덕 산책. 반호프슈트라세 명품 거리 구경.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-200">
+                                    <div class="text-xs font-black text-emerald-600 mb-1 tracking-wide">14:00 — 기념품 쇼핑</div>
+                                    <h4 class="font-black text-gray-900 mb-1">슈프륑글리(Sprüngli) 초콜릿 🍫</h4>
+                                    <p class="text-sm font-medium text-gray-600">부모님 지인들에게 선물할 최고급 파베 초콜릿과 마카롱 구입.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot blue"></div>
+                                <div class="bg-blue-50 rounded-2xl p-5 border border-blue-100">
+                                    <div class="text-xs font-black text-blue-600 mb-2 uppercase tracking-wide">16:30 — 공항으로 이동 & 귀국</div>
+                                    <h4 class="text-lg font-black text-gray-900 mb-2">스위스 항공 LX162 탑승 ✈️</h4>
+                                    <p class="text-sm font-medium text-gray-600 leading-relaxed">취리히 공항 라운지에서 저녁 해결 후 19:15 비행기 탑승. (한국 도착: 다음날 금요일 14:30)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BUDGET & CHECKLIST -->
+            <section id="budget" class="content-section mb-16">
+                <div class="section-kicker">Budget &amp; Checklist</div>
+                <h3 class="section-heading">예산 &amp; 짐 챙기기</h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- 예산 -->
+                    <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm">
+                        <h4 class="font-black text-xl mb-6 flex items-center gap-2 text-gray-900">💰 예상 경비 (3인)</h4>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between text-sm font-bold mb-2">
+                                    <span class="text-gray-700">✈️ 스위스 항공 (이코노미)</span>
+                                    <span class="text-gray-900">₩4,500,000</span>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-1000" style="width:37.5%; background: var(--color-blue)"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm font-bold mb-2">
+                                    <span class="text-gray-700">🏠 샬레 & 호텔 (5박)</span>
+                                    <span class="text-gray-900">₩3,000,000</span>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full" style="width:25%; background: var(--color-primary)"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm font-bold mb-2">
+                                    <span class="text-gray-700">🚂 스위스 패스 & 융프라우 VIP</span>
+                                    <span class="text-gray-900">₩2,000,000</span>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full" style="width:16.6%; background: var(--color-accent)"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm font-bold mb-2">
+                                    <span class="text-gray-700">🧀 식비 및 기타 쇼핑</span>
+                                    <span class="text-gray-900">₩2,500,000</span>
+                                </div>
+                                <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full rounded-full" style="width:20.8%; background: var(--color-success)"></div>
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t border-gray-200">
+                                <div class="flex justify-between mb-1">
+                                    <span class="font-black text-xl text-gray-900">총 예상 비용</span>
+                                    <span class="font-black text-2xl text-primary">₩12,000,000</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8" style="position:relative; height:200px;">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 체크리스트 -->
+                    <div class="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-black text-xl flex items-center gap-2 text-gray-900">🧳 부모님 동반 필수 준비물</h4>
+                            <span id="checklist-count" class="text-xs font-black px-3 py-1.5 rounded-md bg-gray-100 text-gray-600">0/10</span>
+                        </div>
+                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden mb-6">
+                            <div id="checklist-progress" class="h-full rounded-full transition-all duration-500" style="width:0%; background: var(--color-primary)"></div>
+                        </div>
+                        <div id="checklist-container" class="space-y-1 overflow-y-auto pr-2 flex-1 custom-scrollbar">
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="passport_sw"><span class="checklist-label text-sm font-bold text-gray-800">여권 유효기간 확인 (6개월 이상)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="swisspass"><span class="checklist-label text-sm font-bold text-blue-600">스위스 트래블 패스 (1등석) 발권 및 캡처</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="jungfrau_vip"><span class="checklist-label text-sm font-bold text-blue-600">동신항운 융프라우 할인쿠폰 프린트 (3장)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="medicine_alt"><span class="checklist-label text-sm font-bold text-red-600">고산병 약 (다이아막스) / 멀미약 / 소화제</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="food_kor"><span class="checklist-label text-sm font-bold text-gray-800">컵라면, 누룽지, 볶음고추장 (스위스 음식 대비)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="jacket"><span class="checklist-label text-sm font-bold text-gray-800">경량 패딩 및 바람막이 (한여름에도 산 정상은 영하)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="shoes"><span class="checklist-label text-sm font-bold text-gray-800">미끄러지지 않는 편안한 하이킹/트레킹화</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="sunglass"><span class="checklist-label text-sm font-bold text-gray-800">자외선 차단 선글라스 및 선크림 (만년설 반사 대비)</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="sbb_app"><span class="checklist-label text-sm font-bold text-gray-800">SBB (스위스 철도) 앱 및 Meteo (날씨) 앱 설치</span></label>
+                            <label class="checklist-item"><input type="checkbox" class="checklist-cb" data-id="cash_chf"><span class="checklist-label text-sm font-bold text-gray-800">스위스 프랑(CHF) 환전 (산장 등은 현금만 가능)</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 여행 유용 정보 -->
+                <div class="mt-8 rounded-2xl p-6 border" style="background: rgba(var(--color-primary-rgb), 0.03); border-color: rgba(var(--color-primary-rgb), 0.15)">
+                    <h4 class="font-black text-lg mb-4 flex items-center gap-2">🇨🇭 스위스 힐링투어 TMI</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm">
+                            <div class="text-3xl mb-2">🚄</div>
+                            <div class="text-sm font-black text-gray-900">SBB 짐 부치기</div>
+                            <div class="text-xs font-medium text-gray-500 mt-1">부모님 관절 보호를 위해 무거운 짐은 역에서 다음 역으로 보내세요.</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm">
+                            <div class="text-3xl mb-2">🚽</div>
+                            <div class="text-sm font-black text-gray-900">화장실</div>
+                            <div class="text-xs font-medium text-gray-500 mt-1">스위스 공중화장실은 유료(보통 1~2프랑)이니 기차 화장실을 적극 이용.</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm">
+                            <div class="text-3xl mb-2">🌤️</div>
+                            <div class="text-sm font-black text-gray-900">날씨가 전부</div>
+                            <div class="text-xs font-medium text-gray-500 mt-1">Meteo 앱의 웹캠을 확인하고, 맑은 날 융프라우/마테호른에 올인하세요.</div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm">
+                            <div class="text-3xl mb-2">🚰</div>
+                            <div class="text-sm font-black text-gray-900">물 마시기</div>
+                            <div class="text-xs font-medium text-gray-500 mt-1">거리의 분수대 물은 알프스 빙하수라 그냥 마셔도 됩니다. 물통 지참!</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center py-10 text-sm text-gray-400 font-medium border-t border-gray-200">
+                <p>Switzerland Trip 2026 🏔️</p>
+                <p class="mt-2 font-black text-gray-600">사랑하는 부모님과 함께하는 환갑 기념 여행</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<style>
+/* Custom Scrollbar for checklist */
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var root = document.documentElement;
+    var THEME_KEY = 'swiss-family-theme-2026';
+    var themeButtons = document.querySelectorAll('[data-theme-toggle]');
+    var budgetChart = null;
+
+    function getCV(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
+
+    function updateThemeButtons(theme) {
+        var isDark = theme === 'dark';
+        themeButtons.forEach(function(btn) {
+            var icon = btn.querySelector('[data-theme-icon]');
+            var label = btn.querySelector('[data-theme-label]');
+            if (icon) icon.textContent = isDark ? '☀' : '☾';
+            if (label) label.textContent = isDark ? '라이트' : '다크';
+            btn.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
+        });
+    }
+
+    function updateChartTheme() {
+        if (!budgetChart) return;
+        budgetChart.data.datasets[0].backgroundColor = [
+            getCV('--color-blue'), getCV('--color-primary'), getCV('--color-accent'), getCV('--color-success')
+        ];
+        budgetChart.data.datasets[0].borderColor = getCV('--surface');
+        budgetChart.options.plugins.legend.labels.color = getCV('--text-strong');
+        budgetChart.options.plugins.tooltip.backgroundColor = getCV('--tooltip-bg');
+        budgetChart.options.plugins.tooltip.titleColor = getCV('--text-strong');
+        budgetChart.options.plugins.tooltip.bodyColor = getCV('--text-body');
+        budgetChart.options.plugins.tooltip.borderColor = getCV('--border-strong');
+        budgetChart.update();
+    }
+
+    function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        updateThemeButtons(theme);
+        updateChartTheme();
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch(e) {}
+    applyTheme(saved || 'light');
+
+    themeButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            try { localStorage.setItem(THEME_KEY, next); } catch(e) {}
+        });
+    });
+
+    // Mobile menu
+    var sidebar = document.getElementById('sidebar');
+    var menuBtn = document.getElementById('mobile-menu-button');
+    var overlay = document.getElementById('sidebar-overlay');
+    if (menuBtn && sidebar && overlay) {
+        menuBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        });
+        overlay.addEventListener('click', function() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    }
+
+    var navLinks = document.querySelectorAll('#main-nav a');
+    navLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth < 768 && sidebar) {
+                sidebar.classList.add('-translate-x-full');
+                if (overlay) overlay.classList.add('hidden');
+            }
+        });
+    });
+
+    // ScrollSpy
+    var sections = document.querySelectorAll('.content-section');
+    function updateNav() {
+        var current = '';
+        sections.forEach(function(s) { if (s.getBoundingClientRect().top <= 150) current = s.id; });
+        navLinks.forEach(function(l) {
+            l.classList.remove('active');
+            if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+        });
+    }
+    window.addEventListener('scroll', updateNav);
+    updateNav();
+
+    // D-Day
+    var tripDate = new Date('2026-08-15T00:00:00+09:00');
+    var today = new Date(); today.setHours(0,0,0,0);
+    var diff = Math.ceil((tripDate - today) / 86400000);
+    var ddayEl = document.getElementById('dday-count');
+    var ddayBox = document.getElementById('dday-box');
+    if (ddayEl) {
+        if (diff > 0) ddayEl.textContent = 'D-' + diff;
+        else if (diff === 0) { ddayEl.textContent = 'D-DAY'; if (ddayBox) ddayBox.style.background = 'var(--color-primary)'; }
+        else { ddayEl.textContent = 'D+' + Math.abs(diff); if (ddayBox) ddayBox.style.background = 'var(--text-muted)'; }
+    }
+
+    // Leaflet map
+    var places = {
+        zrh:          { lat: 47.4582, lng: 8.5555, emoji: '✈️', name: '취리히 공항', desc: 'ZRH · IN & OUT' },
+        lucerne:      { lat: 47.0502, lng: 8.3093, emoji: '⛴️', name: '루체른', desc: '첫날 숙소 및 리기산 유람선' },
+        grindelwald:  { lat: 46.6241, lng: 8.0414, emoji: '🏡', name: '그린델발트', desc: '메인 샬레 숙소 3박' },
+        jungfrau:     { lat: 46.5475, lng: 7.9826, emoji: '🏔️', name: '융프라우요흐', desc: 'Top of Europe (3,454m)' },
+        zermatt:      { lat: 46.0207, lng: 7.7491, emoji: '⛰️', name: '체르마트', desc: '황금 마테호른 감상' }
+    };
+
+    var mapEl = document.getElementById('leaflet-map');
+    var map = null;
+    var markers = {};
+    if (mapEl && typeof L !== 'undefined') {
+        map = L.map('leaflet-map', { scrollWheelZoom: false }).setView([46.7, 8.2], 8);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 18
+        }).addTo(map);
+
+        Object.keys(places).forEach(function(key) {
+            var p = places[key];
+            var icon = L.divIcon({ html: '<div style="font-size:1.8rem;text-align:center;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.2))">' + p.emoji + '</div>', className: '', iconSize: [36,36], iconAnchor: [18,18], popupAnchor: [0,-18] });
+            var m = L.marker([p.lat, p.lng], { icon: icon }).addTo(map);
+            m.bindPopup('<h4 style="font-weight:900;margin:0 0 6px;">' + p.name + '</h4><p style="margin:0;font-size:13px;font-weight:500">' + p.desc + '</p>');
+            markers[key] = m;
+        });
+        
+        var coords = Object.values(places).map(function(p) { return [p.lat, p.lng]; });
+        map.fitBounds(coords, { padding: [40, 40] });
+    }
+
+    document.querySelectorAll('.place-card-link').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var key = card.getAttribute('data-place');
+            if (map && markers[key] && places[key]) {
+                map.setView([places[key].lat, places[key].lng], 11, { animate: true, duration: 1 });
+                markers[key].openPopup();
+                document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Checklist
+    var SKEY = 'swiss-family-checklist-2026';
+    var checkboxes = document.querySelectorAll('.checklist-cb');
+    var countEl = document.getElementById('checklist-count');
+    var progEl = document.getElementById('checklist-progress');
+
+    function loadCL() {
+        var saved = {};
+        try { saved = JSON.parse(localStorage.getItem(SKEY)) || {}; } catch(e) {}
+        checkboxes.forEach(function(cb) {
+            if (saved.hasOwnProperty(cb.getAttribute('data-id'))) cb.checked = saved[cb.getAttribute('data-id')];
+            updateItem(cb);
+        });
+        updateProg();
+    }
+    function saveCL() {
+        var d = {};
+        checkboxes.forEach(function(cb) { d[cb.getAttribute('data-id')] = cb.checked; });
+        try { localStorage.setItem(SKEY, JSON.stringify(d)); } catch(e) {}
+    }
+    function updateItem(cb) {
+        var item = cb.closest('.checklist-item');
+        if (item) { cb.checked ? item.classList.add('checked') : item.classList.remove('checked'); }
+    }
+    function updateProg() {
+        var total = checkboxes.length, done = 0;
+        checkboxes.forEach(function(cb) { if (cb.checked) done++; });
+        if (countEl) countEl.textContent = done + '/' + total;
+        if (progEl) progEl.style.width = (total > 0 ? Math.round(done/total*100) : 0) + '%';
+    }
+    checkboxes.forEach(function(cb) {
+        cb.addEventListener('change', function() { updateItem(cb); saveCL(); updateProg(); });
+    });
+    loadCL();
+
+    // Budget chart
+    var canvas = document.getElementById('budgetChart');
+    if (canvas) {
+        budgetChart = new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels: ['항공권', '숙박 (샬레+호텔)', '패스권 (교통/융프라우)', '식비 및 기타'],
+                datasets: [{
+                    data: [4500000, 3000000, 2000000, 2500000],
+                    backgroundColor: ['#457B9D', '#2A6F4D', '#D32F2F', '#264653'], /* Fallbacks */
+                    borderWidth: 2, hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '65%',
+                plugins: {
+                    legend: { position: 'right', labels: { padding: 16, usePointStyle: true, pointStyleWidth: 14, font: { family: 'Paperlogy', size: 13, weight: '800' } } },
+                    tooltip: {
+                        borderWidth: 1, padding: 12, cornerRadius: 8,
+                        callbacks: { label: function(ctx) { return ' ₩' + ctx.parsed.toLocaleString(); } }
+                    }
+                }
+            }
+        });
+        // Initial theme application
+        setTimeout(updateChartTheme, 100);
+    }
+});
+</script>
+</body>
+</html>
