@@ -56,7 +56,7 @@
 </td>
 <td width="50%" valign="top">
 
-### ✨ 출력 &nbsp; <a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz"><img src="https://img.shields.io/badge/▶_라이브_데모-CodePen-000?style=flat-square&logo=codepen&logoColor=white" height="20"></a>
+### ✨ 출력
 완성된 `.html` 파일에 포함되는 요소:
 - 🗺️ Leaflet 인터랙티브 지도
 - 📊 예산 도넛 차트
@@ -65,17 +65,9 @@
 - 🌙 다크/라이트 모드 토글
 - 📱 완전한 반응형 디자인
 
-<a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz">
-<img src="https://img.shields.io/badge/▶_한국어_데모_1-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
-</a> <a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
-<img src="https://img.shields.io/badge/▶_한국어_데모_2-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
-</a>
-<br>
-<a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR">
-<img src="https://img.shields.io/badge/▶_English_Demo_1-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
-</a> <a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
-<img src="https://img.shields.io/badge/▶_English_Demo_2-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
-</a>
+> **직접 확인해 보세요:**
+> 🇰🇷 [한국어 데모 1](https://codepen.io/Kipeum-Lee/full/vEXZaEz) · [한국어 데모 2](https://codepen.io/Kipeum-Lee/full/gbwRKRz)
+> 🇺🇸 [English Demo 1](https://codepen.io/Kipeum-Lee/full/XJjgBbR) · [English Demo 2](https://codepen.io/Kipeum-Lee/full/LERLBVd)
 
 </td>
 </tr>

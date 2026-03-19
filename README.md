@@ -56,7 +56,7 @@ Budget: ₩12,000,000
 </td>
 <td width="50%" valign="top">
 
-### ✨ Output &nbsp; <a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR"><img src="https://img.shields.io/badge/▶_Live_Demo-CodePen-000?style=flat-square&logo=codepen&logoColor=white" height="20"></a>
+### ✨ Output
 A complete `.html` file featuring:
 - 🗺️ Interactive Leaflet map
 - 📊 Budget doughnut chart
@@ -65,17 +65,9 @@ A complete `.html` file featuring:
 - 🌙 Dark/Light mode toggle
 - 📱 Fully responsive design
 
-<a href="https://codepen.io/Kipeum-Lee/full/XJjgBbR">
-<img src="https://img.shields.io/badge/▶_English_Demo_1-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
-</a> <a href="https://codepen.io/Kipeum-Lee/full/LERLBVd">
-<img src="https://img.shields.io/badge/▶_English_Demo_2-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
-</a>
-<br>
-<a href="https://codepen.io/Kipeum-Lee/full/vEXZaEz">
-<img src="https://img.shields.io/badge/▶_한국어_데모_1-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
-</a> <a href="https://codepen.io/Kipeum-Lee/full/gbwRKRz">
-<img src="https://img.shields.io/badge/▶_한국어_데모_2-000?style=for-the-badge&logo=codepen&logoColor=white" height="24">
-</a>
+> **See it in action:**
+> 🇺🇸 [English Demo 1](https://codepen.io/Kipeum-Lee/full/XJjgBbR) · [English Demo 2](https://codepen.io/Kipeum-Lee/full/LERLBVd)
+> 🇰🇷 [한국어 데모 1](https://codepen.io/Kipeum-Lee/full/vEXZaEz) · [한국어 데모 2](https://codepen.io/Kipeum-Lee/full/gbwRKRz)
 
 </td>
 </tr>
